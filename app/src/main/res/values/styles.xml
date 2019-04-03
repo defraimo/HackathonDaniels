@@ -1,0 +1,33 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">#F44336</item>
+        <item name="android:textColorSecondary">#FF9800</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">#FFF</item>
+        <item name="android:textColorSecondary">#020202</item>
+    </style>
+    <style name="AppTheme.SeekBar" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">#FF245Ca3</item>
+        <item name="colorControlNormal">#FF72C5F1</item>
+        <item name="colorAccent">#FF245Ca3</item>
+        <item name="android:progressTint">#FF245Ca3</item>
+        <item name="android:progressBackgroundTint">#FF72C5F1</item>
+    </style>
+
+</resources>

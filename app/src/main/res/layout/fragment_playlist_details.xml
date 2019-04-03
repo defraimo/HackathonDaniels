@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF1E202A"
+    tools:context=".playlist.PlaylistDetailsFragment">
+
+    <ImageView
+        android:id="@+id/ivNameList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_name_of_list"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPlaylistName"
+        app:layout_constraintEnd_toEndOf="@+id/tvPlaylistName"
+        app:layout_constraintStart_toStartOf="@+id/tvPlaylistName"
+        app:layout_constraintTop_toTopOf="@+id/tvPlaylistName" />
+
+    <ImageView
+        android:id="@+id/ivSearch"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/search_grey"
+        app:layout_constraintBottom_toBottomOf="@+id/etSearchProgram"
+        app:layout_constraintEnd_toEndOf="@+id/etSearchProgram"
+        app:layout_constraintStart_toStartOf="@+id/etSearchProgram"
+        app:layout_constraintTop_toTopOf="@+id/etSearchProgram" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvPlaylistPrograms"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etSearchProgram"
+        tools:listitem="@layout/program_in_playlist_item" />
+
+    <TextView
+        android:id="@+id/tvPlaylistName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:text="רשימת השמעה"
+        android:textColor="#404249"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etSearchProgram"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:ems="10"
+        android:hint="חיפוש"
+        android:inputType="textPersonName"
+        android:textColor="#FFF"
+        android:textColorHint="#FFF"
+        app:layout_constraintBottom_toTopOf="@+id/rvPlaylistPrograms"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaylistName" />
+
+    <ImageView
+        android:id="@+id/ivSearchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_search_symbol"
+        app:layout_constraintBottom_toBottomOf="@+id/ivSearch"
+        app:layout_constraintStart_toStartOf="@+id/etSearchProgram"
+        app:layout_constraintTop_toTopOf="@+id/ivSearch" />
+
+</android.support.constraint.ConstraintLayout>

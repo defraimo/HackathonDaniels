@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF1E202A"
+    tools:context=".MediaPlayerFragment">
+
+    <daniel.rad.radiotabsdrawer.myMediaPlayer.ui.MediaSeekBar
+        android:id="@+id/sbSong"
+        style="@style/AppTheme.SeekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:fadeScrollbars="false"
+        android:maxWidth="15dp"
+        android:maxHeight="15dp"
+        android:minWidth="15dp"
+        android:minHeight="15dp"
+        android:thumbTint="#FF72C5F1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlayerLine" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="00:00"
+        android:textColor="#FF72C5F1"
+        app:layout_constraintEnd_toEndOf="@+id/sbSong"
+        app:layout_constraintTop_toBottomOf="@+id/sbSong" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.16" />
+
+    <ImageView
+        android:id="@+id/ivMediaPlay"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_play"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sbSong" />
+
+    <ImageView
+        android:id="@+id/bnBack"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="24dp"
+        android:src="@drawable/ic_back_song"
+        app:layout_constraintBottom_toBottomOf="@+id/ivMediaPlay"
+        app:layout_constraintEnd_toStartOf="@+id/ivMediaPlay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivMediaPlay" />
+
+    <ImageView
+        android:id="@+id/bnForward"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_forward_song"
+        app:layout_constraintBottom_toBottomOf="@+id/ivMediaPlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivMediaPlay"
+        app:layout_constraintTop_toTopOf="@+id/ivMediaPlay" />
+
+    <TextView
+        android:id="@+id/tvProgramName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="שם התוכנית"
+        android:textColor="#FFF"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPlayerLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.66"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvPlayerLine"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"/>
+
+    <TextView
+        android:id="@+id/tvPlayerLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="-"
+        android:textColor="#FFF"
+        app:layout_constraintEnd_toStartOf="@+id/tvProgramName"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvStudentName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="שם התלמיד"
+        android:textColor="#FFF"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPlayerLine"
+        app:layout_constraintEnd_toStartOf="@+id/tvPlayerLine"
+        app:layout_constraintTop_toTopOf="@+id/tvPlayerLine"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"/>
+
+</android.support.constraint.ConstraintLayout>

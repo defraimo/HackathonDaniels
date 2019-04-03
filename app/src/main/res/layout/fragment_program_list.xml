@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ConstraintLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".programs.ProgramListFragment"
+    android:background="#FF1E202A">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvPrograms"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etProgramSearch"
+        tools:listitem="@layout/program_item"
+        android:background="#FF1E202A"/>
+
+    <EditText
+        android:id="@+id/etProgramSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#393B42"
+        android:ems="10"
+        android:hint=" חיפוש"
+        android:inputType="textPersonName"
+        android:textColor="#FFF"
+        android:textColorHint="#FFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/search_grey"
+        app:layout_constraintBottom_toBottomOf="@+id/etProgramSearch"
+        app:layout_constraintEnd_toEndOf="@+id/etProgramSearch"
+        app:layout_constraintStart_toStartOf="@+id/etProgramSearch"
+        app:layout_constraintTop_toTopOf="@+id/etProgramSearch" />
+
+    <ImageView
+        android:id="@+id/ivProgramSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_search_symbol"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView7"
+        app:layout_constraintStart_toStartOf="@+id/imageView7"
+        app:layout_constraintTop_toTopOf="@+id/imageView7" />
+
+</android.support.constraint.ConstraintLayout>

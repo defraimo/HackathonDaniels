@@ -1,0 +1,149 @@
+public void mediaPlayer() {
+
+            bnPlay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mediaPlayer[0] == null){
+                        mediaPlayer[0] = programsList.get(songNum);
+                        sbSong.setMax(mediaPlayer[0].getDuration());
+                    }
+                    if (!mediaPlayer[0].isPlaying()) {
+                        mediaPlayer[0].start();
+                        bnPlay.setImageResource(R.drawable.ic_pause);
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                int currentPosition = mediaPlayer[0].getCurrentPosition();
+                                int total = mediaPlayer[0].getDuration();
+
+                                while (mediaPlayer[0] != null && mediaPlayer[0].isPlaying() && currentPosition < total) {
+                                    try {
+                                        Thread.sleep(1000);
+                                        currentPosition = mediaPlayer[0].getCurrentPosition();
+                                    } catch (InterruptedException e) {
+                                        return;
+                                    } catch (Exception e) {
+                                        return;
+                                    }
+
+                                    sbSong.setProgress(currentPosition);
+
+                                }
+                            }
+                        }).start();
+                    }
+                    else if (mediaPlayer[0].isPlaying()){
+                        bnPlay.setImageResource(R.drawable.ic_play);
+                        mediaPlayer[0].pause();
+                    }
+                }
+            });
+
+            bnBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mediaPlayer[0] != null) {
+                        if ((mediaPlayer[0].getCurrentPosition() < 3000) && mediaPlayer[0].isPlaying() && programsList.size() > 0){
+                            if (songNum == 0){
+                                songNum = programsList.size()-1;
+                            }
+                            else {
+                                songNum--;
+                            }
+                        }
+                        if (mediaPlayer[0].isPlaying()) {
+                            mediaPlayer[0].stop();
+                        }
+                        mediaPlayer[0].reset();
+                        mediaPlayer[0].release();
+                        mediaPlayer[0] = null;
+                        mediaPlayer[0] = programsList.get(songNum);
+                        sbSong.setProgress(0);
+                        mediaPlayer[0].start();
+                    }
+                }
+            });
+
+            bnForward.setOnClickListener(v -> {
+                if (mediaPlayer[0] != null) {
+                    mediaPlayer[0].stop();
+                    mediaPlayer[0].reset();
+                    mediaPlayer[0].release();
+                    mediaPlayer[0] = null;
+                    sbSong.setProgress(0);
+                    if (songNum < programsList.size()-1) {
+                        songNum++;
+                    }
+                    else {
+                        songNum = 0;
+                    }
+                    mediaPlayer[0] = programsList.get(songNum);
+                    sbSong.setMax(mediaPlayer[0].getDuration());
+                    mediaPlayer[0].start();
+                }
+            });
+
+
+            sbSong.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                int songProgress = 0;
+
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (mediaPlayer[0] != null) {
+                        tvTime.setText(printSongTime(progress));
+                        songProgress = progress;
+                        if (progress == mediaPlayer[0].getDuration()) {
+                            mediaPlayer[0].stop();
+                            mediaPlayer[0].reset();
+                            mediaPlayer[0].release();
+                            mediaPlayer[0] = null;
+                            if (songNum == programsList.size()-1){
+                                mediaPlayer[0] = programsList.get(songNum = 0);
+                            }
+                            else {
+                                mediaPlayer[0] = programsList.get(++songNum);
+                            }
+                            sbSong.setProgress(0);
+                            sbSong.setMax(mediaPlayer[0].getDuration());
+                            mediaPlayer[0].start();
+
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    int currentPosition = mediaPlayer[0].getCurrentPosition();
+                                    int total = mediaPlayer[0].getDuration();
+
+                                    while (mediaPlayer[0] != null && mediaPlayer[0].isPlaying() && currentPosition < total) {
+                                        try {
+                                            Thread.sleep(1000);
+                                            currentPosition = mediaPlayer[0].getCurrentPosition();
+                                        } catch (InterruptedException e) {
+                                            return;
+                                        } catch (Exception e) {
+                                            return;
+                                        }
+
+                                        sbSong.setProgress(currentPosition);
+
+                                    }
+                                }
+                            }).start();
+                        }
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    if (mediaPlayer[0] != null) {
+                        mediaPlayer[0].seekTo(songProgress);
+                    }
+                }
+            });
+
+    }
