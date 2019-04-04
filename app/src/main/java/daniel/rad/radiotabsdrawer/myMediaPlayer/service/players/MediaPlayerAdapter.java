@@ -23,8 +23,11 @@ import android.net.Uri;
 import android.os.SystemClock;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.telecom.Connection;
 
 import java.io.File;
+import java.net.URL;
+import java.net.URLConnection;
 
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.PlaybackInfoListener;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.PlayerAdapter;
@@ -115,14 +118,16 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
         initializeMediaPlayer();
 
         try {
-            AssetFileDescriptor assetFileDescriptor = mContext.getAssets().openFd(mFilename);
+//            AssetFileDescriptor assetFileDescriptor = mContext.getAssets().openFd(mFilename);
+//            URL url = new URL(mFilename);
+
 //            File file = mContext.getFileStreamPath(mFilename);
             mMediaPlayer.setDataSource(
-//                    mContext,
-//                    Uri.parse(file.getPath()));
-                    assetFileDescriptor.getFileDescriptor(),
-                    assetFileDescriptor.getStartOffset(),
-                    assetFileDescriptor.getLength());
+                    mContext,
+                    Uri.parse(mFilename));
+//                    assetFileDescriptor.getFileDescriptor(),
+//                    assetFileDescriptor.getStartOffset(),
+//                    assetFileDescriptor.getLength());
         } catch (Exception e) {
             throw new RuntimeException("Failed to open file: " + mFilename, e);
         }

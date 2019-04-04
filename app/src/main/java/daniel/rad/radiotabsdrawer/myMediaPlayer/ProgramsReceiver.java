@@ -13,13 +13,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class ProgramsReciever extends AsyncTask<Void,Void, List<ProgramsData>>{
-    private static final List<ProgramsData> programs = new ArrayList<>();
+public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
+    private static List<ProgramsData> programs;
 //    private static final HashMap<String, String> musicFileName = new HashMap<>();
 
 
     @Override
     protected List<ProgramsData> doInBackground(Void... voids) {
+        programs = new ArrayList<>();
         String link = "http://be.repoai.com:5080/WebRTCAppEE/rest/broadcast/getVodList/0/100?fbclid=IwAR1c2x7Pa5nSOL3i4oCvq4Ji_-JNv8DNuTLkqo1sy1h-mPyQCZptUkGQl_E";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(link).build();
@@ -47,6 +48,7 @@ public class ProgramsReciever extends AsyncTask<Void,Void, List<ProgramsData>>{
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             String streamName = jsonObject.getString("streamName");
             String vodName = jsonObject.getString("vodName");
+            String vodNameFixed = vodName.replace("_"," ").replace(".mp4","");
             String streamId = jsonObject.getString("streamId");
             long creationDate;
             try {
@@ -60,27 +62,21 @@ public class ProgramsReciever extends AsyncTask<Void,Void, List<ProgramsData>>{
             } catch (JSONException e) {
                 long fileSize = jsonObject.getLong("fileSize");
             } //TODO: erase if not needed
-            String filePath = jsonObject.getString("filePath");
-            filePath = "http://localhost:5080/WebRTCAppEE/"+filePath;
+//            String filePath = jsonObject.getString("filePath");
+            String filePath = "http://be.repoai.com:5080/WebRTCAppEE/streams/home/"+vodName;
             String vodId = jsonObject.getString("vodId");
             String type = jsonObject.getString("type");
-
-//            programs.put(vodName,
-//                    new MediaMetadataCompat.Builder().
-//                            putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID,vodId).
-//                            putString(MediaMetadataCompat.METADATA_KEY_TITLE, vodName).
-//                            putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI,filePath).
-//                            build());
-//
-//            musicFileName.put(vodId,filePath);
-
             programs.add(
-                    new ProgramsData(
-                            vodName,"student name",0,creationDate,duration,vodId,filePath));
+                    new ProgramsData(vodId,vodNameFixed,"",duration,filePath,0,creationDate));
         }
     }
 
-    public static List<ProgramsData> getPrograms(){
-        return programs;
+    public static ArrayList<ProgramsData> getPrograms(){
+        return (ArrayList<ProgramsData>) programs;
+    }
+
+    @Override
+    protected void onPostExecute(List<ProgramsData> programsData) {
+        System.out.println(programsData);
     }
 }

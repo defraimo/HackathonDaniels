@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,7 +49,7 @@ public class ChosenPlaylistAdapter extends RecyclerView.Adapter<ChosenPlaylistVi
         holder.tvStudentName.setText(programsData.getStudentName());
         else holder.tvLine.setText(""); //if there is no student the line won't be printed
 
-        holder.ivProfilePic.setImageResource(programsData.getImage());
+        holder.ivProfilePic.setImageResource(programsData.getProfilePic());
 
         holder.programsData = programsData;
         holder.mediaPlayerFragment = playerFragment;
@@ -98,6 +100,8 @@ class ChosenPlaylistViewHolder extends RecyclerView.ViewHolder{
 
         ivPlay.setOnClickListener(v -> {
             if (isDoublePressed){
+                Animation shake = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.shake);
+                itemView.startAnimation(shake);
                 AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
                 builder.setTitle("האם אתה בטוח שברצונך למחוק את התוכנית מרשימת ההשמעה?").setPositiveButton("כן", (dialog, which) -> {
 

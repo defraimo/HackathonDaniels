@@ -29,7 +29,7 @@ public class ProgramDAO {
         ContentValues cv = new ContentValues();
         cv.put("programName",programsData.getProgramName());
         cv.put("studentName",programsData.getStudentName());
-        cv.put("studentImage",programsData.getImage());
+        cv.put("studentImage",programsData.getProfilePic());
         cv.put("mediaSource",programsData.getMediaSource());
 
         db.insert(PLAYLIST_NAME,null,cv);

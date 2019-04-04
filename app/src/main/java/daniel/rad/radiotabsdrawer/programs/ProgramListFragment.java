@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 
 import daniel.rad.radiotabsdrawer.R;
+import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 
 
 /**
@@ -40,7 +41,7 @@ public class ProgramListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         rvPrograms = view.findViewById(R.id.rvPrograms);
-        ProgramsAdapter adapter = new ProgramsAdapter(ProgramsDataSource.getPrograms(),this.getContext());
+        ProgramsAdapter adapter = new ProgramsAdapter(ProgramsReceiver.getPrograms(),this.getContext());
         rvPrograms.setLayoutManager(new LinearLayoutManager(this.getContext()));
         rvPrograms.setAdapter(adapter);
 

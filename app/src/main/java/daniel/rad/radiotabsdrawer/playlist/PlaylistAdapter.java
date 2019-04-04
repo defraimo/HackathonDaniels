@@ -11,6 +11,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,26 +49,26 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
 
         ArrayList<ProgramsData> programsDataList = (ArrayList<ProgramsData>) playlist.getProgramsData();
         if (programsDataList.size() == 1) {
-            holder.ivProfileAll.setImageResource(programsDataList.get(0).getImage());
+            holder.ivProfileAll.setImageResource(programsDataList.get(0).getProfilePic());
             holder.ivProfilePic1.setVisibility(View.INVISIBLE);
             holder.ivProfilePic2.setVisibility(View.INVISIBLE);
             holder.ivProfilePic3.setVisibility(View.INVISIBLE);
             holder.ivProfilePic4.setVisibility(View.INVISIBLE);
         } else if (programsDataList.size() == 2) {
-            holder.ivProfilePic1.setImageResource(programsDataList.get(0).getImage());
-            holder.ivProfilePic3.setImageResource(programsDataList.get(1).getImage());
-            holder.ivProfilePic2.setImageResource(programsDataList.get(1).getImage());
-            holder.ivProfilePic4.setImageResource(programsDataList.get(0).getImage());
+            holder.ivProfilePic1.setImageResource(programsDataList.get(0).getProfilePic());
+            holder.ivProfilePic3.setImageResource(programsDataList.get(1).getProfilePic());
+            holder.ivProfilePic2.setImageResource(programsDataList.get(1).getProfilePic());
+            holder.ivProfilePic4.setImageResource(programsDataList.get(0).getProfilePic());
         } else if (programsDataList.size() == 3) {
-            holder.ivProfilePic1.setImageResource(programsDataList.get(0).getImage());
-            holder.ivProfilePic3.setImageResource(programsDataList.get(1).getImage());
-            holder.ivProfilePic2.setImageResource(programsDataList.get(2).getImage());
-            holder.ivProfilePic4.setImageResource(programsDataList.get(0).getImage());
+            holder.ivProfilePic1.setImageResource(programsDataList.get(0).getProfilePic());
+            holder.ivProfilePic3.setImageResource(programsDataList.get(1).getProfilePic());
+            holder.ivProfilePic2.setImageResource(programsDataList.get(2).getProfilePic());
+            holder.ivProfilePic4.setImageResource(programsDataList.get(0).getProfilePic());
         } else if (programsDataList.size() >= 4) {
-            holder.ivProfilePic1.setImageResource(programsDataList.get(0).getImage());
-            holder.ivProfilePic3.setImageResource(programsDataList.get(1).getImage());
-            holder.ivProfilePic2.setImageResource(programsDataList.get(2).getImage());
-            holder.ivProfilePic4.setImageResource(programsDataList.get(3).getImage());
+            holder.ivProfilePic1.setImageResource(programsDataList.get(0).getProfilePic());
+            holder.ivProfilePic3.setImageResource(programsDataList.get(1).getProfilePic());
+            holder.ivProfilePic2.setImageResource(programsDataList.get(2).getProfilePic());
+            holder.ivProfilePic4.setImageResource(programsDataList.get(3).getProfilePic());
         }
 
         holder.playlist = playlist;

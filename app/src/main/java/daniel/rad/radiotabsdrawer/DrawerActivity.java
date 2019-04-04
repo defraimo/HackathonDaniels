@@ -33,15 +33,15 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.TabHost;
 import android.widget.Toast;
+
+import daniel.rad.radiotabsdrawer.myMediaPlayer.BroadcastsJson;
+import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
+
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FragmentManager fm;
     FrameLayout player_frame;
-
-
-    private static final int MY_PERMISSIONS_REQUEST_READ = 1;
-    public static final String Broadcast_PLAY_NEW_AUDIO = "/storage/Audio/Maroon5/Downloads";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +67,9 @@ public class DrawerActivity extends AppCompatActivity
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+
+//        downloadJson();
+        new ProgramsReceiver().execute();
 
         player_frame = findViewById(R.id.player_frame);
 
@@ -115,5 +118,28 @@ public class DrawerActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void downloadJson() {
+        String writingToDisk = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        if (ActivityCompat.checkSelfPermission(
+                this,Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[]{writingToDisk},1);
+
+            //can't continue
+            return;
+        }
+        new BroadcastsJson().execute();
+        new ProgramsReceiver().execute();
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            //call the method that requires
+            downloadJson();
     }
 }

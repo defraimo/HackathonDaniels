@@ -1,13 +1,14 @@
 package daniel.rad.radiotabsdrawer.playlist.removeProgramsFromPlaylist;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,7 +44,7 @@ public class RemovePlaylistAdapter extends RecyclerView.Adapter<RemovePlaylistVi
             holder.tvStudentName.setText(programsData.getStudentName());
         else holder.tvLine.setText(""); //if there is no student the line won't be printed
 
-        holder.ivProfilePic.setImageResource(programsData.getImage());
+        holder.ivProfilePic.setImageResource(programsData.getProfilePic());
 
         holder.programsData = programsData;
     }

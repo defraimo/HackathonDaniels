@@ -4,43 +4,51 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
+import daniel.rad.radiotabsdrawer.R;
 
 public class ProgramsData implements Parcelable {
+
+    private String vodId;
     private String programName;
     private String studentName;
-    private int image;
-    private long creationDate;
-    private int duration;
-    private String vodId;
+    private long duration;
+    private TimeUnit durationUnit;
     private String mediaSource;
+    private int profilePic;
+    private long creationDate;
 
-    public ProgramsData(String programName, String studentName, String mediaSource, int image) {
+    public ProgramsData(String programName, String studentName, String mediaSource, int profilePic) {
         this.programName = programName;
         this.studentName = studentName;
         this.mediaSource = mediaSource;
-        this.image =image;
+        this.profilePic = profilePic;
         duration = 0;
         creationDate = 0;
     }
 
-    public ProgramsData(String programName, String studentName, int image, long creationDate, int duration, String vodId, String mediaSource) {
+    public ProgramsData(String vodId, String programName, String studentName, long duration, String mediaSource, int profilePic, long creationDate) {
+        this.vodId = vodId;
         this.programName = programName;
         this.studentName = studentName;
-        this.image = image;
-        this.creationDate = creationDate;
         this.duration = duration;
-        this.vodId = vodId;
+        this.durationUnit = TimeUnit.SECONDS;
         this.mediaSource = mediaSource;
+        if (profilePic == 0)
+        this.profilePic = R.drawable.ic_default_pic;
+        else this.profilePic = profilePic;
+        this.creationDate = creationDate;
     }
 
     public String getProgramName() {
         return programName;
     }
-    public int getImage() {
-        return image;
+    public int getProfilePic() {
+        return profilePic;
     }
-    public void setImage(int image) {
-        this.image = image;
+    public void setProfilePic(int profilePic) {
+        this.profilePic = profilePic;
     }
     public void setProgramName(String programName) {
         this.programName = programName;
@@ -57,13 +65,13 @@ public class ProgramsData implements Parcelable {
     public void setMediaSource(String mediaSource) {
         this.mediaSource = mediaSource;
     }
-    public long getCreationDate() {
-        return creationDate;
+    public String getCreationDate() {
+        return String.valueOf(creationDate);
     }
     public void setCreationDate(long creationDate) {
         this.creationDate = creationDate;
     }
-    public int getDuration() {
+    public long getDuration() {
         return duration;
     }
     public void setDuration(int duration) {
@@ -75,17 +83,27 @@ public class ProgramsData implements Parcelable {
     public void setVodId(String vodId) {
         this.vodId = vodId;
     }
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+    public TimeUnit getDurationUnit() {
+        return durationUnit;
+    }
+    public void setDurationUnit(TimeUnit durationUnit) {
+        this.durationUnit = durationUnit;
+    }
 
     @Override
     public String toString() {
         return "ProgramsData{" +
-                "programName='" + programName + '\'' +
+                "vodId='" + vodId + '\'' +
+                ", programName='" + programName + '\'' +
                 ", studentName='" + studentName + '\'' +
-                ", image=" + image +
-                ", creationDate=" + creationDate +
                 ", duration=" + duration +
-                ", vodId='" + vodId + '\'' +
+                ", durationUnit=" + durationUnit +
                 ", mediaSource='" + mediaSource + '\'' +
+                ", profilePic=" + profilePic +
+                ", creationDate=" + creationDate +
                 '}';
     }
 
@@ -94,43 +112,51 @@ public class ProgramsData implements Parcelable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProgramsData that = (ProgramsData) o;
-        return image == that.image &&
+        return duration == that.duration &&
+                profilePic == that.profilePic &&
                 creationDate == that.creationDate &&
-                duration == that.duration &&
+                Objects.equals(vodId, that.vodId) &&
                 Objects.equals(programName, that.programName) &&
                 Objects.equals(studentName, that.studentName) &&
-                Objects.equals(vodId, that.vodId) &&
+                durationUnit == that.durationUnit &&
                 Objects.equals(mediaSource, that.mediaSource);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(programName, studentName, image, creationDate, duration, vodId, mediaSource);
+        return Objects.hash(vodId, programName, studentName, duration, durationUnit, mediaSource, profilePic, creationDate);
     }
+
 
     @Override
     public int describeContents() {
         return 0;
     }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.vodId);
         dest.writeString(this.programName);
         dest.writeString(this.studentName);
-        dest.writeInt(this.image);
-        dest.writeLong(this.creationDate);
-        dest.writeInt(this.duration);
-        dest.writeString(this.vodId);
+        dest.writeLong(this.duration);
+        dest.writeInt(this.durationUnit == null ? -1 : this.durationUnit.ordinal());
         dest.writeString(this.mediaSource);
+        dest.writeInt(this.profilePic);
+        dest.writeLong(this.creationDate);
     }
+
     protected ProgramsData(Parcel in) {
+        this.vodId = in.readString();
         this.programName = in.readString();
         this.studentName = in.readString();
-        this.image = in.readInt();
-        this.creationDate = in.readLong();
-        this.duration = in.readInt();
-        this.vodId = in.readString();
+        this.duration = in.readLong();
+        int tmpDurationUnit = in.readInt();
+        this.durationUnit = tmpDurationUnit == -1 ? null : TimeUnit.values()[tmpDurationUnit];
         this.mediaSource = in.readString();
+        this.profilePic = in.readInt();
+        this.creationDate = in.readLong();
     }
+
     public static final Creator<ProgramsData> CREATOR = new Creator<ProgramsData>() {
         @Override
         public ProgramsData createFromParcel(Parcel source) {

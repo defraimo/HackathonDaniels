@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
@@ -42,7 +41,7 @@ public class CreatePlaylistAdapter extends RecyclerView.Adapter<CreatePlaylistVi
             holder.tvStudentName.setText(programsData.getStudentName());
         else holder.tvLine.setText(""); //if there is no student the line won't be printed
 
-        holder.ivProfilePic.setImageResource(programsData.getImage());
+        holder.ivProfilePic.setImageResource(programsData.getProfilePic());
 
         holder.programsData = programsData;
     }

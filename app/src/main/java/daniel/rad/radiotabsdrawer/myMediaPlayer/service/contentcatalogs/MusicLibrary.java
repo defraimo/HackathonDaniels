@@ -20,7 +20,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
@@ -34,7 +33,8 @@ import java.util.concurrent.TimeUnit;
 
 import daniel.rad.radiotabsdrawer.BuildConfig;
 import daniel.rad.radiotabsdrawer.R;
-import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReciever;
+import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
+import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 
 public class MusicLibrary {
@@ -42,30 +42,68 @@ public class MusicLibrary {
     private static final TreeMap<String, MediaMetadataCompat> music = new TreeMap<>();
     private static final HashMap<String, Integer> albumRes = new HashMap<>();
     private static final HashMap<String, String> musicFileName = new HashMap<>();
+    private static List<ProgramsData> programs;
+
+//    static {
+//        createMediaMetadataCompat(
+//                "Jazz_In_Paris",
+//                "Jazz in Paris",
+//                "Media Right Productions",
+//                103,
+//                TimeUnit.SECONDS,
+//                "jazz_in_paris.mp3",
+//                R.drawable.profile_pic2,
+//                "album_jazz_blues");
+//        createMediaMetadataCompat(
+//                "The_Coldest_Shoulder",
+//                "The Coldest Shoulder",
+//                "The 126ers",
+//                160,
+//                TimeUnit.SECONDS,
+//                "the_coldest_shoulder.mp3",
+//                R.drawable.profile_pic3,
+//                "album_youtube_audio_library_rock_2");
+//    }
+
+    /*private String vodId;
+    private String programName;
+    private String studentName;
+    private long duration;
+    private TimeUnit durationUnit;
+    private String mediaSource;
+    private int profilePic;
+    private long creationDate;*/
 
     static {
-        createMediaMetadataCompat(
-                "Jazz_In_Paris",
-                "Jazz in Paris",
-                "Media Right Productions",
-                "Jazz & Blues",
-                "Jazz",
-                103,
-                TimeUnit.SECONDS,
-                "jazz_in_paris.mp3",
-                R.drawable.profile_pic2,
-                "album_jazz_blues");
-        createMediaMetadataCompat(
-                "The_Coldest_Shoulder",
-                "The Coldest Shoulder",
-                "The 126ers",
-                "Youtube Audio Library Rock 2",
-                "Rock",
-                160,
-                TimeUnit.SECONDS,
-                "the_coldest_shoulder.mp3",
-                R.drawable.profile_pic3,
-                "album_youtube_audio_library_rock_2");
+        getBroadcasts();
+        for (int i = 0; i < programs.size(); i++) {
+            ProgramsData model = programs.get(i);
+            createMediaMetadataCompat(
+                   model.getVodId(),
+                    model.getProgramName(),
+                    model.getStudentName(),
+                    getDuration(model),
+                    model.getDurationUnit(),
+                    model.getMediaSource(),
+                    model.getProfilePic(),
+                    model.getCreationDate()
+            );
+        }
+    }
+
+    private static void getBroadcasts(){
+        programs = ProgramsReceiver.getPrograms();
+
+    }
+
+    private static long getDuration(ProgramsData model){
+        MediaPlayer mp = new MediaPlayer();
+        try {
+            mp.setDataSource(model.getMediaSource());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return mp.getDuration();
     }
 
     public static String getRoot() {
@@ -78,17 +116,6 @@ public class MusicLibrary {
     }
 
     public static String getMusicFilename(String mediaId) {
-
-//        String url = "http://be.repoai.com:5080/WebRTCAppEE/rest/broadcast/getVodList/0/100?fbclid=IwAR1OrsxSLBLJ86ZZ3DGxFC0Ym4iq8c1ndiVEtNMeUuQSoQKo7GDpn9sFqAY"; // your URL here
-//        MediaPlayer mediaPlayer = new MediaPlayer();
-//        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//        try {
-//            mediaPlayer.setDataSource(url);
-//            mediaPlayer.prepare(); // might take long! (for buffering, etc)
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        mediaPlayer.start();
         return musicFileName.containsKey(mediaId) ? musicFileName.get(mediaId) : null;
     }
 
@@ -99,20 +126,6 @@ public class MusicLibrary {
     public static Bitmap getAlbumBitmap(Context context, String mediaId){
         return BitmapFactory.decodeResource(context.getResources(),
                 MusicLibrary.getAlbumRes(mediaId));
-    }
-
-    public static void addProgram(String programID,
-                                  String programTitle,
-                                  String studentName,
-                                  String album,
-                                  String genre,
-                                  long duration,
-                                  TimeUnit durationUnit,
-                                  String musicFilename,
-                                  int profilePic,
-                                  String albumArtResName){
-        createMediaMetadataCompat(programID, programTitle, studentName, album, genre, duration,
-                durationUnit, musicFilename, profilePic, albumArtResName);
     }
 
     public static List<MediaBrowserCompat.MediaItem> getMediaItems() {
@@ -153,29 +166,26 @@ public class MusicLibrary {
             String programID,
             String programTitle,
             String studentName,
-            String album,
-            String genre,
             long duration,
             TimeUnit durationUnit,
             String musicFilename,
             int profilePic,
-            String albumArtResName) {
+            String creationDate) {
         music.put(
                 programID,
                 new MediaMetadataCompat.Builder()
                         .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, programID)
-                        .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, album)
                         .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, studentName)
                         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,
                                  TimeUnit.MILLISECONDS.convert(duration, durationUnit))
-                        .putString(MediaMetadataCompat.METADATA_KEY_GENRE, genre)
-                        .putString(
-                                MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,
-                                getAlbumArtUri(albumArtResName))
-                        .putString(
-                                MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON_URI,
-                                getAlbumArtUri(albumArtResName))
+//                        .putString(
+//                                MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,
+//                                getAlbumArtUri(albumArtResName))
+//                        .putString(
+//                                MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON_URI,
+//                                getAlbumArtUri(albumArtResName))
                         .putString(MediaMetadataCompat.METADATA_KEY_TITLE, programTitle)
+                        .putString(MediaMetadataCompat.METADATA_KEY_DATE,creationDate)
                         .build());
         albumRes.put(programID, profilePic);
         musicFileName.put(programID, musicFilename);

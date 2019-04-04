@@ -43,7 +43,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
 
         holder.tvProgramName.setText(program.getProgramName());
         holder.tvPName.setText(program.getStudentName());
-        holder.ivProfilePic.setImageResource(program.getImage());
+        holder.ivProfilePic.setImageResource(program.getProfilePic());
         holder.program = program;
         holder.mediaPlayerFragment = playerFragment;
         //todo: replace ImageResource with and image from Facebook
