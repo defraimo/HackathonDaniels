@@ -1,6 +1,8 @@
 package daniel.rad.radiotabsdrawer.programs;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -12,8 +14,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import daniel.rad.radiotabsdrawer.DrawerActivity;
 import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
 import daniel.rad.radiotabsdrawer.R;
+import daniel.rad.radiotabsdrawer.myMediaPlayer.service.players.MediaPlayerAdapter;
 
 public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.ProgramViewHolder> {
     private MediaPlayerFragment playerFragment;
@@ -61,6 +65,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
         TextView tvProgramName;
         ImageView ivPlayProgram;
         ProgramsData program;
+//        int programIndex = getAdapterPosition();
 
         public ProgramViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -81,6 +86,9 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
             });
 
             ivPlayProgram.setOnClickListener(v -> {
+                Intent intent = new Intent(v.getContext(), DrawerActivity.class);
+                intent.putExtra("programIndex",program);
+                v.getContext().startActivity(intent);
                 mediaPlayerFragment.initBnPlay(itemView.getRootView());
                 mediaPlayerFragment.playFunction();
             });

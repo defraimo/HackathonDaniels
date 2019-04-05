@@ -39,6 +39,7 @@ import android.widget.Toast;
 
 import daniel.rad.radiotabsdrawer.myMediaPlayer.BroadcastsJson;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
+import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -55,6 +56,7 @@ public class DrawerActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 //        checkIfNew();
+        passArgs();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -83,6 +85,15 @@ public class DrawerActivity extends AppCompatActivity
 
         fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.player_frame,new MediaPlayerFragment()).commit();
+    }
+
+    private void passArgs() {
+        Intent intent = getIntent();
+        ProgramsData programsData = intent.getParcelableExtra("programIndex");
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("programIndex",programsData);
+        MediaPlayerFragment playerFragment = new MediaPlayerFragment();
+        playerFragment.setArguments(bundle);
     }
 
     public void initLoadingPic() {

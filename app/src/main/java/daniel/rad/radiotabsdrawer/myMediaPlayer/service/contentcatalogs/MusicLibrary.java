@@ -95,7 +95,7 @@ public class MusicLibrary {
         programs = ProgramsReceiver.getPrograms();
     }
 
-    private static long getDuration(ProgramsData model){
+    public static long getDuration(ProgramsData model){
         MediaPlayer mp = new MediaPlayer();
         try {
             mp.setDataSource(model.getMediaSource());

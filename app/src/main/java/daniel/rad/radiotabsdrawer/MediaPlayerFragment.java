@@ -2,6 +2,8 @@ package daniel.rad.radiotabsdrawer;
 
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,12 +21,18 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
+import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.client.MediaBrowserHelper;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.MusicService;
+import daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs.MusicLibrary;
+import daniel.rad.radiotabsdrawer.myMediaPlayer.service.players.MediaPlayerAdapter;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ui.MediaSeekBar;
+import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import daniel.rad.radiotabsdrawer.radioFragments.RadioTopFragment;
 
 
@@ -44,6 +52,8 @@ public class MediaPlayerFragment extends Fragment {
     ProgressBar pbLoading;
 
     public MediaBrowserHelper mMediaBrowserHelper;
+
+    ProgramsData programsData;
 
     static public boolean mIsPlaying;
 //    static public boolean mIsLoading;
@@ -69,6 +79,10 @@ public class MediaPlayerFragment extends Fragment {
         tvPlayerLine = view.findViewById(R.id.tvPlayerLine);
         initProgressBar(view);
 
+        if (getArguments() != null) {
+            programsData = getArguments().getParcelable("programIndex");
+            playChosenPrograms();
+        }
 
         bnBack.setOnClickListener(v -> {
 //            mIsLoading = true;
@@ -157,6 +171,33 @@ public class MediaPlayerFragment extends Fragment {
 
     public void stopFunction(){
 
+    }
+
+    public void playChosenPrograms(){
+        if (mIsPlaying)
+        mMediaBrowserHelper.getTransportControls().stop();
+        ProgramsData chosenProgram = programsData;
+        tvProgramName.setText(chosenProgram.getProgramName());
+        tvStudentName.setText(chosenProgram.getStudentName());
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(getContext(), Uri.parse(chosenProgram.getMediaSource()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaPlayer.prepareAsync();
+//        MusicService musicService = new MusicService();
+//        mMediaBrowserHelper.getTransportControls().prepareFromMediaId(chosenProgram.getVodId(),); TODO
+//        musicService.initPlayerAdapter(getContext());
+//        musicService.mPlayback.playFromMedia(new MediaMetadataCompat.Builder()
+//                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, chosenProgram.getVodId())
+//                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, chosenProgram.getStudentName())
+//                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,
+//                        TimeUnit.MILLISECONDS.convert(MusicLibrary.getDuration(chosenProgram), chosenProgram.getDurationUnit()))
+//                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chosenProgram.getProgramName())
+//                .putString(MediaMetadataCompat.METADATA_KEY_DATE,chosenProgram.getCreationDate())
+//                .build());
+        mMediaBrowserHelper.getTransportControls().play();
     }
 
     /**

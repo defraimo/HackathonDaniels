@@ -17,6 +17,7 @@
 package daniel.rad.radiotabsdrawer.myMediaPlayer.service;
 
 import android.app.Notification;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,7 +42,7 @@ public class MusicService extends MediaBrowserServiceCompat {
     private static final String TAG = MusicService.class.getSimpleName();
 
     private MediaSessionCompat mSession;
-    private PlayerAdapter mPlayback;
+    public PlayerAdapter mPlayback;
     private MediaNotificationManager mMediaNotificationManager;
     private MediaSessionCallback mCallback;
     private boolean mServiceInStartedState;
@@ -64,6 +65,10 @@ public class MusicService extends MediaBrowserServiceCompat {
 
         mPlayback = new MediaPlayerAdapter(this, new MediaPlayerListener());
         Log.d(TAG, "onCreate: MusicService creating MediaSession, and MediaNotificationManager");
+    }
+
+    public void initPlayerAdapter(Context context) {
+        mPlayback = new MediaPlayerAdapter(context, new MediaPlayerListener());
     }
 
     @Override

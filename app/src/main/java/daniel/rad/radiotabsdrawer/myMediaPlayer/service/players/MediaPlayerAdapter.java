@@ -141,10 +141,6 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
         }
     }
 
-    public Context getmContext() {
-        return mContext;
-    }
-
     @Override
     public void onStop() {
         // Regardless of whether or not the MediaPlayer has been created / started, the state must

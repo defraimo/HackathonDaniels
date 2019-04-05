@@ -2,6 +2,7 @@ package daniel.rad.radiotabsdrawer.playlist;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuPopupHelper;
@@ -59,6 +60,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
         }
 
         ArrayList<ProgramsData> programsDataList = (ArrayList<ProgramsData>) playlist.getProgramsData();
+        holder.ivProfileAll.setImageResource(defaultPic);
         if (programsDataList.size() == 1) {
             if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic){
                 holder.ivProfileAll.setImageResource(defaultPic);
@@ -88,6 +90,14 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 holder.ivProfilePic2.setImageResource(programsDataList.get(1).getProfilePic());
             }
             holder.ivProfileAll.setVisibility(View.INVISIBLE);
+            if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic &&
+                    programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic){
+                holder.ivProfileAll.setVisibility(View.VISIBLE);
+                holder.ivProfilePic1.setVisibility(View.INVISIBLE);
+                holder.ivProfilePic2.setVisibility(View.INVISIBLE);
+                holder.ivProfilePic3.setVisibility(View.INVISIBLE);
+                holder.ivProfilePic4.setVisibility(View.INVISIBLE);
+            }
         } else if (programsDataList.size() == 3) {
             if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic){
                 holder.ivProfilePic1.setImageResource(defaultPic);
@@ -110,6 +120,15 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 holder.ivProfilePic3.setImageResource(programsDataList.get(1).getProfilePic());
             }
             holder.ivProfileAll.setVisibility(View.INVISIBLE);
+            if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic &&
+                    programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic &&
+                    programsDataList.get(2).getProfilePic() == R.drawable.ic_default_pic){
+                holder.ivProfileAll.setVisibility(View.VISIBLE);
+                holder.ivProfilePic1.setVisibility(View.INVISIBLE);
+                holder.ivProfilePic2.setVisibility(View.INVISIBLE);
+                holder.ivProfilePic3.setVisibility(View.INVISIBLE);
+                holder.ivProfilePic4.setVisibility(View.INVISIBLE);
+            }
 
         } else if (programsDataList.size() >= 4) {
             if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic){
@@ -138,6 +157,16 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 holder.ivProfilePic4.setImageResource(programsDataList.get(3).getProfilePic());
             }
             holder.ivProfileAll.setVisibility(View.INVISIBLE);
+            if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic &&
+                    programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic &&
+                    programsDataList.get(2).getProfilePic() == R.drawable.ic_default_pic &&
+                    programsDataList.get(3).getProfilePic() == R.drawable.ic_default_pic){
+                holder.ivProfileAll.setVisibility(View.VISIBLE);
+                holder.ivProfilePic1.setVisibility(View.INVISIBLE);
+                holder.ivProfilePic2.setVisibility(View.INVISIBLE);
+                holder.ivProfilePic3.setVisibility(View.INVISIBLE);
+                holder.ivProfilePic4.setVisibility(View.INVISIBLE);
+            }
         }
 
         holder.playlist = playlist;
@@ -161,6 +190,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
     ImageView ivDeletePlaylist;
     Playlist playlist;
     Context context;
+    Animation mShakeAnimation;
     boolean isDoublePressed = false;
 
     public PlayListViewHolder(@NonNull View itemView) {
@@ -175,6 +205,8 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
 
         itemView.setOnClickListener(v -> {
             if (isDoublePressed) {
+                mShakeAnimation = AnimationUtils.loadAnimation(itemView.getContext(),R.anim.stop_shake);
+                itemView.startAnimation(mShakeAnimation);
                 ivDeletePlaylist.setVisibility(View.GONE);
                 isDoublePressed = false;
             } else {
@@ -189,6 +221,8 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnLongClickListener(v -> {
             if (!isDoublePressed) {
                 ivDeletePlaylist.setVisibility(View.VISIBLE);
+                mShakeAnimation = AnimationUtils.loadAnimation(itemView.getContext(),R.anim.shake);
+                itemView.startAnimation(mShakeAnimation);
                 isDoublePressed = true;
             }
             return true;
