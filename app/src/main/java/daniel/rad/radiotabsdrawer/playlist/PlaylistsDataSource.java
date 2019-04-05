@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 
+import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import daniel.rad.radiotabsdrawer.programs.ProgramsDataSource;
 
@@ -113,10 +114,11 @@ public class PlaylistsDataSource {
 
     public static ArrayList<Playlist> getPlaylists() {
         ArrayList<Playlist> playlists = new ArrayList<>();
-        ArrayList<String> playlistsNames = new ArrayList<>();
+//        ArrayList<String> playlistsNames = new ArrayList<>();
         ArrayList<ProgramsData> dataArrayListFavorite = new ArrayList<>();
-        ArrayList<ProgramsData> dataArrayList = ProgramsDataSource.getPrograms();
+        ArrayList<ProgramsData> dataArrayList = ProgramsReceiver.getPrograms();
 
+        if (dataArrayList.size() != 0)
         dataArrayListFavorite.add(dataArrayList.get(0));
 
         playlists.add(new Playlist("מועדפים", dataArrayList));

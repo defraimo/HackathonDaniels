@@ -2,6 +2,7 @@ package daniel.rad.radiotabsdrawer;
 
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -10,17 +11,21 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Objects;
 
 import daniel.rad.radiotabsdrawer.myMediaPlayer.client.MediaBrowserHelper;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.MusicService;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ui.MediaSeekBar;
+import daniel.rad.radiotabsdrawer.radioFragments.RadioTopFragment;
 
 
 /**
@@ -36,10 +41,12 @@ public class MediaPlayerFragment extends Fragment {
     TextView tvPlayerLine;
     public MediaSeekBar sbSong;
     public TextView tvTime;
+    ProgressBar pbLoading;
 
     public MediaBrowserHelper mMediaBrowserHelper;
 
     static public boolean mIsPlaying;
+//    static public boolean mIsLoading;
 
     public MediaPlayerFragment() {
         // Required empty public constructor
@@ -60,9 +67,12 @@ public class MediaPlayerFragment extends Fragment {
         tvProgramName = view.findViewById(R.id.tvProgramName);
         tvStudentName = view.findViewById(R.id.tvStudentName);
         tvPlayerLine = view.findViewById(R.id.tvPlayerLine);
+        initProgressBar(view);
 
 
         bnBack.setOnClickListener(v -> {
+//            mIsLoading = true;
+            setProgressBarVisible();
             bnBack.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnBack.animate().scaleX(1).scaleY(1).setDuration(200);
                 mMediaBrowserHelper.getTransportControls().skipToPrevious();
@@ -71,6 +81,8 @@ public class MediaPlayerFragment extends Fragment {
         });
 
         bnForward.setOnClickListener(v -> {
+//            mIsLoading = true;
+            setProgressBarVisible();
             bnForward.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnForward.animate().scaleX(1).scaleY(1).setDuration(200);
                 mMediaBrowserHelper.getTransportControls().skipToNext();
@@ -79,14 +91,27 @@ public class MediaPlayerFragment extends Fragment {
         });
 
         bnPlay.setOnClickListener(v -> {
+//            mIsLoading = true;
+            setProgressBarVisible();
             playFunction();
-
         });
 
         mMediaBrowserHelper = new MediaPlayerFragment.MediaBrowserConnection(getContext());
         mMediaBrowserHelper.registerCallback(new MediaPlayerFragment.MediaBrowserListener());
 
         return view;
+    }
+
+    public void initProgressBar(View view) {
+        pbLoading = view.findViewById(R.id.pbLoading);
+    }
+
+    public void setProgressBarVisible(){
+        pbLoading.setVisibility(View.VISIBLE);
+    }
+
+    public void setProgressBarInvisible(){
+        pbLoading.setVisibility(View.GONE);
     }
 
     @Override

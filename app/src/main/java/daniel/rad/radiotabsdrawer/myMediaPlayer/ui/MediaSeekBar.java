@@ -48,6 +48,8 @@ public class MediaSeekBar extends AppCompatSeekBar {
             if (progress > 0 && MediaPlayerFragment.mIsPlaying) {
                 mediaPlayerFragment.initBnPlay(getRootView());
                 mediaPlayerFragment.bnPlay.setImageResource(R.drawable.ic_pause);
+                mediaPlayerFragment.initProgressBar(getRootView());
+                mediaPlayerFragment.setProgressBarInvisible();
             }
             mediaPlayerFragment.initTvTime(getRootView());
             mediaPlayerFragment.tvTime.setText(printSongTime(progress));

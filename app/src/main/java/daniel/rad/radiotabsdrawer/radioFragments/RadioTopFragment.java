@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -37,6 +38,8 @@ public class RadioTopFragment extends Fragment {
     private boolean mIsPlaying;
 
     ImageView ivRadioPlay;
+    public TextView tvProgramTopName;
+    public TextView tvStudentTopName;
 
     public RadioTopFragment() {
         // Required empty public constructor
@@ -55,6 +58,7 @@ public class RadioTopFragment extends Fragment {
 
         ImageView gifImageView = view.findViewById(R.id.ivRadio);
         ivRadioPlay = view.findViewById(R.id.ivRadioPlay);
+        initTextViews(view);
         mediaPlayerFragment = new MediaPlayerFragment();
 
         Glide.with(this).
@@ -82,6 +86,11 @@ public class RadioTopFragment extends Fragment {
                 });
             }
         });
+    }
+
+    private void initTextViews(View view) {
+        tvProgramTopName = view.findViewById(R.id.tvProgramName);
+        tvStudentTopName = view.findViewById(R.id.tvStudentName);
     }
 
     @Override

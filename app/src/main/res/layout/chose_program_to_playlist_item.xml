@@ -21,6 +21,12 @@
             android:text="שם התוכנית"
             android:textColor="#FFF"
             android:textSize="18sp"
+            android:maxEms="10"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ivProfilePic"
             app:layout_constraintTop_toTopOf="parent" />

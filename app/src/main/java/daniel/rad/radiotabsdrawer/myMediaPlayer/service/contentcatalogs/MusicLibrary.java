@@ -93,13 +93,13 @@ public class MusicLibrary {
 
     private static void getBroadcasts(){
         programs = ProgramsReceiver.getPrograms();
-
     }
 
     private static long getDuration(ProgramsData model){
         MediaPlayer mp = new MediaPlayer();
         try {
             mp.setDataSource(model.getMediaSource());
+            mp.prepareAsync();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -180,10 +180,10 @@ public class MusicLibrary {
                                  TimeUnit.MILLISECONDS.convert(duration, durationUnit))
 //                        .putString(
 //                                MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,
-//                                getAlbumArtUri(albumArtResName))
+//                                getAlbumArtUri(musicFilename))
 //                        .putString(
 //                                MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON_URI,
-//                                getAlbumArtUri(albumArtResName))
+//                                getAlbumArtUri(musicFilename))
                         .putString(MediaMetadataCompat.METADATA_KEY_TITLE, programTitle)
                         .putString(MediaMetadataCompat.METADATA_KEY_DATE,creationDate)
                         .build());

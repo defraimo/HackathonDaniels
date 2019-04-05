@@ -51,7 +51,7 @@ public class ProgramListFragment extends Fragment {
 
         ivProgramSearch.setOnClickListener((v)->{
             ArrayList<ProgramsData> newList = new ArrayList<>();
-            ArrayList<ProgramsData> allPrograms = (ArrayList<ProgramsData>) ProgramsDataSource.getPrograms();
+            ArrayList<ProgramsData> allPrograms = (ArrayList<ProgramsData>) ProgramsReceiver.getPrograms();
             String search = etSearch.getText().toString().trim().toLowerCase();
             for (ProgramsData program : allPrograms) {
                 if (program.getProgramName().toLowerCase().contains(search)){

@@ -17,18 +17,13 @@
 package daniel.rad.radiotabsdrawer.myMediaPlayer.service.players;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.telecom.Connection;
 
-import java.io.File;
-import java.net.URL;
-import java.net.URLConnection;
-
+import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.PlaybackInfoListener;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.PlayerAdapter;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs.MusicLibrary;
@@ -133,12 +128,21 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
         }
 
         try {
-            mMediaPlayer.prepare();
+            mMediaPlayer.prepareAsync();
+            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+//                    MediaPlayerFragment.mIsLoading = false;
+                    play();
+                }
+            });
         } catch (Exception e) {
             throw new RuntimeException("Failed to open file: " + mFilename, e);
         }
+    }
 
-        play();
+    public Context getmContext() {
+        return mContext;
     }
 
     @Override

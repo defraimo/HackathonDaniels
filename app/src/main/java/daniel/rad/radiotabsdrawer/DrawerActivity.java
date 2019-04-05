@@ -14,6 +14,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -30,7 +31,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.Toast;
 
@@ -42,6 +45,7 @@ public class DrawerActivity extends AppCompatActivity
 
     FragmentManager fm;
     FrameLayout player_frame;
+    ImageView ivLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +72,25 @@ public class DrawerActivity extends AppCompatActivity
         viewPager.setAdapter(sectionsPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-//        downloadJson();
+        initLoadingPic();
+        stopLoadingPic();
+
         new ProgramsReceiver().execute();
+
+//        downloadJson();
 
         player_frame = findViewById(R.id.player_frame);
 
         fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.player_frame,new MediaPlayerFragment()).commit();
+    }
+
+    public void initLoadingPic() {
+        ivLoading = findViewById(R.id.ivLoading);
+    }
+
+    public void stopLoadingPic(){
+        ivLoading.setVisibility(View.GONE);
     }
 
     private void checkIfNew(){

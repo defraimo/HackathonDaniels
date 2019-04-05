@@ -1,12 +1,20 @@
 package daniel.rad.radiotabsdrawer.myMediaPlayer;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
+import daniel.rad.radiotabsdrawer.DrawerActivity;
+import daniel.rad.radiotabsdrawer.MainActivity;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -15,8 +23,11 @@ import okhttp3.Response;
 
 public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
     private static List<ProgramsData> programs;
-//    private static final HashMap<String, String> musicFileName = new HashMap<>();
-
+//    View view;
+//
+//    public ProgramsReceiver(View view) {
+//        this.view = view;
+//    }
 
     @Override
     protected List<ProgramsData> doInBackground(Void... voids) {
@@ -78,5 +89,8 @@ public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
     @Override
     protected void onPostExecute(List<ProgramsData> programsData) {
         System.out.println(programsData);
+//        DrawerActivity drawerActivity = new DrawerActivity();
+//        drawerActivity.initLoadingPic();
+//        drawerActivity.stopLoadingPic();
     }
 }

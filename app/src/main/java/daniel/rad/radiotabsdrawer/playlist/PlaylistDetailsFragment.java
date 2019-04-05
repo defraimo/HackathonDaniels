@@ -25,6 +25,7 @@ public class PlaylistDetailsFragment extends Fragment {
 
     TextView tvPlaylistName;
     ImageView ivSearchButton;
+    ImageView ivPlayPlaylist;
     EditText etSearchProgram;
     public static RecyclerView rvPlaylistPrograms;
 
@@ -51,6 +52,7 @@ public class PlaylistDetailsFragment extends Fragment {
         tvPlaylistName = view.findViewById(R.id.tvPlaylistName);
         rvPlaylistPrograms = view.findViewById(R.id.rvPlaylistPrograms);
         ivSearchButton = view.findViewById(R.id.ivSearchButton);
+        ivPlayPlaylist = view.findViewById(R.id.ivPlayPlaylist);
         etSearchProgram = view.findViewById(R.id.etSearchProgram);
 
         if(getArguments() != null) {
@@ -69,6 +71,10 @@ public class PlaylistDetailsFragment extends Fragment {
                 rvPlaylistPrograms.setAdapter(adapter);
             }
         }
+
+        ivPlayPlaylist.setOnClickListener(v -> {
+
+        });
 
     }
 }

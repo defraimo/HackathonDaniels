@@ -45,30 +45,99 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
     public void onBindViewHolder(@NonNull PlayListViewHolder holder, int i) {
         Playlist playlist = playlists.get(i);
 
-        holder.tvPlayList.setText(playlist.getName());
+        String playlistName = playlist.getName();
+        int defaultPic;
+        holder.tvPlayList.setText(playlistName);
+        if (playlistName.equals("מומלצים")){
+            defaultPic = R.drawable.ic_default_recommended;
+        }
+        else if (playlistName.equals("מועדפים")){
+            defaultPic = R.drawable.ic_default_favourite;
+        }
+        else {
+            defaultPic = R.drawable.ic_default_pic;
+        }
 
         ArrayList<ProgramsData> programsDataList = (ArrayList<ProgramsData>) playlist.getProgramsData();
         if (programsDataList.size() == 1) {
-            holder.ivProfileAll.setImageResource(programsDataList.get(0).getProfilePic());
+            if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic){
+                holder.ivProfileAll.setImageResource(defaultPic);
+            }
+            else{
+                holder.ivProfileAll.setImageResource(programsDataList.get(0).getProfilePic());
+            }
             holder.ivProfilePic1.setVisibility(View.INVISIBLE);
             holder.ivProfilePic2.setVisibility(View.INVISIBLE);
             holder.ivProfilePic3.setVisibility(View.INVISIBLE);
             holder.ivProfilePic4.setVisibility(View.INVISIBLE);
         } else if (programsDataList.size() == 2) {
-            holder.ivProfilePic1.setImageResource(programsDataList.get(0).getProfilePic());
-            holder.ivProfilePic3.setImageResource(programsDataList.get(1).getProfilePic());
-            holder.ivProfilePic2.setImageResource(programsDataList.get(1).getProfilePic());
-            holder.ivProfilePic4.setImageResource(programsDataList.get(0).getProfilePic());
+            if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic){
+                holder.ivProfilePic1.setImageResource(defaultPic);
+                holder.ivProfilePic4.setImageResource(defaultPic);
+            }
+            else {
+                holder.ivProfilePic1.setImageResource(programsDataList.get(0).getProfilePic());
+                holder.ivProfilePic4.setImageResource(programsDataList.get(0).getProfilePic());
+            }
+            if (programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic){
+                holder.ivProfilePic2.setImageResource(defaultPic);
+                holder.ivProfilePic3.setImageResource(defaultPic);
+            }
+            else {
+                holder.ivProfilePic3.setImageResource(programsDataList.get(1).getProfilePic());
+                holder.ivProfilePic2.setImageResource(programsDataList.get(1).getProfilePic());
+            }
+            holder.ivProfileAll.setVisibility(View.INVISIBLE);
         } else if (programsDataList.size() == 3) {
-            holder.ivProfilePic1.setImageResource(programsDataList.get(0).getProfilePic());
-            holder.ivProfilePic3.setImageResource(programsDataList.get(1).getProfilePic());
-            holder.ivProfilePic2.setImageResource(programsDataList.get(2).getProfilePic());
-            holder.ivProfilePic4.setImageResource(programsDataList.get(0).getProfilePic());
+            if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic){
+                holder.ivProfilePic1.setImageResource(defaultPic);
+                holder.ivProfilePic4.setImageResource(defaultPic);
+            }
+            else {
+                holder.ivProfilePic1.setImageResource(programsDataList.get(0).getProfilePic());
+                holder.ivProfilePic4.setImageResource(programsDataList.get(0).getProfilePic());
+            }
+            if (programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic){
+                holder.ivProfilePic2.setImageResource(defaultPic);
+            }
+            else {
+                holder.ivProfilePic2.setImageResource(programsDataList.get(2).getProfilePic());
+            }
+            if (programsDataList.get(3).getProfilePic() == R.drawable.ic_default_pic){
+                holder.ivProfilePic3.setImageResource(defaultPic);
+            }
+            else {
+                holder.ivProfilePic3.setImageResource(programsDataList.get(1).getProfilePic());
+            }
+            holder.ivProfileAll.setVisibility(View.INVISIBLE);
+
         } else if (programsDataList.size() >= 4) {
-            holder.ivProfilePic1.setImageResource(programsDataList.get(0).getProfilePic());
-            holder.ivProfilePic3.setImageResource(programsDataList.get(1).getProfilePic());
-            holder.ivProfilePic2.setImageResource(programsDataList.get(2).getProfilePic());
-            holder.ivProfilePic4.setImageResource(programsDataList.get(3).getProfilePic());
+            if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic){
+                holder.ivProfilePic1.setImageResource(defaultPic);
+            }
+            else {
+                holder.ivProfilePic1.setImageResource(programsDataList.get(0).getProfilePic());
+            }
+            if (programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic){
+                holder.ivProfilePic2.setImageResource(defaultPic);
+
+            }
+            else {
+                holder.ivProfilePic3.setImageResource(programsDataList.get(1).getProfilePic());
+            }
+            if (programsDataList.get(3).getProfilePic() == R.drawable.ic_default_pic){
+                holder.ivProfilePic3.setImageResource(defaultPic);
+            }
+            else {
+                holder.ivProfilePic2.setImageResource(programsDataList.get(2).getProfilePic());
+            }
+            if (programsDataList.get(4).getProfilePic() == R.drawable.ic_default_pic){
+                holder.ivProfilePic4.setImageResource(defaultPic);
+            }
+            else {
+                holder.ivProfilePic4.setImageResource(programsDataList.get(3).getProfilePic());
+            }
+            holder.ivProfileAll.setVisibility(View.INVISIBLE);
         }
 
         holder.playlist = playlist;

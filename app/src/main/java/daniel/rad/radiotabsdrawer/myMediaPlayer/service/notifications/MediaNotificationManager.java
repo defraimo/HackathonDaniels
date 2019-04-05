@@ -142,7 +142,7 @@ public class MediaNotificationManager {
                                 MediaButtonReceiver.buildMediaButtonPendingIntent(
                                         mService,
                                         PlaybackStateCompat.ACTION_STOP)))
-                .setColor(ContextCompat.getColor(mService, R.color.design_default_color_primary_dark))
+                .setColor(ContextCompat.getColor(mService, R.color.colorPrimaryDark))
                 .setSmallIcon(R.drawable.ic_app_mini_icon)
                 // Pending intent that is fired when user clicks on notification.
                 .setContentIntent(createContentIntent())
