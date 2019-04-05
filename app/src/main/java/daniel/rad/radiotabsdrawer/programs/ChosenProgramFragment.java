@@ -1,16 +1,18 @@
 package daniel.rad.radiotabsdrawer.programs;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import daniel.rad.radiotabsdrawer.R;
 
@@ -19,8 +21,14 @@ import daniel.rad.radiotabsdrawer.R;
  * A simple {@link Fragment} subclass.
  */
 public class ChosenProgramFragment extends Fragment {
-    public static ChosenProgramFragment newInstance(ProgramsData programsData) {
 
+    TextView tvChosenStudentName;
+    TextView tvChosenProgramName;
+    RecyclerView rvChosenComments;
+    ImageView ivAddToFav;
+    ImageView ivShare;
+
+    public static ChosenProgramFragment newInstance(ProgramsData programsData) {
         Bundle args = new Bundle();
         args.putParcelable("model", programsData);
         ChosenProgramFragment fragment = new ChosenProgramFragment();
@@ -43,14 +51,26 @@ public class ChosenProgramFragment extends Fragment {
            ProgramsData model =  getArguments().getParcelable("model");
 
            //defining the elements in the fragment:
-            TextView tvChosenPName = view.findViewById(R.id.tvChosenPName);
-            TextView tvChosenProgramName = view.findViewById(R.id.tvChosenProgramName);
-            FloatingActionButton fabChosenLike = view.findViewById(R.id.fabChosenLike);
-            FloatingActionButton fabChosenShare= view.findViewById(R.id.fabChosenShare);
-            RecyclerView rvChosenComments = view.findViewById(R.id.rvChosenComments);
+            tvChosenStudentName = view.findViewById(R.id.tvChosenStudentName);
+            tvChosenProgramName = view.findViewById(R.id.tvChosenProgramName);
+            rvChosenComments = view.findViewById(R.id.rvChosenComments);
+            ivAddToFav = view.findViewById(R.id.ivAddToFav);
+            ivShare = view.findViewById(R.id.ivShare);
 
-            tvChosenPName.setText(model.getStudentName());
+            tvChosenStudentName.setText(model.getStudentName());
             tvChosenProgramName.setText(model.getProgramName());
+
+            ivShare.setOnClickListener(v -> {
+                Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+                whatsappIntent.setType("text/plain");
+                whatsappIntent.setPackage("com.whatsapp");
+                whatsappIntent.putExtra(Intent.EXTRA_TEXT, "מוזמנ/ת להקשיב לתוכנית - "+model.getProgramName()+" של "+model.getStudentName()+"! *קישור כניסה לאפליקצייה*");
+                try {
+                    getActivity().startActivity(whatsappIntent);
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(getContext(), "whatsapp לא מותקן", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }

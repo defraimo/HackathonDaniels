@@ -34,9 +34,9 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/layout_bg"
             app:layout_constraintBottom_toBottomOf="@+id/tvChosenProgramName"
-            app:layout_constraintEnd_toEndOf="@+id/tvChosenPName"
+            app:layout_constraintEnd_toEndOf="@+id/tvChosenStudentName"
             app:layout_constraintStart_toStartOf="@+id/tvChosenProgramName"
-            app:layout_constraintTop_toTopOf="@+id/tvChosenPName">
+            app:layout_constraintTop_toTopOf="@+id/tvChosenStudentName">
 
         </android.support.constraint.ConstraintLayout>
 
@@ -51,7 +51,7 @@
             android:textColor="#fff"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvChosenPName"
+            app:layout_constraintTop_toBottomOf="@+id/tvChosenStudentName"
             android:maxEms="18"
             android:singleLine="true"
             android:ellipsize="marquee"
@@ -60,7 +60,7 @@
             android:scrollHorizontally="true"/>
 
         <TextView
-            android:id="@+id/tvChosenPName"
+            android:id="@+id/tvChosenStudentName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

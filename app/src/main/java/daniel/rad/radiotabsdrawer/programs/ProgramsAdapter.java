@@ -2,7 +2,6 @@ package daniel.rad.radiotabsdrawer.programs;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,8 +14,6 @@ import java.util.List;
 
 import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
 import daniel.rad.radiotabsdrawer.R;
-import daniel.rad.radiotabsdrawer.myMediaPlayer.service.PlaybackInfoListener;
-import daniel.rad.radiotabsdrawer.myMediaPlayer.service.players.MediaPlayerAdapter;
 
 public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.ProgramViewHolder> {
     private MediaPlayerFragment playerFragment;
@@ -68,7 +65,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
         public ProgramViewHolder(@NonNull View itemView) {
             super(itemView);
             this.ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
-            this.tvPName = itemView.findViewById(R.id.tvChosenPName);
+            this.tvPName = itemView.findViewById(R.id.tvChosenStudentName);
             this.tvProgramName = itemView.findViewById(R.id.tvChosenProgramName);
             this.ivPlayProgram = itemView.findViewById(R.id.ivPlayProgram);
 

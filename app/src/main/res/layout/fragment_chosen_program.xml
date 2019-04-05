@@ -9,61 +9,38 @@
     android:background="#FF1E202A">
 
     <TextView
-        android:id="@+id/tvChosenPName"
+        android:id="@+id/tvChosenStudentName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:text="TextView"
+        android:text="שם התלמיד"
         android:textColor="#FFF"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/tvChosenProgramName"
+        app:layout_constraintStart_toStartOf="@+id/tvChosenProgramName"
+        app:layout_constraintTop_toBottomOf="@+id/tvChosenProgramName" />
 
     <TextView
         android:id="@+id/tvChosenProgramName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:text="TextView"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:fontFamily="sans-serif-black"
+        android:lines="2"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:maxEms="14"
+        android:scrollHorizontally="true"
+        android:text="שם התוכנית"
+        android:textAlignment="center"
         android:textColor="#FFF"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvChosenPName" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabChosenLike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:clickable="true"
-        android:src="@drawable/ic_comment"
-        app:backgroundTint="@color/radioButton"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvChosenProgramName" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabChosenShare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
-        android:clickable="true"
-        android:src="@drawable/ic_menu_share"
-        app:backgroundTint="@android:color/background_light"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvChosenProgramName" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvChosenComments"
@@ -81,4 +58,27 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.25" />
+
+    <ImageView
+        android:id="@+id/ivAddToFav"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_favourite"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvChosenStudentName" />
+
+    <ImageView
+        android:id="@+id/ivShare"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/messenger_button_send_round_shadow"
+        app:layout_constraintBottom_toBottomOf="@+id/ivAddToFav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivAddToFav" />
+
 </android.support.constraint.ConstraintLayout>
