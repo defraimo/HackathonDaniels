@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 import daniel.rad.radiotabsdrawer.DrawerActivity;
 import daniel.rad.radiotabsdrawer.MainActivity;
@@ -23,6 +24,7 @@ import okhttp3.Response;
 
 public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
     private static List<ProgramsData> programs;
+    private static TreeMap<String,String> vodNames;
 //    View view;
 //
 //    public ProgramsReceiver(View view) {
@@ -32,6 +34,7 @@ public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
     @Override
     protected List<ProgramsData> doInBackground(Void... voids) {
         programs = new ArrayList<>();
+        vodNames = new TreeMap<>();
         String link = "http://be.repoai.com:5080/WebRTCAppEE/rest/broadcast/getVodList/0/100?fbclid=IwAR1c2x7Pa5nSOL3i4oCvq4Ji_-JNv8DNuTLkqo1sy1h-mPyQCZptUkGQl_E";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(link).build();
@@ -79,11 +82,16 @@ public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
             String type = jsonObject.getString("type");
             programs.add(
                     new ProgramsData(vodId,vodNameFixed,"",duration,filePath,0,creationDate));
+            vodNames.put(vodId,vodName);
         }
     }
 
     public static ArrayList<ProgramsData> getPrograms(){
         return (ArrayList<ProgramsData>) programs;
+    }
+
+    public static TreeMap<String,String> getVodNames(){
+        return vodNames;
     }
 
     @Override

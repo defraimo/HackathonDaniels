@@ -46,7 +46,6 @@ public class DrawerActivity extends AppCompatActivity
 
     FragmentManager fm;
     FrameLayout player_frame;
-    ImageView ivLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +55,7 @@ public class DrawerActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 //        checkIfNew();
-        passArgs();
+//        passArgs();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -74,9 +73,6 @@ public class DrawerActivity extends AppCompatActivity
         viewPager.setAdapter(sectionsPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        initLoadingPic();
-        stopLoadingPic();
-
         new ProgramsReceiver().execute();
 
 //        downloadJson();
@@ -91,18 +87,13 @@ public class DrawerActivity extends AppCompatActivity
         Intent intent = getIntent();
         ProgramsData programsData = intent.getParcelableExtra("programIndex");
         Bundle bundle = new Bundle();
-        bundle.putParcelable("programIndex",programsData);
-        MediaPlayerFragment playerFragment = new MediaPlayerFragment();
-        playerFragment.setArguments(bundle);
+        if (programsData != null) {
+            bundle.putParcelable("programIndex", programsData);
+            MediaPlayerFragment playerFragment = new MediaPlayerFragment();
+            playerFragment.setArguments(bundle);
+        }
     }
 
-    public void initLoadingPic() {
-        ivLoading = findViewById(R.id.ivLoading);
-    }
-
-    public void stopLoadingPic(){
-        ivLoading.setVisibility(View.GONE);
-    }
 
     private void checkIfNew(){
         SharedPreferences sharedPreferences = getSharedPreferences("userName",MODE_PRIVATE);

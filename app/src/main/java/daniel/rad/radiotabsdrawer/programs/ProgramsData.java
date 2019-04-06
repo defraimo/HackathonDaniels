@@ -127,7 +127,6 @@ public class ProgramsData implements Parcelable {
         return Objects.hash(vodId, programName, studentName, duration, durationUnit, mediaSource, profilePic, creationDate);
     }
 
-
     @Override
     public int describeContents() {
         return 0;

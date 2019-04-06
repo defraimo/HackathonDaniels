@@ -35,7 +35,7 @@
         </activity>
         <activity
             android:name=".DrawerActivity"
-            android:label="@string/app_title"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
             <intent-filter>

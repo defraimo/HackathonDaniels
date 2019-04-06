@@ -3,7 +3,11 @@ package daniel.rad.radiotabsdrawer.programs;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +20,7 @@ import java.util.List;
 
 import daniel.rad.radiotabsdrawer.DrawerActivity;
 import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
+import daniel.rad.radiotabsdrawer.PassingProgramsNames;
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.players.MediaPlayerAdapter;
 
@@ -24,10 +29,13 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
     private List<ProgramsData> programs;
     private Context context;
 
-    public ProgramsAdapter(List<ProgramsData> programs, Context context) {
+    private ProgramAdapterInterface programAdapterInterface;
+
+    public ProgramsAdapter(List<ProgramsData> programs, Context context ,ProgramAdapterInterface programAdapterInterface) {
         playerFragment = new MediaPlayerFragment();
         this.programs = programs;
         this.context = context;
+        this.programAdapterInterface = programAdapterInterface;
     }
 
     @NonNull
@@ -37,7 +45,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
 
         View programView = inflater.inflate(R.layout.program_item, viewGroup, false);
 
-        ProgramViewHolder holder = new ProgramViewHolder(programView);
+        ProgramViewHolder holder = new ProgramViewHolder(programView,programAdapterInterface);
         return holder;
     }
 
@@ -67,7 +75,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
         ProgramsData program;
 //        int programIndex = getAdapterPosition();
 
-        public ProgramViewHolder(@NonNull View itemView) {
+        public ProgramViewHolder(@NonNull View itemView, final ProgramAdapterInterface programAdapterInterface) {
             super(itemView);
             this.ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
             this.tvPName = itemView.findViewById(R.id.tvChosenStudentName);
@@ -86,12 +94,24 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
             });
 
             ivPlayProgram.setOnClickListener(v -> {
-                Intent intent = new Intent(v.getContext(), DrawerActivity.class);
-                intent.putExtra("programIndex",program);
-                v.getContext().startActivity(intent);
-                mediaPlayerFragment.initBnPlay(itemView.getRootView());
-                mediaPlayerFragment.playFunction();
+//                mediaPlayerFragment.initBnPlay(itemView.getRootView());
+//                mediaPlayerFragment.playFunction();
+//                mediaPlayerFragment.playChosenPrograms();
+
+//                FragmentManager fragmentManager = fragment.getChildFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+//                ProgramListFragment fragment = new ProgramListFragment();
+//                Bundle bundle = new Bundle();
+//                bundle.putParcelable("programIndex", program);
+//                fragment.setArguments(bundle);
+//                fragment.getArgs();
+
+                programAdapterInterface.onItemClicked(program);
             });
         }
+    }
+    public interface ProgramAdapterInterface{
+        void onItemClicked(ProgramsData chosenProgram);
     }
 }

@@ -53,6 +53,10 @@ public class MediaSeekBar extends AppCompatSeekBar {
             }
             mediaPlayerFragment.initTvTime(getRootView());
             mediaPlayerFragment.tvTime.setText(printSongTime(progress));
+            if (progress != 0){
+                mediaPlayerFragment.initSbSong(getRootView());
+                mediaPlayerFragment.sbSong.setProgress(progress);
+            }
         }
 
         @Override
