@@ -40,11 +40,14 @@ public class AllPlaylistsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //todo:
+        //call function readDB() here in order to get the playlists from the database
+
         rvPlaylist = view.findViewById(R.id.rvPlaylist);
         tvPlaylist = view.findViewById(R.id.tvPlaylist);
         ivAddPlaylist = view.findViewById(R.id.ivAddPlaylist);
 
-        ArrayList<Playlist> playlists = PlaylistsDataSource.getPlaylists();
+        ArrayList<Playlist> playlists = PlaylistsDataSource.getPlaylists(getContext());
         rvPlaylist.setLayoutManager(new GridLayoutManager(getContext(),2));
         rvPlaylist.setAdapter(new PlaylistAdapter(playlists,getContext()));
 

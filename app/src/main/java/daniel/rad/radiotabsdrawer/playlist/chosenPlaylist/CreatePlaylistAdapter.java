@@ -11,6 +11,7 @@ import android.widget.ToggleButton;
 
 import java.util.List;
 
+import daniel.rad.radiotabsdrawer.playlist.Playlist;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import daniel.rad.radiotabsdrawer.R;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -61,6 +62,7 @@ class CreatePlaylistViewHolder extends RecyclerView.ViewHolder{
     ToggleButton tbCheck;
     ProgramsData programsData;
 
+
     public CreatePlaylistViewHolder(@NonNull View itemView) {
         super(itemView);
         tvProgramName = itemView.findViewById(R.id.tvProgramName);
@@ -72,6 +74,7 @@ class CreatePlaylistViewHolder extends RecyclerView.ViewHolder{
         tbCheck.setOnClickListener(v -> {
             if (tbCheck.isChecked()){
                 tbCheck.setBackgroundResource(R.drawable.ic_radio_button_checked);
+
             }
             else if (!tbCheck.isChecked()){
                 tbCheck.setBackgroundResource(R.drawable.ic_check);

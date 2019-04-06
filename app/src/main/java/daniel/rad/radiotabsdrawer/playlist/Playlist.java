@@ -3,12 +3,18 @@ package daniel.rad.radiotabsdrawer.playlist;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
-public class Playlist implements Parcelable {
+public class Playlist implements Parcelable{
     private String name;
     private List<ProgramsData> programsData;
 
@@ -37,8 +43,6 @@ public class Playlist implements Parcelable {
                 ", programsData=" + programsData +
                 '}';
     }
-
-
     @Override
     public int describeContents() {
         return 0;

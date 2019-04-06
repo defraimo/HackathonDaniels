@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import daniel.rad.radiotabsdrawer.R;
+import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.playlist.Playlist;
 import daniel.rad.radiotabsdrawer.playlist.PlaylistsDataSource;
 import daniel.rad.radiotabsdrawer.playlist.addProgramToPlaylist.AddProgramToPlaylistAdapter;
@@ -41,6 +42,7 @@ public class CreatePlaylistFragment extends Fragment {
     EditText etSearchAddPlaylist;
     ImageView ivCreatePlaylist;
     ImageView ivSearchButton;
+    Playlist playlist;
 
     public static CreatePlaylistFragment newInstance(Playlist playlist, boolean isAddProg) {
         Bundle args = new Bundle();
@@ -73,12 +75,11 @@ public class CreatePlaylistFragment extends Fragment {
         ArrayList<ProgramsData> dataArrayList = ProgramsDataSource.getPrograms();
         RecyclerView.Adapter adapter = new CreatePlaylistAdapter(dataArrayList, getContext());
 
-        PlaylistsDataSource playlistsDataSource= new PlaylistsDataSource();
-        playlistsDataSource.writeDB(getContext(),"מועדפים",dataArrayList);
+
 
         ArrayList<ProgramsData> sortedList = new ArrayList<>(dataArrayList);
         if (getArguments() != null) {
-            Playlist playlist = getArguments().getParcelable("playlist");
+            playlist = getArguments().getParcelable("playlist");
             if (getArguments().getBoolean("isAddProg")) {
                 for (ProgramsData programAll : dataArrayList) {
                     for (ProgramsData playlistProgram : playlist.getProgramsData()) {
@@ -131,9 +132,21 @@ public class CreatePlaylistFragment extends Fragment {
 
         ivCreatePlaylist.setOnClickListener(v -> {
             Toast.makeText(v.getContext(), "Creating Playlist!", Toast.LENGTH_SHORT).show();
-            //TODO: adds playlist to:
-            //1)db
-            //2)rvPlaylists adapter:
+            //an instance of the data source in order to write to the data base:
+            PlaylistsDataSource playlistsDataSource= new PlaylistsDataSource();
+            ArrayList<Playlist> playlists = new ArrayList<>();
+
+            String s = etListName.getText().toString();// playlist name
+
+            playlists.add(new Playlist(s, ProgramsReceiver.getPrograms()));
+            playlistsDataSource.writeDB(getContext(), playlists);
+
+
+            //TODO:
+            //1)pass data from the adapter here.
+            //2)write data to db
+            //3)notify user if successful
+            //4)update adapter in AllPlaylistFragment
 
 
         });
