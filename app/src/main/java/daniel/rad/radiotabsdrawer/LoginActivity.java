@@ -2,6 +2,7 @@ package daniel.rad.radiotabsdrawer;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -52,7 +53,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.registerCallback(cbManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                afterLoginSuccessed();
+                Toast.makeText(getApplicationContext(), "התחברת בהצלחה!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
 
             @Override
@@ -67,13 +69,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void afterLoginSuccessed(){
-        SharedPreferences sharedPreferences = getSharedPreferences("userName", MODE_PRIVATE);
-        sharedPreferences.edit().putString("userName1", "fbUser").apply();
-        Intent intent = new Intent(this, DrawerActivity.class);
-        startActivity(intent);
+    private void afterLoginSuccesses(){
+
+        //SharedPreferences sharedPreferences = getSharedPreferences("userName", MODE_PRIVATE);
+        //sharedPreferences.edit().putString("userName", "fbUser").apply();
+        //Intent intent = new Intent(this, DrawerActivity.class);
+        //startActivity(intent);
         //if we don't wat to get back to this activity again
-        finish();
+        //finish();
     }
 
 
