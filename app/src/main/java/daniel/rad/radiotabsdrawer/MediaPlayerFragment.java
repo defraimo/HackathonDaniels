@@ -4,9 +4,7 @@ package daniel.rad.radiotabsdrawer;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.MediaBrowserCompat;
@@ -14,31 +12,23 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
 
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.client.MediaBrowserHelper;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.MusicService;
-import daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs.MusicLibrary;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.players.MediaPlayerAdapter;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ui.MediaSeekBar;
-import daniel.rad.radiotabsdrawer.programs.ProgramListFragment;
-import daniel.rad.radiotabsdrawer.programs.ProgramsAdapter;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
-import daniel.rad.radiotabsdrawer.radioFragments.RadioTopFragment;
 
 
 /**
@@ -218,7 +208,7 @@ public class MediaPlayerFragment extends Fragment {
         }
         tvProgramName.setText(programsData.getProgramName());
         tvStudentName.setText(programsData.getStudentName());
-        MediaPlayer mediaPlayer = MediaPlayerAdapter.getmMediaPlayer();
+        MediaPlayer mediaPlayer = MediaPlayerAdapter.getMediaPlayer();
         try {
             mediaPlayer.setDataSource(getContext(),Uri.parse("http://be.repoai.com:5080/WebRTCAppEE/streams/home/" + programsData.getVodId()));
             mediaPlayer.prepareAsync();

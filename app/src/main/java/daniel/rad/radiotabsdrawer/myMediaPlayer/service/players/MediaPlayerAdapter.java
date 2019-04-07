@@ -78,7 +78,7 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
         });
     }
 
-    public static MediaPlayer getmMediaPlayer(){
+    public static MediaPlayer getMediaPlayer(){
         if(mMediaPlayer == null){
             mMediaPlayer = new MediaPlayer();
         }

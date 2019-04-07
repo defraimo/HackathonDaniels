@@ -76,8 +76,8 @@ public class MusicLibrary {
     private long creationDate;*/
 
     static {
-        getBroadcasts();
-//        getCurrentPlaying();
+//        getBroadcasts();
+        getCurrentPlaying();
         for (int i = 0; i < programs.size(); i++) {
             ProgramsData model = programs.get(i);
             createMediaMetadataCompat(

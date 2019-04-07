@@ -61,7 +61,14 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
 
         ArrayList<ProgramsData> programsDataList = (ArrayList<ProgramsData>) playlist.getProgramsData();
         holder.ivProfileAll.setImageResource(defaultPic);
-        if (programsDataList.size() == 1) {
+        if (programsDataList.size() == 0){
+            holder.ivProfileAll.setImageResource(defaultPic);
+            holder.ivProfilePic1.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic2.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic3.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic4.setVisibility(View.INVISIBLE);
+        }
+        else if (programsDataList.size() == 1) {
             if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic){
                 holder.ivProfileAll.setImageResource(defaultPic);
             }
