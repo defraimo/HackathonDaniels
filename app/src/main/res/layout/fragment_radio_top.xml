@@ -55,7 +55,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="8dp"
-        android:src="@drawable/profile_pic_demo"
+        android:src="@drawable/ic_default_pic"
         app:civ_border_color="#e2e2e2"
         app:civ_border_width="2dp"
         app:layout_constraintEnd_toStartOf="@+id/tvProgramName"

@@ -32,6 +32,7 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import daniel.rad.radiotabsdrawer.BuildConfig;
+import daniel.rad.radiotabsdrawer.CurrentPlaying;
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
@@ -76,6 +77,7 @@ public class MusicLibrary {
 
     static {
         getBroadcasts();
+//        getCurrentPlaying();
         for (int i = 0; i < programs.size(); i++) {
             ProgramsData model = programs.get(i);
             createMediaMetadataCompat(
@@ -93,6 +95,14 @@ public class MusicLibrary {
 
     private static void getBroadcasts(){
         programs = ProgramsReceiver.getPrograms();
+    }
+
+    private static void getCurrentPlaying(){
+        if (CurrentPlaying.getCurrentPlaying() == null){
+            getBroadcasts();
+            return;
+        }
+        programs = CurrentPlaying.getCurrentPlaying();
     }
 
     public static long getDuration(ProgramsData model){
