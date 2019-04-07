@@ -1,17 +1,23 @@
 package daniel.rad.radiotabsdrawer;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,9 +83,6 @@ public class MediaPlayerFragment extends Fragment {
         tvPlayerLine = view.findViewById(R.id.tvPlayerLine);
         initProgressBar(view);
 
-        tvProgramName.setOnClickListener(v -> {
-            getPassedProgram();
-        });
 
         bnBack.setOnClickListener(v -> {
 //            mIsLoading = true;
@@ -166,8 +169,71 @@ public class MediaPlayerFragment extends Fragment {
         }
     }
 
-    public void stopFunction(){
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            programsData = intent.getParcelableExtra("program");
+            tvProgramName.setText(programsData.getProgramName());
+            tvStudentName.setText(programsData.getStudentName());
+//            if (mIsPlaying)
+            mMediaBrowserHelper.onStop();
 
+            Log.d("Log media", "onReceive: ");
+
+//            mMediaBrowserHelper.getTransportControls().playFromMediaId(programsData.getVodId(),null);
+
+//            mMediaBrowserHelper.getTransportControls().prepareFromMediaId(programsData.getVodId(),null);
+
+//            MediaPlayer mediaPlayer = MediaPlayerAdapter.getMediaPlayer();
+//            mediaPlayer.stop();
+//            mediaPlayer.reset();
+
+//            new MusicLibrary().apdaterCurrentPlaying(getContext());
+
+            MusicLibrary.createMediaMetadataCompat(
+                    programsData.getVodId(),
+                    programsData.getProgramName(),
+                    programsData.getStudentName(),
+                    MusicLibrary.getDuration(programsData),
+                    programsData.getDurationUnit(),
+                    programsData.getMediaSource(),
+                    programsData.getProfilePic(),
+                    programsData.getCreationDate(),
+                    true
+            );
+
+            mMediaBrowserHelper = new MediaPlayerFragment.MediaBrowserConnection(getContext());
+            mMediaBrowserHelper.registerCallback(new MediaPlayerFragment.MediaBrowserListener());
+
+            mMediaBrowserHelper.onStart();
+
+            Log.d("Log media", "onReceive: onstart");
+//            mMediaBrowserHelper.getTransportControls().prepare();
+
+//            try {
+//            mediaPlayer.setDataSource(getContext(),Uri.parse("http://be.repoai.com:5080/WebRTCAppEE/streams/home/" + programsData.getVodId()));
+//            mediaPlayer.prepareAsync();
+//            } catch (IOException e) {
+//                 e.printStackTrace();
+//            }
+//            mediaPlayer.start();
+
+//            mMediaBrowserHelper.getTransportControls().play();
+            Log.d("playFunction", "onReceive: ");
+//            playFunction();
+        }
+    };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastReceiver);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver,new IntentFilter("currentProgram"));
     }
 
     public void playChosenPrograms(){
@@ -218,9 +284,11 @@ public class MediaPlayerFragment extends Fragment {
                 model.getDurationUnit(),
                 model.getMediaSource(),
                 model.getProfilePic(),
-                model.getCreationDate()
+                model.getCreationDate(),
+                true
         );
 
+        Log.d("Log media", "getPassedProgram: ");
 //        MediaPlayer mediaPlayer = MediaPlayerAdapter.getMediaPlayer();
 //        try {
 //            mediaPlayer.setDataSource(getContext(),Uri.parse("http://be.repoai.com:5080/WebRTCAppEE/streams/home/" + programsData.getVodId()));
@@ -229,7 +297,8 @@ public class MediaPlayerFragment extends Fragment {
 //            e.printStackTrace();
 //        }
 //        mMediaBrowserHelper.getTransportControls().prepareFromMediaId(programsData.getVodId(),null);
-        playFunction();
+//        playFunction();
+        Log.d("Log media", "getPassedProgram: before play");
         System.out.println(model);
     }
 
@@ -264,6 +333,7 @@ public class MediaPlayerFragment extends Fragment {
                                         @NonNull List<MediaBrowserCompat.MediaItem> children) {
             super.onChildrenLoaded(parentId, children);
 
+            if (getMediaController() == null) return;
             final MediaControllerCompat mediaController = getMediaController();
 
             // Queue up all media items for this simple sample.
@@ -273,6 +343,7 @@ public class MediaPlayerFragment extends Fragment {
 
             // Call prepare now so pressing play just works.
             mediaController.getTransportControls().prepare();
+            mediaController.getTransportControls().play();
         }
     }
 
@@ -287,6 +358,7 @@ public class MediaPlayerFragment extends Fragment {
     class MediaBrowserListener extends MediaControllerCompat.Callback {
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat playbackState) {
+            Log.d("Log media", "onPlaybackStateChanged: ");
             mIsPlaying = playbackState != null &&
                     playbackState.getState() == PlaybackStateCompat.STATE_PLAYING;
             bnPlay.setPressed(mIsPlaying);
