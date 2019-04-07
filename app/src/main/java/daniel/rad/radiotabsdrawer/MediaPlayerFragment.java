@@ -26,6 +26,7 @@ import java.util.TreeMap;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.client.MediaBrowserHelper;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.MusicService;
+import daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs.MusicLibrary;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.players.MediaPlayerAdapter;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ui.MediaSeekBar;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
@@ -202,22 +203,34 @@ public class MediaPlayerFragment extends Fragment {
     }
 
     public void getPassedProgram(){
-        ProgramsData programsData = DataHolder.getInstance().getPassedProgramsData();
+        ProgramsData model = DataHolder.getInstance().getPassedProgramsData();
         if (mIsPlaying) {
             mMediaBrowserHelper.getTransportControls().stop();
         }
-        tvProgramName.setText(programsData.getProgramName());
-        tvStudentName.setText(programsData.getStudentName());
-        MediaPlayer mediaPlayer = MediaPlayerAdapter.getMediaPlayer();
-        try {
-            mediaPlayer.setDataSource(getContext(),Uri.parse("http://be.repoai.com:5080/WebRTCAppEE/streams/home/" + programsData.getVodId()));
-            mediaPlayer.prepareAsync();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        tvProgramName.setText(model.getProgramName());
+        tvStudentName.setText(model.getStudentName());
+
+        MusicLibrary.createMediaMetadataCompat(
+                model.getVodId(),
+                model.getProgramName(),
+                model.getStudentName(),
+                MusicLibrary.getDuration(model),
+                model.getDurationUnit(),
+                model.getMediaSource(),
+                model.getProfilePic(),
+                model.getCreationDate()
+        );
+
+//        MediaPlayer mediaPlayer = MediaPlayerAdapter.getMediaPlayer();
+//        try {
+//            mediaPlayer.setDataSource(getContext(),Uri.parse("http://be.repoai.com:5080/WebRTCAppEE/streams/home/" + programsData.getVodId()));
+//            mediaPlayer.prepareAsync();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 //        mMediaBrowserHelper.getTransportControls().prepareFromMediaId(programsData.getVodId(),null);
-        mMediaBrowserHelper.getTransportControls().play();
-        System.out.println(programsData);
+        playFunction();
+        System.out.println(model);
     }
 
 //    @Override

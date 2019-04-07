@@ -76,8 +76,8 @@ public class MusicLibrary {
     private long creationDate;*/
 
     static {
-//        getBroadcasts();
-        getCurrentPlaying();
+//        getCurrentPlaying();
+        getBroadcasts();
         for (int i = 0; i < programs.size(); i++) {
             ProgramsData model = programs.get(i);
             createMediaMetadataCompat(
@@ -172,7 +172,7 @@ public class MusicLibrary {
         return builder.build();
     }
 
-    private static void createMediaMetadataCompat(
+    public static void createMediaMetadataCompat(
             String programID,
             String programTitle,
             String studentName,

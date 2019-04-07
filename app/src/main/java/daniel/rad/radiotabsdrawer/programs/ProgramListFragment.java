@@ -30,7 +30,6 @@ public class ProgramListFragment extends Fragment {
     EditText etSearch;
     ImageView ivProgramSearch;
 //    PassingProgramsNames passingProgramsNames;
-    ProgramsData programsData;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,7 +46,6 @@ public class ProgramListFragment extends Fragment {
         ProgramsAdapter.ProgramAdapterInterface adapterInterface = new ProgramsAdapter.ProgramAdapterInterface() {
             @Override
             public void onItemClicked(ProgramsData chosenProgram) {
-                programsData = chosenProgram;
                 System.out.println(chosenProgram);
 
                 DataHolder.getInstance().setPassedProgramsData(chosenProgram);
