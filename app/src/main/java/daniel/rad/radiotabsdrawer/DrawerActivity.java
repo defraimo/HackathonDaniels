@@ -32,6 +32,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TabHost;
@@ -41,11 +42,12 @@ import daniel.rad.radiotabsdrawer.myMediaPlayer.BroadcastsJson;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
-public class DrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class DrawerActivity extends AppCompatActivity {
 
     FragmentManager fm;
     FrameLayout player_frame;
+    Button btnMyStreams;
+    Button btnLogOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +65,8 @@ public class DrawerActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
+
 
         TabLayout tabLayout = findViewById(R.id.tabs_in_drawer);
         ViewPager viewPager = findViewById(R.id.view_pager_drawer);
@@ -81,6 +83,7 @@ public class DrawerActivity extends AppCompatActivity
 
         fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.player_frame,new MediaPlayerFragment()).commit();
+        onBtnClicked();
     }
 
     private void passArgs() {
@@ -116,26 +119,19 @@ public class DrawerActivity extends AppCompatActivity
     }
 
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        switch (item.getItemId()){
-            case R.id.nav_student_programs:
-                Intent intent = new Intent(this,ProfileActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.nav_log_out:
-                Toast.makeText(this, "Bye bye", Toast.LENGTH_LONG).show();
-                break;
-            default:
-                break;
+    private void onBtnClicked(){
+        btnMyStreams = findViewById(R.id.btnMyStreams);
+        btnLogOut = findViewById(R.id.btnLogOut);
 
-        }
+        btnMyStreams.setOnClickListener((v)->{
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+        });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+        btnLogOut.setOnClickListener((v)->{
+            Toast.makeText(this,"bye bye",Toast.LENGTH_SHORT).show();
+        });
+
     }
 
     private void downloadJson() {

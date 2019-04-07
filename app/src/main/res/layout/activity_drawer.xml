@@ -5,22 +5,62 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#212121"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start"
-    android:background="#212121">
+    tools:openDrawer="start">
 
     <include
         layout="@layout/app_bar_drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/nav_constraint"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:background="#212121"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_drawer"
-        app:menu="@menu/activity_drawer_drawer" />
+        android:fitsSystemWindows="true">
+
+        <include
+            layout="@layout/nav_header_drawer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btnMyStreams"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/round_btn"
+            android:padding="24dp"
+            android:text="התוכניות שלי"
+            android:textColor="#ffffff"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline4" />
+
+        <Button
+            android:id="@+id/btnLogOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="#000000ff"
+            android:text="התנתק"
+            android:textColor="#ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
+
+
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.v4.widget.DrawerLayout>
