@@ -32,6 +32,7 @@ import android.support.v4.media.MediaMetadataCompat;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
@@ -101,6 +102,8 @@ public class MusicLibrary {
 
     private static void getBroadcasts(){
         programs = ProgramsReceiver.getPrograms();
+        //init different program to the mediaPlayer every time the app runs
+        Collections.shuffle(programs);
     }
 
 //    public void apdaterCurrentPlaying(Context context){

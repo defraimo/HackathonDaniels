@@ -57,6 +57,9 @@ public class MediaPlayerFragment extends Fragment {
 
     ProgramsData programsData;
 
+    //to prevent from the song to start playing when the app is first on
+    static public boolean startedFirstTime;
+
     static public boolean mIsPlaying;
 //    static public boolean mIsLoading;
 
@@ -218,7 +221,6 @@ public class MediaPlayerFragment extends Fragment {
 //            }
 //            mediaPlayer.start();
 
-//            mMediaBrowserHelper.getTransportControls().play();
             Log.d("playFunction", "onReceive: ");
 //            playFunction();
         }
@@ -343,7 +345,10 @@ public class MediaPlayerFragment extends Fragment {
 
             // Call prepare now so pressing play just works.
             mediaController.getTransportControls().prepare();
-            mediaController.getTransportControls().play();
+            if (!MediaPlayerFragment.startedFirstTime) {
+                mediaController.getTransportControls().play();
+                MediaPlayerFragment.startedFirstTime = true;
+            }
         }
     }
 
