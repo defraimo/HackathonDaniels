@@ -2,7 +2,6 @@ package daniel.rad.radiotabsdrawer.playlist.chosenPlaylist;
 
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,19 +17,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.playlist.Playlist;
 import daniel.rad.radiotabsdrawer.playlist.PlaylistsDataSource;
 import daniel.rad.radiotabsdrawer.playlist.addProgramToPlaylist.AddProgramToPlaylistAdapter;
-import daniel.rad.radiotabsdrawer.programs.ProgramsAdapter;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
-import daniel.rad.radiotabsdrawer.programs.ProgramsDataSource;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,7 +65,7 @@ public class CreatePlaylistFragment extends Fragment {
 
         rvChooseProgram.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        ArrayList<ProgramsData> dataArrayList = ProgramsDataSource.getPrograms();
+        ArrayList<ProgramsData> dataArrayList = ProgramsReceiver.getPrograms();
         RecyclerView.Adapter adapter = new CreatePlaylistAdapter(dataArrayList, getContext());
 
 

@@ -16,10 +16,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import daniel.rad.radiotabsdrawer.playlist.chosenPlaylist.CreatePlaylistFragment;
-import daniel.rad.radiotabsdrawer.programs.ProgramsData;
-import daniel.rad.radiotabsdrawer.programs.ProgramsDataSource;
 import daniel.rad.radiotabsdrawer.R;
+import daniel.rad.radiotabsdrawer.playlist.chosenPlaylist.CreatePlaylistFragment;
 
 /**
  * A simple {@link Fragment} subclass.

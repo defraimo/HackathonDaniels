@@ -6,49 +6,26 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-
-import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
-import android.util.JsonWriter;
 import android.util.Log;
-import android.widget.Toast;
-
 
 import com.cloudant.client.api.ClientBuilder;
 import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
-import com.cloudant.client.api.model.Attachment;
-import com.cloudant.client.api.model.Document;
-import com.cloudant.client.api.model.IndexField;
-import com.cloudant.client.api.model.Response;
-import com.cloudant.sync.internal.sqlite.sqlite4java.QueryBuilder;
-import com.cloudant.sync.query.Query;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import daniel.rad.radiotabsdrawer.DrawerActivity;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
-import daniel.rad.radiotabsdrawer.programs.ProgramsDataSource;
 
 
 public class PlaylistsDataSource {
@@ -120,10 +97,12 @@ public class PlaylistsDataSource {
 
     }
 
-    private ArrayList<Playlist> readJsonFile(Context context,File path) throws IOException {
+    private ArrayList<Playlist> readJsonFile(Context context) throws IOException {
         ArrayList<Playlist> buildPlaylists = new ArrayList<>();
         ArrayList<ProgramsData> buildPrograms = new ArrayList<>();
-        FileInputStream is = new FileInputStream(path);
+        String path = "/data/data/" + context.getPackageName();
+        File filePath = new File(path, "playlists.json");
+        FileInputStream is = new FileInputStream(filePath);
         int size = is.available();
         byte[] buffer = new byte[size];
         is.read(buffer);
@@ -210,17 +189,15 @@ public class PlaylistsDataSource {
         PlaylistsDataSource playlistsDataSource = new PlaylistsDataSource();
         ArrayList<Playlist> playlists = new ArrayList<>();
 
-        String path = "/data/data/" + context.getPackageName();
-        File filePath = new File(path, "playlists.json");
 
         try {
-            playlistsDataSource.readJsonFile(context, filePath);
+            playlistsDataSource.readJsonFile(context);
         } catch (IOException e) {
             e.printStackTrace();
         }
         ArrayList<ProgramsData> temp = new ArrayList<>();
-        playlists.add(new Playlist("מומלצים", temp));
         playlists.add(new Playlist("מועדפים", temp));
+        playlists.add(new Playlist("מומלצים", ProgramsReceiver.getPrograms()));
 
         return playlists;
     }
