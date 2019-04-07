@@ -98,7 +98,7 @@ public class CreatePlaylistFragment extends Fragment {
 
         ivSearchButton.setOnClickListener((v) -> {
             ArrayList<ProgramsData> newList = new ArrayList<>();
-            ArrayList<ProgramsData> allPrograms = (ArrayList<ProgramsData>) ProgramsDataSource.getPrograms();
+            ArrayList<ProgramsData> allPrograms = (ArrayList<ProgramsData>) ProgramsReceiver.getPrograms();
             String search = etSearchAddPlaylist.getText().toString().trim().toLowerCase();
             for (ProgramsData program : allPrograms) {
                 if (program.getProgramName().toLowerCase().contains(search)) {

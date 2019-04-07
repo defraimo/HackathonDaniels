@@ -1,6 +1,7 @@
 package daniel.rad.radiotabsdrawer.myMediaPlayer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -25,11 +26,20 @@ import okhttp3.Response;
 public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
     private static List<ProgramsData> programs;
     private static TreeMap<String,String> vodNames;
+    private WeakReference<MainActivity> mainActivityWeakReference;
 //    View view;
 //
 //    public ProgramsReceiver(View view) {
 //        this.view = view;
 //    }
+
+
+    public ProgramsReceiver() {
+    }
+
+    public ProgramsReceiver(MainActivity mainActivity) {
+        this.mainActivityWeakReference = new WeakReference<MainActivity>(mainActivity);
+    }
 
     @Override
     protected List<ProgramsData> doInBackground(Void... voids) {
@@ -100,5 +110,9 @@ public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
 //        DrawerActivity drawerActivity = new DrawerActivity();
 //        drawerActivity.initLoadingPic();
 //        drawerActivity.stopLoadingPic();
+        Intent intent = new Intent(mainActivityWeakReference.get(),DrawerActivity.class);
+        mainActivityWeakReference.get().startActivity(intent);
+        mainActivityWeakReference.get().finish();
+
     }
 }

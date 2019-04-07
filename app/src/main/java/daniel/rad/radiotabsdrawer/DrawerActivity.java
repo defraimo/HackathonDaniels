@@ -73,7 +73,7 @@ public class DrawerActivity extends AppCompatActivity
         viewPager.setAdapter(sectionsPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        new ProgramsReceiver().execute();
+//        new ProgramsReceiver().execute();
 
 //        downloadJson();
 

@@ -1,9 +1,7 @@
 package daniel.rad.radiotabsdrawer.programs;
 
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -21,8 +18,6 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 
 import daniel.rad.radiotabsdrawer.DataHolder;
-import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
-import daniel.rad.radiotabsdrawer.PassingProgramsNames;
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 

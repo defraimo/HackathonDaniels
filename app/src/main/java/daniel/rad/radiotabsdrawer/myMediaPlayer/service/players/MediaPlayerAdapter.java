@@ -35,7 +35,7 @@ import daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs.MusicLib
 public final class MediaPlayerAdapter extends PlayerAdapter {
 
     private final Context mContext;
-    private MediaPlayer mMediaPlayer;
+    private static MediaPlayer mMediaPlayer;
     private String mFilename;
     private PlaybackInfoListener mPlaybackInfoListener;
     private MediaMetadataCompat mCurrentMedia;
@@ -62,20 +62,27 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
     private void initializeMediaPlayer() {
         if (mMediaPlayer == null) {
             mMediaPlayer = new MediaPlayer();
-            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    mPlaybackInfoListener.onPlaybackCompleted();
-
-                    // Set the state to "paused" because it most closely matches the state
-                    // in MediaPlayer with regards to available state transitions compared
-                    // to "stop".
-                    // Paused allows: seekTo(), start(), pause(), stop()
-                    // Stop allows: stop()
-                    setNewState(PlaybackStateCompat.STATE_PAUSED);
-                }
-            });
         }
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mPlaybackInfoListener.onPlaybackCompleted();
+
+                // Set the state to "paused" because it most closely matches the state
+                // in MediaPlayer with regards to available state transitions compared
+                // to "stop".
+                // Paused allows: seekTo(), start(), pause(), stop()
+                // Stop allows: stop()
+                setNewState(PlaybackStateCompat.STATE_PAUSED);
+            }
+        });
+    }
+
+    public static MediaPlayer getmMediaPlayer(){
+        if(mMediaPlayer == null){
+            mMediaPlayer = new MediaPlayer();
+        }
+        return mMediaPlayer;
     }
 
     // Implements PlaybackControl.

@@ -218,14 +218,14 @@ public class MediaPlayerFragment extends Fragment {
         }
         tvProgramName.setText(programsData.getProgramName());
         tvStudentName.setText(programsData.getStudentName());
-//        MediaPlayer mediaPlayer = new MediaPlayer();
-//        try {
-//            mediaPlayer.setDataSource(getContext(),Uri.parse("http://be.repoai.com:5080/WebRTCAppEE/streams/home/" + programsData.getVodId()));
-//            mediaPlayer.prepareAsync();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        mMediaBrowserHelper.getTransportControls().prepareFromMediaId(programsData.getVodId(),null);
+        MediaPlayer mediaPlayer = MediaPlayerAdapter.getmMediaPlayer();
+        try {
+            mediaPlayer.setDataSource(getContext(),Uri.parse("http://be.repoai.com:5080/WebRTCAppEE/streams/home/" + programsData.getVodId()));
+            mediaPlayer.prepareAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        mMediaBrowserHelper.getTransportControls().prepareFromMediaId(programsData.getVodId(),null);
         mMediaBrowserHelper.getTransportControls().play();
         System.out.println(programsData);
     }

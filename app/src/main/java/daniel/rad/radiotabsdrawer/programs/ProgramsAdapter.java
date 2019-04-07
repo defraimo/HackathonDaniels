@@ -1,13 +1,7 @@
 package daniel.rad.radiotabsdrawer.programs;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,11 +12,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import daniel.rad.radiotabsdrawer.DrawerActivity;
 import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
-import daniel.rad.radiotabsdrawer.PassingProgramsNames;
 import daniel.rad.radiotabsdrawer.R;
-import daniel.rad.radiotabsdrawer.myMediaPlayer.service.players.MediaPlayerAdapter;
 
 public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.ProgramViewHolder> {
     private MediaPlayerFragment playerFragment;
