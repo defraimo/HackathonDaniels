@@ -253,7 +253,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                                 activity.getSupportFragmentManager().
                                         beginTransaction().
                                         addToBackStack("removeProgramFromPlaylist").
-                                        replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(playlist ,true)).
+                                        replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(playlist)).
                                         commit();
                                 return true;
                             case R.id.itemRemoveProgram:
