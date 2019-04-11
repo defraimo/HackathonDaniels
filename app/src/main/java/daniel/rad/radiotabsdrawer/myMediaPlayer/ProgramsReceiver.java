@@ -1,21 +1,18 @@
 package daniel.rad.radiotabsdrawer.myMediaPlayer;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.TreeMap;
 
-import daniel.rad.radiotabsdrawer.DrawerActivity;
 import daniel.rad.radiotabsdrawer.MainActivity;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import okhttp3.Call;
@@ -27,11 +24,6 @@ public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
     private static List<ProgramsData> programs;
     private static TreeMap<String,String> vodNames;
     private WeakReference<MainActivity> mainActivityWeakReference;
-//    View view;
-//
-//    public ProgramsReceiver(View view) {
-//        this.view = view;
-//    }
 
 
     public ProgramsReceiver() {
@@ -94,6 +86,7 @@ public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
                     new ProgramsData(vodId,vodNameFixed,"",duration,filePath,0,creationDate));
             vodNames.put(vodId,vodName);
         }
+//        MusicLibrary.playingPrograms((ArrayList<ProgramsData>) programs);
     }
 
     public static ArrayList<ProgramsData> getPrograms(){
@@ -107,12 +100,15 @@ public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
     @Override
     protected void onPostExecute(List<ProgramsData> programsData) {
         System.out.println(programsData);
-//        DrawerActivity drawerActivity = new DrawerActivity();
-//        drawerActivity.initLoadingPic();
-//        drawerActivity.stopLoadingPic();
-        Intent intent = new Intent(mainActivityWeakReference.get(),DrawerActivity.class);
-        mainActivityWeakReference.get().startActivity(intent);
-        mainActivityWeakReference.get().finish();
+        Random r = new Random();
+        int random = r.nextInt(programsData.size());
+        ArrayList<ProgramsData> randomProgram = new ArrayList<>();
+        randomProgram.add(programsData.get(random));
+        new InitMusicLibrary(randomProgram,mainActivityWeakReference,0).execute();
+
+//        Intent intent = new Intent(mainActivityWeakReference.get(),DrawerActivity.class);
+//        mainActivityWeakReference.get().startActivity(intent);
+//        mainActivityWeakReference.get().finish();
 
     }
 }

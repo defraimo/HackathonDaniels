@@ -65,9 +65,6 @@ public class DrawerActivity extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
-
-
         TabLayout tabLayout = findViewById(R.id.tabs_in_drawer);
         ViewPager viewPager = findViewById(R.id.view_pager_drawer);
 

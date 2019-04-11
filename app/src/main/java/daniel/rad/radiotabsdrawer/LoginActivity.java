@@ -56,7 +56,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Toast.makeText(getApplicationContext(), "התחברת בהצלחה!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                SharedPreferences sharedPreferences = getSharedPreferences("whoIsLogged",MODE_PRIVATE);
+                sharedPreferences.edit().putString("userName",tvFbName.getText().toString()).apply();
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
             }
 
             @Override

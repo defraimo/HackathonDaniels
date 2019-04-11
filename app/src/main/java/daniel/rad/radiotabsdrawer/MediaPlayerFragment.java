@@ -26,7 +26,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.TreeMap;
 
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
@@ -92,6 +94,9 @@ public class MediaPlayerFragment extends Fragment {
             setProgressBarVisible();
             bnBack.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnBack.animate().scaleX(1).scaleY(1).setDuration(200);
+                Random r = new Random();
+                int random = r.nextInt(ProgramsReceiver.getPrograms().size());
+                MusicLibrary.playingPrograms(ProgramsReceiver.getPrograms().get(random));
                 mMediaBrowserHelper.getTransportControls().skipToPrevious();
                 bnPlay.setImageResource(R.drawable.ic_pause);
             });
@@ -102,6 +107,9 @@ public class MediaPlayerFragment extends Fragment {
             setProgressBarVisible();
             bnForward.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnForward.animate().scaleX(1).scaleY(1).setDuration(200);
+                Random r = new Random();
+                int random = r.nextInt(ProgramsReceiver.getPrograms().size());
+                MusicLibrary.playingPrograms(ProgramsReceiver.getPrograms().get(random));
                 mMediaBrowserHelper.getTransportControls().skipToNext();
                 bnPlay.setImageResource(R.drawable.ic_pause);
             });
@@ -183,6 +191,9 @@ public class MediaPlayerFragment extends Fragment {
 
             Log.d("Log media", "onReceive: ");
 
+
+            MusicLibrary.playingPrograms(programsData);
+
 //            mMediaBrowserHelper.getTransportControls().playFromMediaId(programsData.getVodId(),null);
 
 //            mMediaBrowserHelper.getTransportControls().prepareFromMediaId(programsData.getVodId(),null);
@@ -193,6 +204,7 @@ public class MediaPlayerFragment extends Fragment {
 
 //            new MusicLibrary().apdaterCurrentPlaying(getContext());
 
+            /*
             MusicLibrary.createMediaMetadataCompat(
                     programsData.getVodId(),
                     programsData.getProgramName(),
@@ -204,6 +216,7 @@ public class MediaPlayerFragment extends Fragment {
                     programsData.getCreationDate(),
                     true
             );
+            */
 
             mMediaBrowserHelper = new MediaPlayerFragment.MediaBrowserConnection(getContext());
             mMediaBrowserHelper.registerCallback(new MediaPlayerFragment.MediaBrowserListener());
@@ -335,7 +348,7 @@ public class MediaPlayerFragment extends Fragment {
                                         @NonNull List<MediaBrowserCompat.MediaItem> children) {
             super.onChildrenLoaded(parentId, children);
 
-            if (getMediaController() == null) return;
+//            if (getMediaController() == null) return;
             final MediaControllerCompat mediaController = getMediaController();
 
             // Queue up all media items for this simple sample.
@@ -346,8 +359,11 @@ public class MediaPlayerFragment extends Fragment {
             // Call prepare now so pressing play just works.
             mediaController.getTransportControls().prepare();
             if (!MediaPlayerFragment.startedFirstTime) {
-                mediaController.getTransportControls().play();
                 MediaPlayerFragment.startedFirstTime = true;
+            }
+            else {
+                mediaController.getTransportControls().play();
+                setProgressBarVisible();
             }
         }
     }

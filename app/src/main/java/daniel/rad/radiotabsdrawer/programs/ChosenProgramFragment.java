@@ -61,15 +61,11 @@ public class ChosenProgramFragment extends Fragment {
             tvChosenProgramName.setText(model.getProgramName());
 
             ivShare.setOnClickListener(v -> {
-                Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
-                whatsappIntent.setType("text/plain");
-                whatsappIntent.setPackage("com.whatsapp");
-                whatsappIntent.putExtra(Intent.EXTRA_TEXT, "מוזמנ/ת להקשיב לתוכנית - "+model.getProgramName()+" של "+model.getStudentName()+"! *קישור כניסה לאפליקצייה*");
-                try {
-                    getActivity().startActivity(whatsappIntent);
-                } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(getContext(), "whatsapp לא מותקן", Toast.LENGTH_SHORT).show();
-                }
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, "מוזמנ/ת להקשיב לתוכנית - "+model.getProgramName()+" של "+model.getStudentName()+"! *קישור כניסה לאפליקצייה*");
+
+                startActivity(Intent.createChooser(share, "היכן תרצה לשתף את התוכנית?"));
             });
         }
     }

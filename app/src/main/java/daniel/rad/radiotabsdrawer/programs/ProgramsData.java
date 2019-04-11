@@ -33,7 +33,7 @@ public class ProgramsData implements Parcelable {
         this.programName = programName;
         this.studentName = studentName;
         this.duration = duration;
-        this.durationUnit = TimeUnit.SECONDS;
+        this.durationUnit = TimeUnit.MILLISECONDS;
         this.mediaSource = mediaSource;
         if (profilePic == 0)
         this.profilePic = R.drawable.ic_default_pic;

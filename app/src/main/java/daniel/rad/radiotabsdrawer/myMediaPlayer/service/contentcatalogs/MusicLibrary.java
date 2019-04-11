@@ -16,21 +16,15 @@
 
 package daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs;
 
-import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
-import android.os.Parcelable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,8 +33,6 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import daniel.rad.radiotabsdrawer.BuildConfig;
-import daniel.rad.radiotabsdrawer.CurrentPlaying;
-import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
@@ -73,21 +65,29 @@ public class MusicLibrary {
 //                "album_youtube_audio_library_rock_2");
 //    }
 
-    /*private String vodId;
-    private String programName;
-    private String studentName;
-    private long duration;
-    private TimeUnit durationUnit;
-    private String mediaSource;
-    private int profilePic;
-    private long creationDate;*/
+//    static {
+//        getBroadcasts();
+//        for (int i = 0; i < programs.size(); i++) {
+//            ProgramsData model = programs.get(i);
+//            createMediaMetadataCompat(
+//                   model.getVodId(),
+//                    model.getProgramName(),
+//                    model.getStudentName(),
+//                    getDuration(model),
+//                    model.getDurationUnit(),
+//                    model.getMediaSource(),
+//                    model.getProfilePic(),
+//                    model.getCreationDate(),
+//                    false
+//            );
+//        }
+//    }
 
-    static {
-        getBroadcasts();
+    public static void playingPrograms(ArrayList<ProgramsData> programs){
         for (int i = 0; i < programs.size(); i++) {
             ProgramsData model = programs.get(i);
             createMediaMetadataCompat(
-                   model.getVodId(),
+                    model.getVodId(),
                     model.getProgramName(),
                     model.getStudentName(),
                     getDuration(model),
@@ -100,52 +100,35 @@ public class MusicLibrary {
         }
     }
 
+    public static void playingPrograms(ProgramsData model){
+            createMediaMetadataCompat(
+                    model.getVodId(),
+                    model.getProgramName(),
+                    model.getStudentName(),
+                    getDuration(model),
+                    model.getDurationUnit(),
+                    model.getMediaSource(),
+                    model.getProfilePic(),
+                    model.getCreationDate(),
+                    false
+            );
+    }
+
     private static void getBroadcasts(){
         programs = ProgramsReceiver.getPrograms();
         //init different program to the mediaPlayer every time the app runs
         Collections.shuffle(programs);
     }
 
-//    public void apdaterCurrentPlaying(Context context){
-//        LocalBroadcastManager.getInstance(context).registerReceiver(broadcastReceiver,new IntentFilter("currentProgram")); //TODO: check the context
-//        for (int i = 0; i < programs.size(); i++) {
-//            ProgramsData model = programs.get(i);
-//            createMediaMetadataCompat(
-//                    model.getVodId(),
-//                    model.getProgramName(),
-//                    model.getStudentName(),
-//                    getDuration(model),
-//                    model.getDurationUnit(),
-//                    model.getMediaSource(),
-//                    model.getProfilePic(),
-//                    model.getCreationDate()
-//            );
-//        }
-//    }
-//
-//    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            ProgramsData program = intent.getParcelableExtra("program");
-//            programs.clear();
-//            programs.add(program);
-//        }
-//    };
-
     public static long getDuration(ProgramsData model){
         MediaPlayer mp = new MediaPlayer();
+        mp.reset();
         try {
             mp.setDataSource(model.getMediaSource());
-            mp.prepareAsync();
+            mp.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-
-            }
-        });
         return mp.getDuration();
     }
 
@@ -181,6 +164,10 @@ public class MusicLibrary {
         return result;
     }
 
+    public static MediaMetadataCompat getMetadata(Context context, String mediaId) {
+        return music.get("i");
+    }
+
 //    public static MediaMetadataCompat getMetadata(Context context, String mediaId) {
 //        MediaMetadataCompat metadataWithoutBitmap = music.get(mediaId);
 //        Bitmap albumArt = getAlbumBitmap(context, mediaId);
@@ -202,35 +189,8 @@ public class MusicLibrary {
 //                MediaMetadataCompat.METADATA_KEY_DURATION,
 //                metadataWithoutBitmap.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
 //        builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt);
-//        return builder.build();
+//        return metadataWithoutBitmap;
 //    }
-
-    public static MediaMetadataCompat getMetadata(Context context, String mediaId) {
-//        if (mediaId.length() > 4){
-//            return music.get(mediaId);
-//        }
-        MediaMetadataCompat metadataWithoutBitmap = music.get("i");
-//        Bitmap albumArt = getAlbumBitmap(context, mediaId);
-//
-//        // Since MediaMetadataCompat is immutable, we need to create a copy to set the album art.
-//        // We don't set it initially on all items so that they don't take unnecessary memory.
-//        MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
-//        for (String key :
-//                new String[]{
-//                        MediaMetadataCompat.METADATA_KEY_MEDIA_ID,
-//                        MediaMetadataCompat.METADATA_KEY_ALBUM,
-//                        MediaMetadataCompat.METADATA_KEY_ARTIST,
-//                        MediaMetadataCompat.METADATA_KEY_GENRE,
-//                        MediaMetadataCompat.METADATA_KEY_TITLE
-//                }) {
-//            builder.putString(key, metadataWithoutBitmap.getString(key));
-//        }
-//        builder.putLong(
-//                MediaMetadataCompat.METADATA_KEY_DURATION,
-//                metadataWithoutBitmap.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
-//        builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt);
-        return metadataWithoutBitmap;
-    }
 
     public static void createMediaMetadataCompat(
             String programID,
