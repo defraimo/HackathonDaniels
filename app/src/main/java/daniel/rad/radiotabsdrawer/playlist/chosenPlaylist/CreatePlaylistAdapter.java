@@ -12,7 +12,6 @@ import android.widget.ToggleButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import daniel.rad.radiotabsdrawer.playlist.Playlist;
 import daniel.rad.radiotabsdrawer.playlist.PlaylistAdapterInterface;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import daniel.rad.radiotabsdrawer.R;
@@ -74,7 +73,7 @@ class CreatePlaylistViewHolder extends RecyclerView.ViewHolder {
 
     public CreatePlaylistViewHolder(@NonNull View itemView) {
         super(itemView);
-        tvProgramName = itemView.findViewById(R.id.tvProgramName);
+        tvProgramName = itemView.findViewById(R.id.tvManagerProgramName);
         tvStudentName = itemView.findViewById(R.id.tvStudentName);
         ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
         tvLine = itemView.findViewById(R.id.tvLine);

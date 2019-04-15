@@ -1,11 +1,15 @@
 package daniel.rad.radiotabsdrawer.radioFragments;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
@@ -25,6 +29,7 @@ import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.client.MediaBrowserHelper;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.MusicService;
+import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,6 +45,8 @@ public class RadioTopFragment extends Fragment {
     ImageView ivRadioPlay;
     public TextView tvProgramTopName;
     public TextView tvStudentTopName;
+
+    ProgramsData programsData;
 
     public RadioTopFragment() {
         // Required empty public constructor
@@ -58,6 +65,8 @@ public class RadioTopFragment extends Fragment {
 
         ImageView gifImageView = view.findViewById(R.id.ivRadio);
         ivRadioPlay = view.findViewById(R.id.ivRadioPlay);
+        tvProgramTopName = view.findViewById(R.id.tvManagerProgramName);
+        tvStudentTopName = view.findViewById(R.id.tvStudentName);
         initTextViews(view);
         mediaPlayerFragment = new MediaPlayerFragment();
 
@@ -88,8 +97,31 @@ public class RadioTopFragment extends Fragment {
         });
     }
 
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            programsData = intent.getParcelableExtra("program");
+            tvProgramTopName.setText(programsData.getProgramName());
+            tvStudentTopName.setText(programsData.getStudentName());
+            tvProgramTopName.setSelected(true);
+            tvStudentTopName.setSelected(true);
+        }
+    };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastReceiver);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver,new IntentFilter("currentProgram"));
+    }
+
     private void initTextViews(View view) {
-        tvProgramTopName = view.findViewById(R.id.tvProgramName);
+        tvProgramTopName = view.findViewById(R.id.tvManagerProgramName);
         tvStudentTopName = view.findViewById(R.id.tvStudentName);
     }
 
@@ -157,10 +189,12 @@ public class RadioTopFragment extends Fragment {
             if (mediaMetadata == null) {
                 return;
             }
-//            tvProgramName.setText(
-//                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
-//            tvStudentName.setText(
-//                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST));
+            tvProgramTopName.setText(
+                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
+            tvProgramTopName.setSelected(true);
+            tvStudentTopName.setText(
+                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST));
+            tvStudentTopName.setSelected(true);
         }
 
         @Override

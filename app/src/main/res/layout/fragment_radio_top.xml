@@ -12,7 +12,7 @@
         android:layout_width="189dp"
         android:layout_height="102dp"
         app:layout_constraintBottom_toBottomOf="@+id/ivRadioPlay"
-        app:layout_constraintEnd_toEndOf="@+id/tvProgramName"
+        app:layout_constraintEnd_toEndOf="@+id/tvManagerProgramName"
         app:layout_constraintTop_toTopOf="@+id/ivRadioPlay"
         app:srcCompat="@drawable/radio_gif" />
 
@@ -27,13 +27,21 @@
         app:layout_constraintTop_toBottomOf="@+id/ivProfilePic" />
 
     <TextView
-        android:id="@+id/tvProgramName"
+        android:id="@+id/tvManagerProgramName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="שם התוכנית"
         android:textColor="#FFF"
         android:textSize="30sp"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:maxEms="4"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
@@ -47,8 +55,16 @@
         android:text="שם התלמיד"
         android:textColor="#FFF"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/tvProgramName"
-        app:layout_constraintTop_toBottomOf="@+id/tvProgramName" />
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:maxEms="4"
+        app:layout_constraintEnd_toEndOf="@+id/tvManagerProgramName"
+        app:layout_constraintTop_toBottomOf="@+id/tvManagerProgramName" />
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/ivProfilePic"
@@ -58,7 +74,7 @@
         android:src="@drawable/ic_default_pic"
         app:civ_border_color="#e2e2e2"
         app:civ_border_width="2dp"
-        app:layout_constraintEnd_toStartOf="@+id/tvProgramName"
+        app:layout_constraintEnd_toStartOf="@+id/tvManagerProgramName"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

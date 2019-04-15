@@ -2,6 +2,8 @@
 <resources>
     <color name="colorPrimary">#FF245Ca3</color>
     <color name="colorPrimaryDark">#FF1E202A</color>
+    <color name="colorDark">#181A25</color>
     <color name="colorAccent">#FF72C5F1</color>
     <color name="radioButton">#FFFFFF</color>
+    <color name="transparent">@android:color/transparent</color>
 </resources>

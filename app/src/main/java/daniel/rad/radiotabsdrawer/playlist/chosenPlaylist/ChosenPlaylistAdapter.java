@@ -76,7 +76,7 @@ class ChosenPlaylistViewHolder extends RecyclerView.ViewHolder{
 
     public ChosenPlaylistViewHolder(@NonNull View itemView) {
         super(itemView);
-        tvProgramName = itemView.findViewById(R.id.tvProgramName);
+        tvProgramName = itemView.findViewById(R.id.tvManagerProgramName);
         tvStudentName = itemView.findViewById(R.id.tvStudentName);
         ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
         tvLine = itemView.findViewById(R.id.tvLine);

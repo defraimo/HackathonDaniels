@@ -1,13 +1,14 @@
 package daniel.rad.radiotabsdrawer;
 
 import android.Manifest;
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
-import android.os.Handler;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,17 +17,12 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.List;
 
+import daniel.rad.radiotabsdrawer.login.LoginActivity;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
-import daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs.MusicLibrary;
 import daniel.rad.radiotabsdrawer.playlist.Playlist;
-import daniel.rad.radiotabsdrawer.playlist.PlaylistJsonReader;
 import daniel.rad.radiotabsdrawer.playlist.PlaylistsJsonWriter;
-import daniel.rad.radiotabsdrawer.playlist.chosenPlaylist.CreatePlaylistFragment;
-import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +30,42 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        checkIfAlreadyLogged();
+
+        //TODO: move to LoginActivity
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+
+            //checks if file json of playlists exists, and if not creates one:
+            String path = "/data/data/" + getPackageName();
+            File filePath = new File(path, "playlists.json");
+            if (!filePath.exists()) {
+                ArrayList<Playlist> playlists = new ArrayList<>();
+                playlists.add(new Playlist("מועדפים", new ArrayList<>()));
+                playlists.add(new Playlist("מומלצים", new ArrayList<>()));
+                new PlaylistsJsonWriter(playlists, this).execute();
+            } else {
+                PlaylistsJsonWriter.isLoaded = true;
+                new ProgramsReceiver(this).execute();
+            }
+        }
+        else{
+            //there is no connection
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.
+                    setTitle("אין חיבור אינטרנט").
+                    setMessage("אנא בדוק את החיבור ונסה שנית").
+                    setPositiveButton("הבנתי", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+                        }
+                    }).
+                    show();
+        }
 
         ImageView gifImageView = findViewById(R.id.ivLoadingGif);
         Glide.with(this).
@@ -49,27 +81,16 @@ public class MainActivity extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{writingToDisk}, 1);
         }
-        //checks if file json of playlists exists, and if not creates one:
-        String path = "/data/data/" + getPackageName();
-        File filePath = new File(path, "playlists.json");
-        if (!filePath.exists()) {
-            ArrayList<Playlist> playlists = new ArrayList<>();
-            playlists.add(new Playlist("מועדפים", new ArrayList<>()));
-            playlists.add(new Playlist("מומלצים", new ArrayList<>()));
-            new PlaylistsJsonWriter(playlists, this).execute();
-        } else {
-            PlaylistsJsonWriter.isLoaded = true;
-            new ProgramsReceiver(this).execute();
-        }
 
 
         getSupportActionBar().hide();
     }
+
     private void checkIfAlreadyLogged(){
         SharedPreferences sharedPreferences = getSharedPreferences("userName",MODE_PRIVATE);
-        String name1 = sharedPreferences.getString("userName1", null);
-        if (name1 == null){
-            Intent intent = new Intent(this,LoginActivity.class);
+        String name = sharedPreferences.getString("name", null);
+        if (name == null){
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
         }

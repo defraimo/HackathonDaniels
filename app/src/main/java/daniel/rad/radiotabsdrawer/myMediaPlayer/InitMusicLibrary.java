@@ -1,6 +1,8 @@
 package daniel.rad.radiotabsdrawer.myMediaPlayer;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 
@@ -11,6 +13,7 @@ import java.util.List;
 
 import daniel.rad.radiotabsdrawer.DrawerActivity;
 import daniel.rad.radiotabsdrawer.MainActivity;
+import daniel.rad.radiotabsdrawer.admin.AdminActivity;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs.MusicLibrary;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
@@ -59,8 +62,37 @@ public class InitMusicLibrary extends AsyncTask<Void,Void, List<ProgramsData>> {
     protected void onPostExecute(List<ProgramsData> programsData) {
         super.onPostExecute(programsData);
 
-        Intent intent = new Intent(mainActivityWeakReference.get(), DrawerActivity.class);
-        mainActivityWeakReference.get().startActivity(intent);
-        mainActivityWeakReference.get().finish();
+        SharedPreferences sharedPreferences = mainActivityWeakReference.get().getSharedPreferences("userName", Context.MODE_PRIVATE);
+//        String isManager = sharedPreferences.getString("managerLogged", "false");
+//        String isUser = sharedPreferences.getString("userLogged", "false");
+        String name = sharedPreferences.getString("name", null);
+
+//        if (isManager != null) {
+//            if (isManager.equals("true")) {
+//                Intent intent = new Intent(mainActivityWeakReference.get(), AdminActivity.class);
+//                mainActivityWeakReference.get().startActivity(intent);
+//                mainActivityWeakReference.get().finish();
+//            }
+//        }
+//        if (isUser != null) {
+//            if (isUser.equals("true")){
+//                    Intent intent = new Intent(mainActivityWeakReference.get(), DrawerActivity.class);
+//                    mainActivityWeakReference.get().startActivity(intent);
+//                    mainActivityWeakReference.get().finish();
+//            }
+//        }
+
+        if (name != null) {
+            if (name.equals("מנהל")) {
+                Intent intent = new Intent(mainActivityWeakReference.get(), AdminActivity.class);
+                mainActivityWeakReference.get().startActivity(intent);
+                mainActivityWeakReference.get().finish();
+            }
+            else {
+                Intent intent = new Intent(mainActivityWeakReference.get(), DrawerActivity.class);
+                mainActivityWeakReference.get().startActivity(intent);
+                mainActivityWeakReference.get().finish();
+            }
+        }
     }
 }

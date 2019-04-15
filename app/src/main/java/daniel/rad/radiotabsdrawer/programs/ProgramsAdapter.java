@@ -64,7 +64,6 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
         TextView tvProgramName;
         ImageView ivPlayProgram;
         ProgramsData program;
-//        int programIndex = getAdapterPosition();
 
         public ProgramViewHolder(@NonNull View itemView, final ProgramAdapterInterface programAdapterInterface) {
             super(itemView);
@@ -72,8 +71,6 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
             this.tvPName = itemView.findViewById(R.id.tvChosenStudentName);
             this.tvProgramName = itemView.findViewById(R.id.tvChosenProgramName);
             this.ivPlayProgram = itemView.findViewById(R.id.ivPlayProgram);
-
-//            globalMediaPlayer = new GlobalMediaPlayer(itemView.getContext(),ivPlayProgram,tvProgramName,tvPName);
 
             itemView.setOnClickListener((v) -> {
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
@@ -85,19 +82,6 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
             });
 
             ivPlayProgram.setOnClickListener(v -> {
-//                mediaPlayerFragment.initBnPlay(itemView.getRootView());
-//                mediaPlayerFragment.playFunction();
-//                mediaPlayerFragment.playChosenPrograms();
-
-//                FragmentManager fragmentManager = fragment.getChildFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-//                ProgramListFragment fragment = new ProgramListFragment();
-//                Bundle bundle = new Bundle();
-//                bundle.putParcelable("programIndex", program);
-//                fragment.setArguments(bundle);
-//                fragment.getArgs();
-
                 programAdapterInterface.onItemClicked(program);
             });
         }

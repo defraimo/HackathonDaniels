@@ -5,11 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaBrowserCompat;
@@ -25,19 +22,16 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.TreeMap;
 
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.client.MediaBrowserHelper;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.MusicService;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs.MusicLibrary;
-import daniel.rad.radiotabsdrawer.myMediaPlayer.service.players.MediaPlayerAdapter;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ui.MediaSeekBar;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
+import daniel.rad.radiotabsdrawer.radioFragments.RadioTopFragment;
 
 
 /**
@@ -56,6 +50,7 @@ public class MediaPlayerFragment extends Fragment {
     ProgressBar pbLoading;
 
     public MediaBrowserHelper mMediaBrowserHelper;
+    private RadioTopFragment radioTopFragment;
 
     ProgramsData programsData;
 
@@ -83,7 +78,7 @@ public class MediaPlayerFragment extends Fragment {
         sbSong = view.findViewById(R.id.sbSong);
         initTvTime(view);
 
-        tvProgramName = view.findViewById(R.id.tvProgramName);
+        tvProgramName = view.findViewById(R.id.tvManagerProgramName);
         tvStudentName = view.findViewById(R.id.tvStudentName);
         tvPlayerLine = view.findViewById(R.id.tvPlayerLine);
         initProgressBar(view);
@@ -194,48 +189,11 @@ public class MediaPlayerFragment extends Fragment {
 
             MusicLibrary.playingPrograms(programsData);
 
-//            mMediaBrowserHelper.getTransportControls().playFromMediaId(programsData.getVodId(),null);
-
-//            mMediaBrowserHelper.getTransportControls().prepareFromMediaId(programsData.getVodId(),null);
-
-//            MediaPlayer mediaPlayer = MediaPlayerAdapter.getMediaPlayer();
-//            mediaPlayer.stop();
-//            mediaPlayer.reset();
-
-//            new MusicLibrary().apdaterCurrentPlaying(getContext());
-
-            /*
-            MusicLibrary.createMediaMetadataCompat(
-                    programsData.getVodId(),
-                    programsData.getProgramName(),
-                    programsData.getStudentName(),
-                    MusicLibrary.getDuration(programsData),
-                    programsData.getDurationUnit(),
-                    programsData.getMediaSource(),
-                    programsData.getProfilePic(),
-                    programsData.getCreationDate(),
-                    true
-            );
-            */
-
             mMediaBrowserHelper = new MediaPlayerFragment.MediaBrowserConnection(getContext());
             mMediaBrowserHelper.registerCallback(new MediaPlayerFragment.MediaBrowserListener());
 
             mMediaBrowserHelper.onStart();
 
-            Log.d("Log media", "onReceive: onstart");
-//            mMediaBrowserHelper.getTransportControls().prepare();
-
-//            try {
-//            mediaPlayer.setDataSource(getContext(),Uri.parse("http://be.repoai.com:5080/WebRTCAppEE/streams/home/" + programsData.getVodId()));
-//            mediaPlayer.prepareAsync();
-//            } catch (IOException e) {
-//                 e.printStackTrace();
-//            }
-//            mediaPlayer.start();
-
-            Log.d("playFunction", "onReceive: ");
-//            playFunction();
         }
     };
 
@@ -249,38 +207,6 @@ public class MediaPlayerFragment extends Fragment {
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver,new IntentFilter("currentProgram"));
-    }
-
-    public void playChosenPrograms(){
-        if (getArguments() != null) {
-            programsData = getArguments().getParcelable("programIndex");
-            if (mIsPlaying)
-                mMediaBrowserHelper.getTransportControls().stop();
-            TreeMap<String, String> vodNames = ProgramsReceiver.getVodNames();
-            ProgramsData chosenProgram = programsData;
-            System.out.println(chosenProgram);
-            tvProgramName.setText(chosenProgram.getProgramName());
-            tvStudentName.setText(chosenProgram.getStudentName());
-            MediaPlayer mediaPlayer = new MediaPlayer();
-            try {
-                mediaPlayer.setDataSource(getContext(), Uri.parse("http://be.repoai.com:5080/WebRTCAppEE/streams/home/" + vodNames.get(chosenProgram.getVodId())));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            mediaPlayer.prepareAsync();
-//        MusicService musicService = new MusicService();
-//        mMediaBrowserHelper.getTransportControls().prepareFromMediaId(chosenProgram.getVodId(),); TODO
-//        musicService.initPlayerAdapter(getContext());
-//        musicService.mPlayback.playFromMedia(new MediaMetadataCompat.Builder()
-//                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, chosenProgram.getVodId())
-//                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, chosenProgram.getStudentName())
-//                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,
-//                        TimeUnit.MILLISECONDS.convert(MusicLibrary.getDuration(chosenProgram), chosenProgram.getDurationUnit()))
-//                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chosenProgram.getProgramName())
-//                .putString(MediaMetadataCompat.METADATA_KEY_DATE,chosenProgram.getCreationDate())
-//                .build());
-            mMediaBrowserHelper.getTransportControls().play();
-        }
     }
 
     public void getPassedProgram(){
@@ -316,18 +242,6 @@ public class MediaPlayerFragment extends Fragment {
         Log.d("Log media", "getPassedProgram: before play");
         System.out.println(model);
     }
-
-//    @Override
-//    public void WhichProgram(ProgramsData chosenProgram) {
-//        MediaPlayer mediaPlayer = new MediaPlayer();
-//        TreeMap<String, String> vodNames = ProgramsReceiver.getVodNames();
-//        try {
-//            mediaPlayer.setDataSource(getContext(),Uri.parse("http://be.repoai.com:5080/WebRTCAppEE/streams/home/" + vodNames.get(chosenProgram.getVodId())));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        mediaPlayer.prepareAsync();
-//    }
 
     /**
      * Customize the connection to our {@link android.support.v4.media.MediaBrowserServiceCompat}

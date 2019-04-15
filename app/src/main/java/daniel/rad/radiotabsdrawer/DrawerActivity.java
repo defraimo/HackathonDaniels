@@ -1,28 +1,14 @@
 package daniel.rad.radiotabsdrawer;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.ComponentName;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -30,14 +16,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TabHost;
 import android.widget.Toast;
 
+import daniel.rad.radiotabsdrawer.login.LoginActivity;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.BroadcastsJson;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
@@ -94,17 +77,6 @@ public class DrawerActivity extends AppCompatActivity {
         }
     }
 
-
-    private void checkIfNew(){
-        SharedPreferences sharedPreferences = getSharedPreferences("userName",MODE_PRIVATE);
-        String name1 = sharedPreferences.getString("userName1", null);
-        if (name1 == null){
-            Intent intent = new Intent(this,LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -126,7 +98,16 @@ public class DrawerActivity extends AppCompatActivity {
         });
 
         btnLogOut.setOnClickListener((v)->{
-            Toast.makeText(this,"bye bye",Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("האם אתה בטוח שברצונך להתנתק?").
+                    setNegativeButton("לא", (dialog, which) -> {}).
+                    setPositiveButton("כן",(dialog, which) -> {
+                        SharedPreferences SPrefUser = getSharedPreferences("userName",MODE_PRIVATE);
+                        SPrefUser.edit().putString("name",null).apply();
+                        Intent intent = new Intent(this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }).show();
         });
 
     }

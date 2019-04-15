@@ -7,8 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -66,7 +64,7 @@ class RemovePlaylistViewHolder extends RecyclerView.ViewHolder {
 
     public RemovePlaylistViewHolder(@NonNull View itemView) {
         super(itemView);
-        tvProgramName = itemView.findViewById(R.id.tvProgramName);
+        tvProgramName = itemView.findViewById(R.id.tvManagerProgramName);
         tvStudentName = itemView.findViewById(R.id.tvStudentName);
         ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
         tvLine = itemView.findViewById(R.id.tvLine);

@@ -1,12 +1,10 @@
-package daniel.rad.radiotabsdrawer.programs;
+package daniel.rad.radiotabsdrawer.admin.programsManager;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -19,49 +17,43 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 
-import daniel.rad.radiotabsdrawer.DataHolder;
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
-
+import daniel.rad.radiotabsdrawer.programs.ProgramsAdapter;
+import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProgramListFragment extends Fragment {
-    RecyclerView rvPrograms;
-    EditText etSearch;
+public class ProgramsManagerListFragment extends Fragment {
+
+    RecyclerView rvProgramsManager;
     ImageView ivProgramSearch;
-//    PassingProgramsNames passingProgramsNames;
+    EditText etSearch;
+
+
+    public ProgramsManagerListFragment() {
+        // Required empty public constructor
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_program_list, container, false);
+        return inflater.inflate(R.layout.fragment_programs_manager_list, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        ProgramsAdapter.ProgramAdapterInterface adapterInterface = new ProgramsAdapter.ProgramAdapterInterface() {
-            @Override
-            public void onItemClicked(ProgramsData chosenProgram) {
-                System.out.println(chosenProgram);
-
-                Intent intent = new Intent("currentProgram");
-                intent.putExtra("program",chosenProgram);
-                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
-            }
-        };
-
-        rvPrograms = view.findViewById(R.id.rvPrograms);
-        ProgramsAdapter adapter = new ProgramsAdapter(ProgramsReceiver.getPrograms(),this.getContext(),adapterInterface);
-        rvPrograms.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        rvPrograms.setAdapter(adapter);
-
-        etSearch = view.findViewById(R.id.etProgramSearch);
+        rvProgramsManager = view.findViewById(R.id.rvProgramsManager);
         ivProgramSearch = view.findViewById(R.id.ivProgramSearch);
+        etSearch = view.findViewById(R.id.etSearch);
+
+        rvProgramsManager.setLayoutManager(new LinearLayoutManager(getContext()));
+        ProgramsManagerAdapter adapter = new ProgramsManagerAdapter(ProgramsReceiver.getPrograms(), getContext());
+        rvProgramsManager.setAdapter(adapter);
 
         ivProgramSearch.setOnClickListener((v)->{
             ArrayList<ProgramsData> newList = new ArrayList<>();
@@ -75,8 +67,8 @@ public class ProgramListFragment extends Fragment {
                 }
             }
             if(!search.isEmpty()) {
-                ProgramsAdapter searchAdapter = new ProgramsAdapter(newList, this.getContext(),adapterInterface);
-                rvPrograms.setAdapter(searchAdapter);
+                ProgramsManagerAdapter searchAdapter = new ProgramsManagerAdapter(newList, getContext());
+                rvProgramsManager.setAdapter(searchAdapter);
             }
         });
 
@@ -92,10 +84,11 @@ public class ProgramListFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if(etSearch.getText().toString().isEmpty()){
-                    rvPrograms.setAdapter(adapter);
+                    rvProgramsManager.setAdapter(adapter);
                 }
             }
         });
-    }
 
+
+    }
 }

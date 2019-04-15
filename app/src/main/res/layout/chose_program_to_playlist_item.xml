@@ -12,7 +12,7 @@
         android:background="#FF1E202A">
 
         <TextView
-            android:id="@+id/tvProgramName"
+            android:id="@+id/tvManagerProgramName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -51,9 +51,9 @@
             android:text="-"
             android:textColor="#FFF"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tvProgramName"
-            app:layout_constraintEnd_toStartOf="@+id/tvProgramName"
-            app:layout_constraintTop_toTopOf="@+id/tvProgramName" />
+            app:layout_constraintBottom_toBottomOf="@+id/tvManagerProgramName"
+            app:layout_constraintEnd_toStartOf="@+id/tvManagerProgramName"
+            app:layout_constraintTop_toTopOf="@+id/tvManagerProgramName" />
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/ivProfilePic"
