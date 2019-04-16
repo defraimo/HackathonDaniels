@@ -45,8 +45,8 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  */
 public class RegularLoginFragment extends Fragment {
 
-    private static final String CHECK_USER_NAME = "check";
-    private static final String CHECK_PASSWORD = "check";
+    private static final String CHECK_USER_NAME = "c";
+    private static final String CHECK_PASSWORD = "c";
 
     private LoginButton loginButton;
     private CircleImageView civProfilePicture;

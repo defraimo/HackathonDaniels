@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import daniel.rad.radiotabsdrawer.MainActivity;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
@@ -56,28 +59,30 @@ public class PlaylistJsonReader extends AsyncTask<Void, Void, ArrayList<Playlist
             is.close();
             String mResponse = new String(buffer);
 
-            JSONArray jsonArray = new JSONArray(mResponse);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String playlistName = jsonObject.getString("name");
-                JSONArray playlistPrograms = jsonObject.getJSONArray("programsData");
-                for (int j = 0; j < playlistPrograms.length(); j++) {
-                    JSONObject singleProgram = (JSONObject) playlistPrograms.get(i);
-                    String vodId = singleProgram.getString("vodId");
-                    String programName = singleProgram.getString("programName");
-                    String studentName = singleProgram.getString("studentName");
-                    long duration = singleProgram.getLong("duration");
-                    String mediaSource = singleProgram.getString("mediaSource");
-                    int profilePic = singleProgram.getInt("profilePic");
-                    long creationDate = singleProgram.getLong("creationDate");
-                    ProgramsData pd = new ProgramsData(vodId, programName, studentName, duration, mediaSource, profilePic, creationDate);
-                    buildPrograms.add(pd);
-                }
-                Playlist p = new Playlist(playlistName, buildPrograms);
-                buildPlaylists.add(p);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+            Gson gson = new Gson();
+            Playlist[] playlists = gson.fromJson(mResponse, Playlist[].class);
+
+            buildPlaylists.addAll(Arrays.asList(playlists));
+//            JSONArray jsonArray = new JSONArray(mResponse);
+//            for (int i = 0; i < jsonArray.length(); i++) {
+//                JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                String playlistName = jsonObject.getString("name");
+//                JSONArray playlistPrograms = jsonObject.getJSONArray("programsData");
+//                for (int j = 0; j < playlistPrograms.length(); j++) {
+//                    JSONObject singleProgram = (JSONObject) playlistPrograms.get(j);
+//                    String vodId = singleProgram.getString("vodId");
+//                    String programName = singleProgram.getString("programName");
+//                    String studentName = singleProgram.getString("studentName");
+//                    long duration = singleProgram.getLong("duration");
+//                    String mediaSource = singleProgram.getString("mediaSource");
+//                    int profilePic = singleProgram.getInt("profilePic");
+//                    long creationDate = singleProgram.getLong("creationDate");
+//                    ProgramsData pd = new ProgramsData(vodId, programName, studentName, duration, mediaSource, profilePic, creationDate);
+//                    buildPrograms.add(pd);
+//                }
+//                Playlist p = new Playlist(playlistName, buildPrograms);
+//                buildPlaylists.add(p);
+//            }
         } catch (FileNotFoundException e) {
             System.out.println("File Not Found");
         } catch (IOException e) {

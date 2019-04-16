@@ -37,7 +37,6 @@ import daniel.rad.radiotabsdrawer.programs.ProgramsData;
  * A simple {@link Fragment} subclass.
  */
 public class CreatePlaylistFragment extends Fragment {
-    public static final String TAG = "Testing";
 
     RecyclerView rvChooseProgram;
     EditText etListName;
@@ -45,7 +44,6 @@ public class CreatePlaylistFragment extends Fragment {
     ImageView ivCreatePlaylist;
     ImageView ivSearchButton;
     Playlist playlist;
-    BroadcastReceiver receiver;
     private static boolean isCreateNew = true;
 
     private ArrayList<ProgramsData> programsToCreate;
@@ -86,26 +84,15 @@ public class CreatePlaylistFragment extends Fragment {
         etSearchAddPlaylist = view.findViewById(R.id.etSearchProgram);
         ivCreatePlaylist = view.findViewById(R.id.ivCreatePlaylist);
         ivSearchButton = view.findViewById(R.id.ivSearchButton);
+        programsToCreate= new ArrayList<>();
 
         CreatePlaylistAdapter.CreatePlaylistAdapterInterface adapterInterface = new CreatePlaylistAdapter.CreatePlaylistAdapterInterface() {
             @Override
-            public void passProgram(ProgramsData programsData) {
-                System.out.println("This Is WEIRD! " + programsData);
+            public void passProgram(boolean toAdd, ProgramsData programsData) {
+                if(toAdd) programsToCreate.add(programsData);
+                else programsToCreate.remove(programsData);
             }
         };
-
-//        receiver = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//                ProgramsData addProgram = intent.getParcelableExtra("addProgram");
-//                ProgramsData removeProgram = intent.getParcelableExtra("removeProgram");
-//                if (addProgram != null) {
-//                    programsToCreate.add(addProgram);
-//                } else if (removeProgram != null) {
-//                    programsToCreate.remove(removeProgram);
-//                }
-//            }
-//        };
 
         ArrayList<ProgramsData> dataArrayList = ProgramsReceiver.getPrograms();
         rvChooseProgram.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -127,9 +114,9 @@ public class CreatePlaylistFragment extends Fragment {
                         }
                     }
                 }
+                RecyclerView.Adapter adapterAddedProg = new AddProgramToPlaylistAdapter(sortedList, getContext());
+                rvChooseProgram.setAdapter(adapterAddedProg);
             }
-            RecyclerView.Adapter adapterAddedProg = new AddProgramToPlaylistAdapter(sortedList, getContext());
-            rvChooseProgram.setAdapter(adapterAddedProg);
         } else {
             rvChooseProgram.setAdapter(adapter);
         }
@@ -170,7 +157,6 @@ public class CreatePlaylistFragment extends Fragment {
         });
 
         ivCreatePlaylist.setOnClickListener(v -> {
-            Toast.makeText(v.getContext(), "Creating Playlist!", Toast.LENGTH_SHORT).show();
             //an instance of the data source in order to write to the data base:
             String playlistName = etListName.getText().toString();
             playlistArrayList.add(new Playlist(playlistName, programsToCreate));
@@ -179,18 +165,4 @@ public class CreatePlaylistFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-//        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(Objects.requireNonNull(getContext()));
-//        IntentFilter intentFilter = new IntentFilter("createPlaylist");
-//        broadcastManager.registerReceiver(receiver, intentFilter);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//        LocalBroadcastManager.getInstance(Objects.requireNonNull(getContext())).unregisterReceiver(receiver);
-
-    }
 }

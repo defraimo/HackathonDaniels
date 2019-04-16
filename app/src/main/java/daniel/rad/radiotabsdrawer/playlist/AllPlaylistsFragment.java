@@ -49,6 +49,7 @@ public class AllPlaylistsFragment extends Fragment implements JsonReaderInterfac
         return view;
     }
 
+
     @Override
     public void onResume(){
         super.onResume();

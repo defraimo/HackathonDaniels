@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
@@ -24,13 +25,20 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CreatePlaylistAdapter extends RecyclerView.Adapter<CreatePlaylistAdapter.CreatePlaylistViewHolder> {
     List<ProgramsData> programsDataList;
     Context context;
+    ArrayList<Boolean> isSelectedArr;
 
     private CreatePlaylistAdapterInterface createPlaylistAdapterInterface;
 
-    public CreatePlaylistAdapter(List<ProgramsData> programsDataList, Context context,  CreatePlaylistAdapterInterface createPlaylistAdapterInterface) {
+    public CreatePlaylistAdapter(List<ProgramsData> programsDataList, Context context, CreatePlaylistAdapterInterface createPlaylistAdapterInterface) {
         this.programsDataList = programsDataList;
         this.context = context;
         this.createPlaylistAdapterInterface = createPlaylistAdapterInterface;
+        isSelectedArr = new ArrayList<>();
+
+        for (int i = 0; i < programsDataList.size(); i++) {
+            isSelectedArr.add(false);
+        }
+        System.out.println(isSelectedArr);
     }
 
     @NonNull
@@ -44,8 +52,14 @@ public class CreatePlaylistAdapter extends RecyclerView.Adapter<CreatePlaylistAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CreatePlaylistViewHolder holder, int i) {
-        ProgramsData programsData = programsDataList.get(i);
+    public void onBindViewHolder(@NonNull CreatePlaylistViewHolder holder, int position) {
+        ProgramsData programsData = programsDataList.get(position);
+
+        if(isSelectedArr.get(position)){
+            holder.tbCheck.setBackgroundResource(R.drawable.ic_radio_button_checked);
+        }else{
+            holder.tbCheck.setBackgroundResource(R.drawable.ic_check);
+        }
 
         holder.tvProgramName.setText(programsData.getProgramName());
         if (programsData.getStudentName() != null)
@@ -55,6 +69,17 @@ public class CreatePlaylistAdapter extends RecyclerView.Adapter<CreatePlaylistAd
         holder.ivProfilePic.setImageResource(programsData.getProfilePic());
         holder.programsData = programsData;
 
+        holder.tbCheck.setOnClickListener(v -> {
+            if (holder.tbCheck.isChecked()) {
+                holder.tbCheck.setBackgroundResource(R.drawable.ic_radio_button_checked);
+                isSelectedArr.set(position, true);
+                createPlaylistAdapterInterface.passProgram(true,programsData);
+            } else if (!holder.tbCheck.isChecked()) {
+                holder.tbCheck.setBackgroundResource(R.drawable.ic_check);
+                createPlaylistAdapterInterface.passProgram(false,programsData);
+                isSelectedArr.set(position, false);
+            }
+        });
     }
 
     @Override
@@ -70,7 +95,6 @@ public class CreatePlaylistAdapter extends RecyclerView.Adapter<CreatePlaylistAd
         CircleImageView ivProfilePic;
         ToggleButton tbCheck;
         ProgramsData programsData;
-//    ProgramsData nullProgram = null;
 
 
         public CreatePlaylistViewHolder(@NonNull View itemView, final CreatePlaylistAdapterInterface createPlaylistAdapterInterface) {
@@ -80,33 +104,10 @@ public class CreatePlaylistAdapter extends RecyclerView.Adapter<CreatePlaylistAd
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
             tvLine = itemView.findViewById(R.id.tvLine);
             tbCheck = itemView.findViewById(R.id.tbCheck);
-//        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(itemView.getContext());
-//         Intent intent = new Intent("createPlaylist");
 
-            itemView.setOnClickListener(v -> {
-                createPlaylistAdapterInterface.passProgram(programsData);
-            });
-
-
-            tbCheck.setOnClickListener(v -> {
-                createPlaylistAdapterInterface.passProgram(programsData);
-                if (tbCheck.isChecked()) {
-                    tbCheck.setBackgroundResource(R.drawable.ic_radio_button_checked);
-//                Log.d("Testing Playlist", "CreatePlaylistViewHolder: sent add broadcast");
-//                intent.putExtra("addProgram",programsData);
-//                intent.putExtra("removeProgram",nullProgram);
-//                broadcastManager.sendBroadcast(intent);
-                } else if (!tbCheck.isChecked()) {
-                    tbCheck.setBackgroundResource(R.drawable.ic_check);
-//                Log.d("Testing Playlist", "CreatePlaylistViewHolder: sent remove broadcast");
-//                intent.putExtra("removeProgram",programsData);
-//                intent.putExtra("addProgram",nullProgram);
-//                broadcastManager.sendBroadcast(intent);
-                }
-            });
         }
     }
     public interface CreatePlaylistAdapterInterface {
-        void passProgram(ProgramsData programsData);
+        void passProgram(boolean toAdd, ProgramsData programsData);
     }
 }

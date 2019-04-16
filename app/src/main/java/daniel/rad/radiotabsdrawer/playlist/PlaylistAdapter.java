@@ -1,12 +1,15 @@
 package daniel.rad.radiotabsdrawer.playlist;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.RecyclerView;
+import android.util.JsonWriter;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,10 +29,10 @@ import daniel.rad.radiotabsdrawer.playlist.chosenPlaylist.CreatePlaylistFragment
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
-    List<Playlist> playlists;
+    ArrayList<Playlist> playlists;
     Context context;
 
-    public PlaylistAdapter(List<Playlist> playlists, Context context) {
+    public PlaylistAdapter(ArrayList<Playlist> playlists, Context context) {
         this.playlists = playlists;
         this.context = context;
     }
@@ -49,30 +52,26 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
         String playlistName = playlist.getName();
         int defaultPic;
         holder.tvPlayList.setText(playlistName);
-        if (playlistName.equals("מומלצים")){
+        if (playlistName.equals("מומלצים")) {
             defaultPic = R.drawable.ic_default_recommended;
-        }
-        else if (playlistName.equals("מועדפים")){
+        } else if (playlistName.equals("מועדפים")) {
             defaultPic = R.drawable.ic_default_favourite;
-        }
-        else {
+        } else {
             defaultPic = R.drawable.ic_default_pic;
         }
 
         ArrayList<ProgramsData> programsDataList = (ArrayList<ProgramsData>) playlist.getProgramsData();
         holder.ivProfileAll.setImageResource(defaultPic);
-        if (programsDataList.size() == 0){
+        if (programsDataList.size() == 0) {
             holder.ivProfileAll.setImageResource(defaultPic);
             holder.ivProfilePic1.setVisibility(View.INVISIBLE);
             holder.ivProfilePic2.setVisibility(View.INVISIBLE);
             holder.ivProfilePic3.setVisibility(View.INVISIBLE);
             holder.ivProfilePic4.setVisibility(View.INVISIBLE);
-        }
-        else if (programsDataList.size() == 1) {
-            if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic){
+        } else if (programsDataList.size() == 1) {
+            if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic) {
                 holder.ivProfileAll.setImageResource(defaultPic);
-            }
-            else{
+            } else {
                 holder.ivProfileAll.setImageResource(programsDataList.get(0).getProfilePic());
             }
             holder.ivProfilePic1.setVisibility(View.INVISIBLE);
@@ -80,25 +79,23 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             holder.ivProfilePic3.setVisibility(View.INVISIBLE);
             holder.ivProfilePic4.setVisibility(View.INVISIBLE);
         } else if (programsDataList.size() == 2) {
-            if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic){
+            if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic) {
                 holder.ivProfilePic1.setImageResource(defaultPic);
                 holder.ivProfilePic4.setImageResource(defaultPic);
-            }
-            else {
+            } else {
                 holder.ivProfilePic1.setImageResource(programsDataList.get(0).getProfilePic());
                 holder.ivProfilePic4.setImageResource(programsDataList.get(0).getProfilePic());
             }
-            if (programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic){
+            if (programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic) {
                 holder.ivProfilePic2.setImageResource(defaultPic);
                 holder.ivProfilePic3.setImageResource(defaultPic);
-            }
-            else {
+            } else {
                 holder.ivProfilePic3.setImageResource(programsDataList.get(1).getProfilePic());
                 holder.ivProfilePic2.setImageResource(programsDataList.get(1).getProfilePic());
             }
             holder.ivProfileAll.setVisibility(View.INVISIBLE);
             if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic &&
-                    programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic){
+                    programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic) {
                 holder.ivProfileAll.setVisibility(View.VISIBLE);
                 holder.ivProfilePic1.setVisibility(View.INVISIBLE);
                 holder.ivProfilePic2.setVisibility(View.INVISIBLE);
@@ -106,30 +103,27 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 holder.ivProfilePic4.setVisibility(View.INVISIBLE);
             }
         } else if (programsDataList.size() == 3) {
-            if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic){
+            if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic) {
                 holder.ivProfilePic1.setImageResource(defaultPic);
                 holder.ivProfilePic4.setImageResource(defaultPic);
-            }
-            else {
+            } else {
                 holder.ivProfilePic1.setImageResource(programsDataList.get(0).getProfilePic());
                 holder.ivProfilePic4.setImageResource(programsDataList.get(0).getProfilePic());
             }
-            if (programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic){
+            if (programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic) {
                 holder.ivProfilePic2.setImageResource(defaultPic);
-            }
-            else {
+            } else {
                 holder.ivProfilePic2.setImageResource(programsDataList.get(2).getProfilePic());
             }
-            if (programsDataList.get(3).getProfilePic() == R.drawable.ic_default_pic){
+            if (programsDataList.get(2).getProfilePic() == R.drawable.ic_default_pic) {
                 holder.ivProfilePic3.setImageResource(defaultPic);
-            }
-            else {
+            } else {
                 holder.ivProfilePic3.setImageResource(programsDataList.get(1).getProfilePic());
             }
             holder.ivProfileAll.setVisibility(View.INVISIBLE);
             if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic &&
                     programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic &&
-                    programsDataList.get(2).getProfilePic() == R.drawable.ic_default_pic){
+                    programsDataList.get(2).getProfilePic() == R.drawable.ic_default_pic) {
                 holder.ivProfileAll.setVisibility(View.VISIBLE);
                 holder.ivProfilePic1.setVisibility(View.INVISIBLE);
                 holder.ivProfilePic2.setVisibility(View.INVISIBLE);
@@ -138,36 +132,32 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             }
 
         } else if (programsDataList.size() >= 4) {
-            if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic){
+            if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic) {
                 holder.ivProfilePic1.setImageResource(defaultPic);
-            }
-            else {
+            } else {
                 holder.ivProfilePic1.setImageResource(programsDataList.get(0).getProfilePic());
             }
-            if (programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic){
+            if (programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic) {
                 holder.ivProfilePic2.setImageResource(defaultPic);
 
-            }
-            else {
+            } else {
                 holder.ivProfilePic3.setImageResource(programsDataList.get(1).getProfilePic());
             }
-            if (programsDataList.get(3).getProfilePic() == R.drawable.ic_default_pic){
+            if (programsDataList.get(2).getProfilePic() == R.drawable.ic_default_pic) {
                 holder.ivProfilePic3.setImageResource(defaultPic);
-            }
-            else {
+            } else {
                 holder.ivProfilePic2.setImageResource(programsDataList.get(2).getProfilePic());
             }
-            if (programsDataList.get(4).getProfilePic() == R.drawable.ic_default_pic){
+            if (programsDataList.get(3).getProfilePic() == R.drawable.ic_default_pic) {
                 holder.ivProfilePic4.setImageResource(defaultPic);
-            }
-            else {
+            } else {
                 holder.ivProfilePic4.setImageResource(programsDataList.get(3).getProfilePic());
             }
             holder.ivProfileAll.setVisibility(View.INVISIBLE);
             if (programsDataList.get(0).getProfilePic() == R.drawable.ic_default_pic &&
                     programsDataList.get(1).getProfilePic() == R.drawable.ic_default_pic &&
                     programsDataList.get(2).getProfilePic() == R.drawable.ic_default_pic &&
-                    programsDataList.get(3).getProfilePic() == R.drawable.ic_default_pic){
+                    programsDataList.get(3).getProfilePic() == R.drawable.ic_default_pic) {
                 holder.ivProfileAll.setVisibility(View.VISIBLE);
                 holder.ivProfilePic1.setVisibility(View.INVISIBLE);
                 holder.ivProfilePic2.setVisibility(View.INVISIBLE);
@@ -178,6 +168,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
 
         holder.playlist = playlist;
         holder.context = context;
+        holder.playlists = playlists;
+
     }
 
     @Override
@@ -198,6 +190,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
     Playlist playlist;
     Context context;
     Animation mShakeAnimation;
+    ArrayList<Playlist> playlists;
     boolean isDoublePressed = false;
 
     public PlayListViewHolder(@NonNull View itemView) {
@@ -212,7 +205,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
 
         itemView.setOnClickListener(v -> {
             if (isDoublePressed) {
-                mShakeAnimation = AnimationUtils.loadAnimation(itemView.getContext(),R.anim.stop_shake);
+                mShakeAnimation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.stop_shake);
                 itemView.startAnimation(mShakeAnimation);
                 ivDeletePlaylist.setVisibility(View.GONE);
                 isDoublePressed = false;
@@ -221,14 +214,14 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                 activity.getSupportFragmentManager().
                         beginTransaction().
                         addToBackStack("playlistList").
-                        replace(R.id.playlist_frame, PlaylistDetailsFragment.newInstance(playlist,false)).
+                        replace(R.id.playlist_frame, PlaylistDetailsFragment.newInstance(playlist, false)).
                         commit();
             }
         });
         itemView.setOnLongClickListener(v -> {
             if (!isDoublePressed) {
                 ivDeletePlaylist.setVisibility(View.VISIBLE);
-                mShakeAnimation = AnimationUtils.loadAnimation(itemView.getContext(),R.anim.shake);
+                mShakeAnimation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.shake);
                 itemView.startAnimation(mShakeAnimation);
                 isDoublePressed = true;
             }
@@ -244,40 +237,93 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                 MenuPopupHelper optionsMenu = new MenuPopupHelper(context, menuBuilder, ivDeletePlaylist);
                 optionsMenu.setForceShowIcon(true);
 
-                menuBuilder.setCallback(new MenuBuilder.Callback() {
-                    @Override
-                    public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.itemAddProgram:
-                                AppCompatActivity activity = (AppCompatActivity) context;
-                                activity.getSupportFragmentManager().
-                                        beginTransaction().
-                                        addToBackStack("removeProgramFromPlaylist").
-                                        replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(playlist)).
-                                        commit();
-                                return true;
-                            case R.id.itemRemoveProgram:
-                                activity = (AppCompatActivity) context;
-                                activity.getSupportFragmentManager().
-                                        beginTransaction().
-                                        addToBackStack("removeProgramFromPlaylist").
-                                        replace(R.id.playlist_frame, PlaylistDetailsFragment.newInstance(playlist,true)).
-                                        commit();
-                                return true;
-                            case R.id.itemRemoveList:
-                                Toast.makeText(context, "הרשימה הוסרה!", Toast.LENGTH_SHORT).show();
-                                return true;
+                if (playlist.getName().equals("מועדפים") || playlist.getName().equals("מומלצים")) {
+                    menuBuilder.setCallback(new MenuBuilder.Callback() {
+                        @Override
+                        public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.itemAddProgram:
+                                    AppCompatActivity activity = (AppCompatActivity) context;
+                                    activity.getSupportFragmentManager().
+                                            beginTransaction().
+                                            addToBackStack("removeProgramFromPlaylist").
+                                            replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(playlist)).
+                                            commit();
+                                    return true;
+                                case R.id.itemRemoveProgram:
+                                    activity = (AppCompatActivity) context;
+                                    activity.getSupportFragmentManager().
+                                            beginTransaction().
+                                            addToBackStack("removeProgramFromPlaylist").
+                                            replace(R.id.playlist_frame, PlaylistDetailsFragment.newInstance(playlist, true)).
+                                            commit();
+                                    return true;
+                                case R.id.itemRemoveList:
+                                    new AlertDialog.Builder(context).
+                                            setTitle("לא ניתן למחוק רשימה זו").
+                                            setPositiveButton("הבנתי", (dialog, which) -> {
+                                                mShakeAnimation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.stop_shake);
+                                                itemView.startAnimation(mShakeAnimation);
+                                                ivDeletePlaylist.setVisibility(View.GONE);
+                                                isDoublePressed = false;
+                                            }).show();
+                                    return true;
+                            }
+                            return false;
                         }
-                        return false;
-                    }
+                        @Override
+                        public void onMenuModeChange(MenuBuilder menuBuilder) {
+                        }
+                    });
+                } else {
+                    menuBuilder.setCallback(new MenuBuilder.Callback() {
+                        @Override
+                        public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.itemAddProgram:
+                                    AppCompatActivity activity = (AppCompatActivity) context;
+                                    activity.getSupportFragmentManager().
+                                            beginTransaction().
+                                            addToBackStack("removeProgramFromPlaylist").
+                                            replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(playlist)).
+                                            commit();
+                                    return true;
+                                case R.id.itemRemoveProgram:
+                                    activity = (AppCompatActivity) context;
+                                    activity.getSupportFragmentManager().
+                                            beginTransaction().
+                                            addToBackStack("removeProgramFromPlaylist").
+                                            replace(R.id.playlist_frame, PlaylistDetailsFragment.newInstance(playlist, true)).
+                                            commit();
+                                    return true;
+                                case R.id.itemRemoveList:
+                                    new AlertDialog.Builder(context).
+                                            setTitle("האם אתה בטוח שתרצה להסיר רשימה זו?").
+                                            setPositiveButton("כן", (dialog, which) -> {
+                                                Toast.makeText(context, "הרשימה הוסרה!", Toast.LENGTH_SHORT).show();
+                                                playlists.remove(playlist);
+                                                new PlaylistsJsonWriter(playlists, context).execute();
+                                                mShakeAnimation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.stop_shake);
+                                                itemView.startAnimation(mShakeAnimation);
+                                                ivDeletePlaylist.setVisibility(View.GONE);
+                                                isDoublePressed = false;
+                                            }).setNegativeButton("לא", (dialog, which) -> {
+                                        mShakeAnimation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.stop_shake);
+                                        itemView.startAnimation(mShakeAnimation);
+                                        ivDeletePlaylist.setVisibility(View.GONE);
+                                        isDoublePressed = false;
+                                    }).show();
 
-                    @Override
-                    public void onMenuModeChange(MenuBuilder menuBuilder) {
-                    }
-                });
-
+                                    return true;
+                            }
+                            return false;
+                        }
+                        @Override
+                        public void onMenuModeChange(MenuBuilder menuBuilder) {
+                        }
+                    });
+                }
                 optionsMenu.show();
-
             }
         });
     }

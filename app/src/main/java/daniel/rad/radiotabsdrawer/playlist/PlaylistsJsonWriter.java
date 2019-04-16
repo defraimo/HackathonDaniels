@@ -45,7 +45,6 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
         this.playlists = playlists;
         contextWeakReference = new WeakReference<>(context);
     }
-
     public PlaylistsJsonWriter() {
     }
 
@@ -54,9 +53,10 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
         Context context = contextWeakReference.get();
         String path = "/data/data/" + context.getPackageName();
         File filePath = new File(path, "playlists.json");
-        try (FileWriter out = new FileWriter(filePath)) {
+        try (FileWriter out = new FileWriter(filePath, false)) {
 //        jsonConverter(context);
-            String playlistsJson = gsonConverter(context);
+            String playlistsJson = gsonConverter();
+            System.out.println(playlistsJson);
             out.write(playlistsJson);
             out.flush();
         } catch (IOException e) {
@@ -82,9 +82,10 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    private String gsonConverter(Context context) {
+    private String gsonConverter() {
         Gson gson = new Gson();
         String playlistsJson = gson.toJson(playlists);
+        System.out.println("playlistJson: " + playlistsJson);
 
         return playlistsJson;
 
