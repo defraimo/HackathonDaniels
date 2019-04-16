@@ -14,6 +14,7 @@ import java.util.Random;
 import java.util.TreeMap;
 
 import daniel.rad.radiotabsdrawer.MainActivity;
+import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -103,7 +104,9 @@ public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
         Random r = new Random();
         int random = r.nextInt(programsData.size());
         ArrayList<ProgramsData> randomProgram = new ArrayList<>();
-        randomProgram.add(programsData.get(random));
+        ProgramsData chosenProgram = programsData.get(random);
+        randomProgram.add(chosenProgram);
+        MediaPlayerFragment.currentlyPlayingProgram = chosenProgram.getProgramName();
         new InitMusicLibrary(randomProgram,mainActivityWeakReference,0).execute();
 
 //        Intent intent = new Intent(mainActivityWeakReference.get(),DrawerActivity.class);

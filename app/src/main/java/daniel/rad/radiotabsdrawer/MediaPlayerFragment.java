@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -50,9 +51,11 @@ public class MediaPlayerFragment extends Fragment {
     ProgressBar pbLoading;
 
     public MediaBrowserHelper mMediaBrowserHelper;
-    private RadioTopFragment radioTopFragment;
 
     ProgramsData programsData;
+
+    public static String currentlyPlayingProgram;
+    private ProgramsData nextProgramToPlay;
 
     //to prevent from the song to start playing when the app is first on
     static public boolean startedFirstTime;
@@ -89,9 +92,21 @@ public class MediaPlayerFragment extends Fragment {
             setProgressBarVisible();
             bnBack.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnBack.animate().scaleX(1).scaleY(1).setDuration(200);
-                Random r = new Random();
-                int random = r.nextInt(ProgramsReceiver.getPrograms().size());
-                MusicLibrary.playingPrograms(ProgramsReceiver.getPrograms().get(random));
+
+                //getting the previous program
+                ArrayList<ProgramsData> programsList = ProgramsReceiver.getPrograms();
+                for (int i = 0; i < programsList.size(); i++) {
+                    if (programsList.get(i).getProgramName().equals(currentlyPlayingProgram)){
+                        if (i == 0){
+                            nextProgramToPlay = programsList.get(programsList.size()-1);
+                        }
+                        else {
+                            nextProgramToPlay = programsList.get(i-1);
+                        }
+                    }
+                }
+                MusicLibrary.playingProgramsAsync(nextProgramToPlay,getContext());
+
                 mMediaBrowserHelper.getTransportControls().skipToPrevious();
                 bnPlay.setImageResource(R.drawable.ic_pause);
             });
@@ -102,9 +117,21 @@ public class MediaPlayerFragment extends Fragment {
             setProgressBarVisible();
             bnForward.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnForward.animate().scaleX(1).scaleY(1).setDuration(200);
-                Random r = new Random();
-                int random = r.nextInt(ProgramsReceiver.getPrograms().size());
-                MusicLibrary.playingPrograms(ProgramsReceiver.getPrograms().get(random));
+
+                //getting the next program
+                ArrayList<ProgramsData> programsList = ProgramsReceiver.getPrograms();
+                for (int i = 0; i < programsList.size(); i++) {
+                    if (programsList.get(i).getProgramName().equals(currentlyPlayingProgram)){
+                        if (programsList.size()-i == 1){
+                            nextProgramToPlay = programsList.get(0);
+                        }
+                        else {
+                            nextProgramToPlay = programsList.get(i+1);
+                        }
+                    }
+                }
+                MusicLibrary.playingProgramsAsync(nextProgramToPlay,getContext());
+
                 mMediaBrowserHelper.getTransportControls().skipToNext();
                 bnPlay.setImageResource(R.drawable.ic_pause);
             });
@@ -181,19 +208,36 @@ public class MediaPlayerFragment extends Fragment {
             programsData = intent.getParcelableExtra("program");
             tvProgramName.setText(programsData.getProgramName());
             tvStudentName.setText(programsData.getStudentName());
+            setProgressBarVisible();
 //            if (mIsPlaying)
-            mMediaBrowserHelper.onStop();
+
+//            mMediaBrowserHelper.onStop();
+            mMediaBrowserHelper.getTransportControls().stop();
 
             Log.d("Log media", "onReceive: ");
 
 
-            MusicLibrary.playingPrograms(programsData);
+            MusicLibrary.playingProgramsAsync(programsData,getContext());
 
-            mMediaBrowserHelper = new MediaPlayerFragment.MediaBrowserConnection(getContext());
-            mMediaBrowserHelper.registerCallback(new MediaPlayerFragment.MediaBrowserListener());
+//            mMediaBrowserHelper = new MediaPlayerFragment.MediaBrowserConnection(getContext());
+//            mMediaBrowserHelper.registerCallback(new MediaPlayerFragment.MediaBrowserListener());
+//
+//            mMediaBrowserHelper.onStart();
+        }
+    };
 
-            mMediaBrowserHelper.onStart();
+    BroadcastReceiver playingNowReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String programToPlay = intent.getStringExtra("program");
+            if (!programToPlay.equals(currentlyPlayingProgram)){
+                currentlyPlayingProgram = programToPlay;
+                mMediaBrowserHelper = new MediaPlayerFragment.MediaBrowserConnection(getContext());
+                mMediaBrowserHelper.registerCallback(new MediaPlayerFragment.MediaBrowserListener());
 
+                mMediaBrowserHelper.onStart();
+                setProgressBarInvisible();
+            }
         }
     };
 
@@ -201,12 +245,14 @@ public class MediaPlayerFragment extends Fragment {
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(playingNowReceiver);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver,new IntentFilter("currentProgram"));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(playingNowReceiver,new IntentFilter("programToPlay"));
     }
 
     public void getPassedProgram(){

@@ -18,9 +18,11 @@ package daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 
@@ -33,6 +35,7 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import daniel.rad.radiotabsdrawer.BuildConfig;
+import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
@@ -130,6 +133,34 @@ public class MusicLibrary {
             e.printStackTrace();
         }
         return mp.getDuration();
+    }
+
+    public static void playingProgramsAsync(ProgramsData model,Context context){
+        MediaPlayer mp = new MediaPlayer();
+        mp.reset();
+        try {
+            mp.setDataSource(model.getMediaSource());
+            mp.prepareAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mp.setOnPreparedListener(mp1 -> {
+            createMediaMetadataCompat(
+                    model.getVodId(),
+                    model.getProgramName(),
+                    model.getStudentName(),
+                    mp1.getDuration(),
+                    model.getDurationUnit(),
+                    model.getMediaSource(),
+                    model.getProfilePic(),
+                    model.getCreationDate(),
+                    false
+            );
+            LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+            Intent intent = new Intent("programToPlay");
+            intent.putExtra("program",model.getProgramName());
+            localBroadcastManager.sendBroadcast(intent);
+        });
     }
 
     public static String getRoot() {
