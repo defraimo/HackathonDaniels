@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.cloudant.client.api.ClientBuilder;
@@ -29,7 +30,9 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import daniel.rad.radiotabsdrawer.MainActivity;
+import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
+import daniel.rad.radiotabsdrawer.playlist.chosenPlaylist.CreatePlaylistFragment;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 
@@ -69,13 +72,19 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
         if (!isLoaded) {
             isLoaded = true;
             new ProgramsReceiver((MainActivity) contextWeakReference.get()).execute();
+        }else{
+            AppCompatActivity activity = (AppCompatActivity) contextWeakReference.get();
+            activity.getSupportFragmentManager().
+                    beginTransaction().
+                    addToBackStack("allPlaylists").
+                    replace(R.id.playlist_frame, AllPlaylistsFragment.newInstance(playlists)).
+                    commit();
         }
     }
 
     private String gsonConverter(Context context) {
         Gson gson = new Gson();
         String playlistsJson = gson.toJson(playlists);
-        System.out.println(playlistsJson);
 
         return playlistsJson;
 

@@ -33,6 +33,13 @@ public class AllPlaylistsFragment extends Fragment implements JsonReaderInterfac
     PlaylistJsonReader jsonReader;
     PlaylistAdapter adapter;
 
+    public static AllPlaylistsFragment newInstance(ArrayList<Playlist> playlistArraylist) {
+        Bundle args = new Bundle();
+        args.putParcelableArrayList("playlists", playlistArraylist);
+        AllPlaylistsFragment fragment = new AllPlaylistsFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,11 +72,7 @@ public class AllPlaylistsFragment extends Fragment implements JsonReaderInterfac
         tvPlaylist = view.findViewById(R.id.tvPlaylist);
         ivAddPlaylist = view.findViewById(R.id.ivAddPlaylist);
 
-
-
         rvPlaylist.setLayoutManager(new GridLayoutManager(getContext(), 2));
-//        new PlaylistJsonReader(getContext(), playlistsList, progressBar, rvPlaylist).execute();
-
 
         ivAddPlaylist.setOnClickListener(v -> {
             AppCompatActivity activity = (AppCompatActivity) view.getContext();

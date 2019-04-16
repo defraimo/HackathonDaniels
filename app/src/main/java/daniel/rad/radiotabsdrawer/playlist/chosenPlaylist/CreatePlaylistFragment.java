@@ -1,15 +1,21 @@
 package daniel.rad.radiotabsdrawer.playlist.chosenPlaylist;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +24,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
-import daniel.rad.radiotabsdrawer.playlist.AllPlaylistsFragment;
 import daniel.rad.radiotabsdrawer.playlist.Playlist;
-import daniel.rad.radiotabsdrawer.playlist.PlaylistAdapterInterface;
 import daniel.rad.radiotabsdrawer.playlist.PlaylistsJsonWriter;
 import daniel.rad.radiotabsdrawer.playlist.addProgramToPlaylist.AddProgramToPlaylistAdapter;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
@@ -32,6 +37,7 @@ import daniel.rad.radiotabsdrawer.programs.ProgramsData;
  * A simple {@link Fragment} subclass.
  */
 public class CreatePlaylistFragment extends Fragment {
+    public static final String TAG = "Testing";
 
     RecyclerView rvChooseProgram;
     EditText etListName;
@@ -39,10 +45,12 @@ public class CreatePlaylistFragment extends Fragment {
     ImageView ivCreatePlaylist;
     ImageView ivSearchButton;
     Playlist playlist;
+    BroadcastReceiver receiver;
     private static boolean isCreateNew = true;
 
     private ArrayList<ProgramsData> programsToCreate;
     private ArrayList<Playlist> playlistArrayList;
+    CreatePlaylistAdapter adapter;
 
     public static CreatePlaylistFragment newInstance(Playlist playlist) {
         isCreateNew = false;
@@ -52,6 +60,7 @@ public class CreatePlaylistFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public static CreatePlaylistFragment newInstance(ArrayList<Playlist> playlists) {
         isCreateNew = true;
         Bundle args = new Bundle();
@@ -71,12 +80,6 @@ public class CreatePlaylistFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        PlaylistAdapterInterface adapterInterface = new PlaylistAdapterInterface() {
-            @Override
-            public void OnItemClicked(ArrayList<ProgramsData> programs) {
-                programsToCreate = new ArrayList<>(programs);
-            }
-        };
 
         rvChooseProgram = view.findViewById(R.id.rvChooseProgram);
         etListName = view.findViewById(R.id.etListName);
@@ -84,18 +87,38 @@ public class CreatePlaylistFragment extends Fragment {
         ivCreatePlaylist = view.findViewById(R.id.ivCreatePlaylist);
         ivSearchButton = view.findViewById(R.id.ivSearchButton);
 
-        rvChooseProgram.setLayoutManager(new LinearLayoutManager(getContext()));
+        CreatePlaylistAdapter.CreatePlaylistAdapterInterface adapterInterface = new CreatePlaylistAdapter.CreatePlaylistAdapterInterface() {
+            @Override
+            public void passProgram(ProgramsData programsData) {
+                System.out.println("This Is WEIRD! " + programsData);
+            }
+        };
+
+//        receiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                ProgramsData addProgram = intent.getParcelableExtra("addProgram");
+//                ProgramsData removeProgram = intent.getParcelableExtra("removeProgram");
+//                if (addProgram != null) {
+//                    programsToCreate.add(addProgram);
+//                } else if (removeProgram != null) {
+//                    programsToCreate.remove(removeProgram);
+//                }
+//            }
+//        };
 
         ArrayList<ProgramsData> dataArrayList = ProgramsReceiver.getPrograms();
-        RecyclerView.Adapter adapter = new CreatePlaylistAdapter(dataArrayList, getContext(), adapterInterface);
+        rvChooseProgram.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new CreatePlaylistAdapter(dataArrayList, this.getContext(), adapterInterface);
 
         ArrayList<ProgramsData> sortedList = new ArrayList<>(dataArrayList);
 
         if (getArguments() != null) {
             if (isCreateNew) {
-                 playlistArrayList = getArguments().
+                playlistArrayList = getArguments().
                         getParcelableArrayList("playlists");
-            }else{
+                rvChooseProgram.setAdapter(adapter);
+            } else {
                 playlist = getArguments().getParcelable("playlist");
                 for (ProgramsData programAll : dataArrayList) {
                     for (ProgramsData playlistProgram : playlist.getProgramsData()) {
@@ -124,7 +147,7 @@ public class CreatePlaylistFragment extends Fragment {
                 }
             }
             if (!search.isEmpty()) {
-                rvChooseProgram.setAdapter(new CreatePlaylistAdapter(newList, this.getContext(), adapterInterface));
+                rvChooseProgram.setAdapter(new CreatePlaylistAdapter(newList, this.getContext(),adapterInterface));
             }
         });
         etSearchAddPlaylist.addTextChangedListener(new TextWatcher() {
@@ -149,18 +172,25 @@ public class CreatePlaylistFragment extends Fragment {
         ivCreatePlaylist.setOnClickListener(v -> {
             Toast.makeText(v.getContext(), "Creating Playlist!", Toast.LENGTH_SHORT).show();
             //an instance of the data source in order to write to the data base:
-            ArrayList<Playlist> playlists = new ArrayList<>(playlistArrayList);
-
-            String s = etListName.getText().toString();// playlist name
-            playlists.add(new Playlist(s, programsToCreate));
-
-
+            String playlistName = etListName.getText().toString();
+            playlistArrayList.add(new Playlist(playlistName, programsToCreate));
             //write all playlists to json:
-            new PlaylistsJsonWriter(playlists, getContext()).execute();
-
-
-
-
+            new PlaylistsJsonWriter(playlistArrayList, getContext()).execute();
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(Objects.requireNonNull(getContext()));
+//        IntentFilter intentFilter = new IntentFilter("createPlaylist");
+//        broadcastManager.registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+//        LocalBroadcastManager.getInstance(Objects.requireNonNull(getContext())).unregisterReceiver(receiver);
+
     }
 }

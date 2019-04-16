@@ -64,7 +64,7 @@ class AddProgramToPlaylistViewHolder extends RecyclerView.ViewHolder{
 
     public AddProgramToPlaylistViewHolder(@NonNull View itemView) {
         super(itemView);
-        tvProgramName = itemView.findViewById(R.id.tvManagerProgramName);
+        tvProgramName = itemView.findViewById(R.id.tvProgramName);
         tvStudentName = itemView.findViewById(R.id.tvStudentName);
         ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
         tvLine = itemView.findViewById(R.id.tvLine);
