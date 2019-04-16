@@ -10,20 +10,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.List;
 
 import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
 import daniel.rad.radiotabsdrawer.R;
 
 public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.ProgramViewHolder> {
-    private MediaPlayerFragment playerFragment;
     private List<ProgramsData> programs;
     private Context context;
 
     private ProgramAdapterInterface programAdapterInterface;
 
     public ProgramsAdapter(List<ProgramsData> programs, Context context ,ProgramAdapterInterface programAdapterInterface) {
-        playerFragment = new MediaPlayerFragment();
         this.programs = programs;
         this.context = context;
         this.programAdapterInterface = programAdapterInterface;
@@ -48,7 +51,6 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
         holder.tvPName.setText(program.getStudentName());
         holder.ivProfilePic.setImageResource(program.getProfilePic());
         holder.program = program;
-        holder.mediaPlayerFragment = playerFragment;
         //todo: replace ImageResource with and image from Facebook
     }
 
@@ -58,7 +60,6 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
     }
 
     class ProgramViewHolder extends RecyclerView.ViewHolder {
-        MediaPlayerFragment mediaPlayerFragment;
         ImageView ivProfilePic;
         TextView tvPName;
         TextView tvProgramName;
@@ -82,6 +83,11 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
             });
 
             ivPlayProgram.setOnClickListener(v -> {
+//                FirebaseApp.initializeApp(context);
+//                DatabaseReference programPlays = FirebaseDatabase.getInstance().
+//                        getReference("programPlays").
+//                        child(program.getProgramName()).push();
+//                programPlays.setValue(1);
                 programAdapterInterface.onItemClicked(program);
             });
         }

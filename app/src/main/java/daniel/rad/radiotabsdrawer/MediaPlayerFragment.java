@@ -109,6 +109,7 @@ public class MediaPlayerFragment extends Fragment {
 
                 mMediaBrowserHelper.getTransportControls().skipToPrevious();
                 bnPlay.setImageResource(R.drawable.ic_pause);
+                makeTopRadioPlay();
             });
         });
 
@@ -134,6 +135,7 @@ public class MediaPlayerFragment extends Fragment {
 
                 mMediaBrowserHelper.getTransportControls().skipToNext();
                 bnPlay.setImageResource(R.drawable.ic_pause);
+                makeTopRadioPlay();
             });
         });
 
@@ -191,12 +193,14 @@ public class MediaPlayerFragment extends Fragment {
             mMediaBrowserHelper.getTransportControls().pause();
             bnPlay.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnPlay.setImageResource(R.drawable.ic_play);
+                makeTopRadioPause();
                 bnPlay.animate().scaleX(1).scaleY(1).setDuration(200);
             });
         } else {
             mMediaBrowserHelper.getTransportControls().play();
             bnPlay.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnPlay.setImageResource(R.drawable.ic_pause);
+                makeTopRadioPlay();
                 bnPlay.animate().scaleX(1).scaleY(1).setDuration(200);
             });
         }
@@ -240,6 +244,18 @@ public class MediaPlayerFragment extends Fragment {
             }
         }
     };
+
+    public void makeTopRadioPlay(){
+        Intent intent = new Intent("currentPlayerStatus");
+        intent.putExtra("playingStatus","playing");
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+    }
+
+    public void makeTopRadioPause(){
+        Intent intent = new Intent("currentPlayerStatus");
+        intent.putExtra("playingStatus","paused");
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+    }
 
     @Override
     public void onPause() {

@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import daniel.rad.radiotabsdrawer.admin.programsManager.ProgramManagerFragment;
+import daniel.rad.radiotabsdrawer.admin.statisticsManager.StatisticsFragment;
 
 public class AdminSectionsPagerAdapter extends FragmentPagerAdapter {
 

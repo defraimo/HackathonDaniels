@@ -108,16 +108,36 @@ public class RadioTopFragment extends Fragment {
         }
     };
 
+    BroadcastReceiver mediaPlayerStatusReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+                String playingStatus = intent.getStringExtra("playingStatus");
+                if (playingStatus.equals("playing")) {
+                    ivRadioPlay.animate().scaleX(1.2f).scaleY(1.2f).setDuration(100).withEndAction(() -> {
+                        ivRadioPlay.setImageResource(R.drawable.ic_pause_fragment);
+                        ivRadioPlay.animate().scaleX(1).scaleY(1).setDuration(100);
+                    });
+                } else if (playingStatus.equals("paused")) {
+                    ivRadioPlay.animate().scaleX(1.2f).scaleY(1.2f).setDuration(100).withEndAction(() -> {
+                        ivRadioPlay.setImageResource(R.drawable.ic_play_radio);
+                        ivRadioPlay.animate().scaleX(1).scaleY(1).setDuration(100);
+                    });
+                }
+        }
+    };
+
     @Override
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mediaPlayerStatusReceiver);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver,new IntentFilter("currentProgram"));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mediaPlayerStatusReceiver,new IntentFilter("currentPlayerStatus"));
     }
 
     private void initTextViews(View view) {

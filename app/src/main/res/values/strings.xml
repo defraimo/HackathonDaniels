@@ -16,8 +16,8 @@
     <string name="label_previous">Previous track</string>
     <string name="label_next">Next track</string>
 
-    <string name="facebook_app_id">2226787234026892</string>
-    <string name="fb_login_protocol_scheme">fb2226787234026892</string>
+    <string name="facebook_app_id">351552232142545</string>
+    <string name="fb_login_protocol_scheme">fb351552232142545</string>
 
     <string name="log_out">התנתק</string>
 </resources>

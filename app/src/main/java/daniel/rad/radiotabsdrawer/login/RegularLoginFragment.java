@@ -25,6 +25,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -185,7 +186,10 @@ public class RegularLoginFragment extends Fragment {
                 try {
                     String first_name = object.getString("first_name");
                     String last_name = object.getString("last_name");
-                    String email = object.getString("email");
+                    String email;
+                    if (object.has("email")) {
+                        email = object.getString("email");
+                    }
                     String id = object.getString("id");
                     String image_url = "https://graph.facebook.com/"+id+"/picture?type=normal";
 
@@ -194,6 +198,7 @@ public class RegularLoginFragment extends Fragment {
                     RequestOptions requestOptions = new RequestOptions();
                     requestOptions.dontAnimate();
                     Glide.with(getActivity()).load(image_url).into(civProfilePicture);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
