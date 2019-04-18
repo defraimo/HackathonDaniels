@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
@@ -91,7 +92,7 @@ public class CreatePlaylistFragment extends Fragment {
             else playlist.getProgramsData().remove(programsData);
         };
 
-        ArrayList<ProgramsData> dataArrayList = ProgramsReceiver.getPrograms();
+        List<ProgramsData> dataArrayList = ProgramsReceiver.getPrograms();
         rvChooseProgram.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CreatePlaylistAdapter(dataArrayList, this.getContext(), createPlaylistAdapterInterface);
 
@@ -122,8 +123,8 @@ public class CreatePlaylistFragment extends Fragment {
 
 
         ivSearchButton.setOnClickListener((v) -> {
-            ArrayList<ProgramsData> newList = new ArrayList<>();
-            ArrayList<ProgramsData> allPrograms = ProgramsReceiver.getPrograms();
+            List<ProgramsData> newList = new ArrayList<>();
+            List<ProgramsData> allPrograms = ProgramsReceiver.getPrograms();
             String search = etSearchAddPlaylist.getText().toString().trim().toLowerCase();
             for (ProgramsData program : allPrograms) {
                 if (program.getProgramName().toLowerCase().contains(search)) {
