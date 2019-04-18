@@ -31,7 +31,7 @@ public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
     }
 
     public ProgramsReceiver(MainActivity mainActivity) {
-        this.mainActivityWeakReference = new WeakReference<MainActivity>(mainActivity);
+        this.mainActivityWeakReference = new WeakReference<>(mainActivity);
     }
 
     @Override
@@ -63,10 +63,10 @@ public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
         JSONArray jsonArray = new JSONArray(json);
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
-            String streamName = jsonObject.getString("streamName");
+//            String streamName = jsonObject.getString("streamName");
             String vodName = jsonObject.getString("vodName");
             String vodNameFixed = vodName.replace("_"," ").replace(".mp4","");
-            String streamId = jsonObject.getString("streamId");
+//            String streamId = jsonObject.getString("streamId");
             long creationDate;
             try {
                 creationDate = jsonObject.getInt("creationDate");
@@ -74,15 +74,15 @@ public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
                 creationDate = jsonObject.getLong("creationDate");
             }
             int duration = jsonObject.getInt("duration");
-            try {
-                int fileSize = jsonObject.getInt("fileSize");
-            } catch (JSONException e) {
-                long fileSize = jsonObject.getLong("fileSize");
-            } //TODO: erase if not needed
+//            try {
+//                int fileSize = jsonObject.getInt("fileSize");
+//            } catch (JSONException e) {
+//                long fileSize = jsonObject.getLong("fileSize");
+//            } //TODO: erase if not needed
 //            String filePath = jsonObject.getString("filePath");
             String filePath = "http://be.repoai.com:5080/WebRTCAppEE/streams/home/"+vodName;
             String vodId = jsonObject.getString("vodId");
-            String type = jsonObject.getString("type");
+//            String type = jsonObject.getString("type");
             programs.add(
                     new ProgramsData(vodId,vodNameFixed,"",duration,filePath,0,creationDate));
             vodNames.put(vodId,vodName);
@@ -90,8 +90,8 @@ public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
 //        MusicLibrary.playingPrograms((ArrayList<ProgramsData>) programs);
     }
 
-    public static ArrayList<ProgramsData> getPrograms(){
-        return (ArrayList<ProgramsData>) programs;
+    public static List<ProgramsData> getPrograms(){
+        return programs;
     }
 
     public static TreeMap<String,String> getVodNames(){

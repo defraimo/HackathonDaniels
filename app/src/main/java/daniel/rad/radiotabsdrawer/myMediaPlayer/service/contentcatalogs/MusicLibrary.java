@@ -28,14 +28,13 @@ import android.support.v4.media.MediaMetadataCompat;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import daniel.rad.radiotabsdrawer.BuildConfig;
-import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
+import daniel.rad.radiotabsdrawer.myMediaPlayer.LoadPrograms;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
@@ -86,7 +85,7 @@ public class MusicLibrary {
 //        }
 //    }
 
-    public static void playingPrograms(ArrayList<ProgramsData> programs){
+    public static void playingPrograms(ArrayList<ProgramsData> programs) {
         for (int i = 0; i < programs.size(); i++) {
             ProgramsData model = programs.get(i);
             createMediaMetadataCompat(
@@ -103,27 +102,21 @@ public class MusicLibrary {
         }
     }
 
-    public static void playingPrograms(ProgramsData model){
-            createMediaMetadataCompat(
-                    model.getVodId(),
-                    model.getProgramName(),
-                    model.getStudentName(),
-                    getDuration(model),
-                    model.getDurationUnit(),
-                    model.getMediaSource(),
-                    model.getProfilePic(),
-                    model.getCreationDate(),
-                    false
-            );
+    public static void playingPrograms(ProgramsData model) {
+        createMediaMetadataCompat(
+                model.getVodId(),
+                model.getProgramName(),
+                model.getStudentName(),
+                getDuration(model),
+                model.getDurationUnit(),
+                model.getMediaSource(),
+                model.getProfilePic(),
+                model.getCreationDate(),
+                false
+        );
     }
 
-    private static void getBroadcasts(){
-        programs = ProgramsReceiver.getPrograms();
-        //init different program to the mediaPlayer every time the app runs
-        Collections.shuffle(programs);
-    }
-
-    public static long getDuration(ProgramsData model){
+    public static long getDuration(ProgramsData model) {
         MediaPlayer mp = new MediaPlayer();
         mp.reset();
         try {
@@ -135,7 +128,33 @@ public class MusicLibrary {
         return mp.getDuration();
     }
 
-    public static void playingProgramsAsync(ProgramsData model,Context context){
+    public static void playingProgramsAsync(ProgramsData model, Context context) {
+        List<ProgramsData> loadedPrograms = ProgramsReceiver.getPrograms();
+
+        for (int i = 0; i < loadedPrograms.size(); i++) {
+            if (loadedPrograms.get(i) != null) {
+                if (loadedPrograms.get(i).getProgramName().equals(model.getProgramName())) {
+                    if (loadedPrograms.get(i).isLoaded()) {
+                        createMediaMetadataCompat(
+                                model.getVodId(),
+                                model.getProgramName(),
+                                model.getStudentName(),
+                                model.getDuration(),
+                                model.getDurationUnit(),
+                                model.getMediaSource(),
+                                model.getProfilePic(),
+                                model.getCreationDate(),
+                                false
+                        );
+                        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+                        Intent intent = new Intent("programToPlay");
+                        intent.putExtra("program", model.getProgramName());
+                        localBroadcastManager.sendBroadcast(intent);
+                        return;
+                    }
+                }
+            }
+        }
         MediaPlayer mp = new MediaPlayer();
         mp.reset();
         try {
@@ -158,7 +177,7 @@ public class MusicLibrary {
             );
             LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
             Intent intent = new Intent("programToPlay");
-            intent.putExtra("program",model.getProgramName());
+            intent.putExtra("program", model.getProgramName());
             localBroadcastManager.sendBroadcast(intent);
         });
     }
@@ -180,7 +199,7 @@ public class MusicLibrary {
         return albumRes.containsKey(mediaId) ? albumRes.get(mediaId) : 0;
     }
 
-    public static Bitmap getAlbumBitmap(Context context, String mediaId){
+    public static Bitmap getAlbumBitmap(Context context, String mediaId) {
         return BitmapFactory.decodeResource(context.getResources(),
                 MusicLibrary.getAlbumRes(mediaId));
     }
@@ -241,7 +260,7 @@ public class MusicLibrary {
                         .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, programID)
                         .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, studentName)
                         .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,
-                                 TimeUnit.MILLISECONDS.convert(duration, durationUnit))
+                                TimeUnit.MILLISECONDS.convert(duration, durationUnit))
 //                        .putString(
 //                                MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,
 //                                getAlbumArtUri(musicFilename))
@@ -249,7 +268,7 @@ public class MusicLibrary {
 //                                MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON_URI,
 //                                getAlbumArtUri(musicFilename))
                         .putString(MediaMetadataCompat.METADATA_KEY_TITLE, programTitle)
-                        .putString(MediaMetadataCompat.METADATA_KEY_DATE,creationDate)
+                        .putString(MediaMetadataCompat.METADATA_KEY_DATE, creationDate)
                         .build());
         albumRes.put(programID, profilePic);
         musicFileName.put(programID, musicFilename);

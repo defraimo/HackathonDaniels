@@ -44,15 +44,12 @@ public class ProgramListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ProgramsAdapter.ProgramAdapterInterface adapterInterface = new ProgramsAdapter.ProgramAdapterInterface() {
-            @Override
-            public void onItemClicked(ProgramsData chosenProgram) {
-                System.out.println(chosenProgram);
+        ProgramsAdapter.ProgramAdapterInterface adapterInterface = chosenProgram -> {
+            System.out.println(chosenProgram);
 
-                Intent intent = new Intent("currentProgram");
-                intent.putExtra("program",chosenProgram);
-                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
-            }
+            Intent intent = new Intent("currentProgram");
+            intent.putExtra("program",chosenProgram);
+            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
         };
 
         rvPrograms = view.findViewById(R.id.rvPrograms);

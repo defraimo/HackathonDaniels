@@ -22,6 +22,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -53,6 +59,7 @@ public class MediaPlayerFragment extends Fragment {
     public MediaBrowserHelper mMediaBrowserHelper;
 
     ProgramsData programsData;
+    boolean fromUser;
 
     public static String currentlyPlayingProgram;
     private ProgramsData nextProgramToPlay;
@@ -73,8 +80,6 @@ public class MediaPlayerFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_media_player, container, false);
 
-//        getPassedProgram();
-
         initBnPlay(view);
         bnBack = view.findViewById(R.id.bnBack);
         bnForward = view.findViewById(R.id.bnForward);
@@ -94,7 +99,7 @@ public class MediaPlayerFragment extends Fragment {
                 bnBack.animate().scaleX(1).scaleY(1).setDuration(200);
 
                 //getting the previous program
-                ArrayList<ProgramsData> programsList = ProgramsReceiver.getPrograms();
+                List<ProgramsData> programsList = ProgramsReceiver.getPrograms();
                 for (int i = 0; i < programsList.size(); i++) {
                     if (programsList.get(i).getProgramName().equals(currentlyPlayingProgram)){
                         if (i == 0){
@@ -114,13 +119,12 @@ public class MediaPlayerFragment extends Fragment {
         });
 
         bnForward.setOnClickListener(v -> {
-//            mIsLoading = true;
             setProgressBarVisible();
             bnForward.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnForward.animate().scaleX(1).scaleY(1).setDuration(200);
 
                 //getting the next program
-                ArrayList<ProgramsData> programsList = ProgramsReceiver.getPrograms();
+                List<ProgramsData> programsList = ProgramsReceiver.getPrograms();
                 for (int i = 0; i < programsList.size(); i++) {
                     if (programsList.get(i).getProgramName().equals(currentlyPlayingProgram)){
                         if (programsList.size()-i == 1){
@@ -140,7 +144,6 @@ public class MediaPlayerFragment extends Fragment {
         });
 
         bnPlay.setOnClickListener(v -> {
-//            mIsLoading = true;
             setProgressBarVisible();
             playFunction();
         });
@@ -210,23 +213,46 @@ public class MediaPlayerFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             programsData = intent.getParcelableExtra("program");
+            if (programsData.getProgramName().equals(currentlyPlayingProgram)) return;
             tvProgramName.setText(programsData.getProgramName());
             tvStudentName.setText(programsData.getStudentName());
             setProgressBarVisible();
-//            if (mIsPlaying)
 
-//            mMediaBrowserHelper.onStop();
             mMediaBrowserHelper.getTransportControls().stop();
-
-            Log.d("Log media", "onReceive: ");
-
 
             MusicLibrary.playingProgramsAsync(programsData,getContext());
 
-//            mMediaBrowserHelper = new MediaPlayerFragment.MediaBrowserConnection(getContext());
-//            mMediaBrowserHelper.registerCallback(new MediaPlayerFragment.MediaBrowserListener());
-//
-//            mMediaBrowserHelper.onStart();
+            DatabaseReference programsNumOfPlays =
+                    FirebaseDatabase.getInstance()
+                            .getReference("ProgramsNumOfPlays");
+
+            fromUser = true;
+
+            programsNumOfPlays.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (!fromUser) return;
+
+                    Long o = (Long) dataSnapshot.child(programsData.getVodId()).getValue();
+
+                    int value = o != null ? o.intValue(): 0;
+                    programsNumOfPlays
+                            .child(programsData.getVodId())
+                            .setValue(value+ 1)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+
+                                }
+
+                            });
+
+                    fromUser = false;
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
     };
 
@@ -241,6 +267,17 @@ public class MediaPlayerFragment extends Fragment {
 
                 mMediaBrowserHelper.onStart();
                 setProgressBarInvisible();
+            }
+        }
+    };
+
+    BroadcastReceiver isLoggedIn = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean loginStatus = intent.getBooleanExtra("loginStatus", true);
+            if (!loginStatus){
+                //stop the media player when the user logs out
+                mMediaBrowserHelper.getTransportControls().stop();
             }
         }
     };
@@ -262,6 +299,7 @@ public class MediaPlayerFragment extends Fragment {
         super.onPause();
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastReceiver);
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(playingNowReceiver);
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(isLoggedIn);
     }
 
     @Override
@@ -269,40 +307,7 @@ public class MediaPlayerFragment extends Fragment {
         super.onResume();
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver,new IntentFilter("currentProgram"));
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(playingNowReceiver,new IntentFilter("programToPlay"));
-    }
-
-    public void getPassedProgram(){
-        ProgramsData model = DataHolder.getInstance().getPassedProgramsData();
-        if (mIsPlaying) {
-            mMediaBrowserHelper.getTransportControls().stop();
-        }
-        tvProgramName.setText(model.getProgramName());
-        tvStudentName.setText(model.getStudentName());
-
-        MusicLibrary.createMediaMetadataCompat(
-                model.getVodId(),
-                model.getProgramName(),
-                model.getStudentName(),
-                MusicLibrary.getDuration(model),
-                model.getDurationUnit(),
-                model.getMediaSource(),
-                model.getProfilePic(),
-                model.getCreationDate(),
-                true
-        );
-
-        Log.d("Log media", "getPassedProgram: ");
-//        MediaPlayer mediaPlayer = MediaPlayerAdapter.getMediaPlayer();
-//        try {
-//            mediaPlayer.setDataSource(getContext(),Uri.parse("http://be.repoai.com:5080/WebRTCAppEE/streams/home/" + programsData.getVodId()));
-//            mediaPlayer.prepareAsync();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        mMediaBrowserHelper.getTransportControls().prepareFromMediaId(programsData.getVodId(),null);
-//        playFunction();
-        Log.d("Log media", "getPassedProgram: before play");
-        System.out.println(model);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(isLoggedIn,new IntentFilter("loggedOut"));
     }
 
     /**

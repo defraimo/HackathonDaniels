@@ -18,6 +18,8 @@ public class ProgramsData implements Parcelable {
     private String mediaSource;
     private int profilePic;
     private long creationDate;
+    private boolean isLoaded;
+    private int numOfPlays;
 
     public ProgramsData(String programName, String studentName, String mediaSource, int profilePic) {
         this.programName = programName;
@@ -108,26 +110,6 @@ public class ProgramsData implements Parcelable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProgramsData that = (ProgramsData) o;
-        return duration == that.duration &&
-                profilePic == that.profilePic &&
-                creationDate == that.creationDate &&
-                Objects.equals(vodId, that.vodId) &&
-                Objects.equals(programName, that.programName) &&
-                Objects.equals(studentName, that.studentName) &&
-                durationUnit == that.durationUnit &&
-                Objects.equals(mediaSource, that.mediaSource);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(vodId, programName, studentName, duration, durationUnit, mediaSource, profilePic, creationDate);
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }
@@ -167,6 +149,44 @@ public class ProgramsData implements Parcelable {
             return new ProgramsData[size];
         }
     };
+
+    public void setLoaded(boolean loaded) {
+        this.isLoaded = loaded;
+    }
+
+    public boolean isLoaded() {
+        return isLoaded;
+    }
+
+    public int getNumOfPlays() {
+        return numOfPlays;
+    }
+
+    public void setNumOfPlays(int numOfPlays) {
+        this.numOfPlays = numOfPlays;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProgramsData that = (ProgramsData) o;
+        return duration == that.duration &&
+                profilePic == that.profilePic &&
+                creationDate == that.creationDate &&
+                isLoaded == that.isLoaded &&
+                numOfPlays == that.numOfPlays &&
+                Objects.equals(vodId, that.vodId) &&
+                Objects.equals(programName, that.programName) &&
+                Objects.equals(studentName, that.studentName) &&
+                durationUnit == that.durationUnit &&
+                Objects.equals(mediaSource, that.mediaSource);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(vodId, programName, studentName, duration, durationUnit, mediaSource, profilePic, creationDate, isLoaded, numOfPlays);
+    }
 }
 
 

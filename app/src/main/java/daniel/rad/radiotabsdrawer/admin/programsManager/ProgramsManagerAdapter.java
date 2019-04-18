@@ -10,15 +10,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 public class ProgramsManagerAdapter extends RecyclerView.Adapter<ProgramsManagerAdapter.ProgramsViewHolder> {
-    ArrayList<ProgramsData> programs;
+    List<ProgramsData> programs;
     Context context;
 
-    public ProgramsManagerAdapter(ArrayList<ProgramsData> programs, Context context) {
+    public ProgramsManagerAdapter(List<ProgramsData> programs, Context context) {
         this.programs = programs;
         this.context = context;
     }

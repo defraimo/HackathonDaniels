@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import daniel.rad.radiotabsdrawer.login.LoginActivity;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.BroadcastsJson;
+import daniel.rad.radiotabsdrawer.myMediaPlayer.LoadPrograms;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
@@ -36,13 +38,10 @@ public class DrawerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        checkIfNew();
-//        passArgs();
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -55,15 +54,12 @@ public class DrawerActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-//        new ProgramsReceiver().execute();
-
-//        downloadJson();
-
         player_frame = findViewById(R.id.player_frame);
 
         fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.player_frame,new MediaPlayerFragment()).commit();
         onBtnClicked();
+
     }
 
     private void passArgs() {
@@ -79,7 +75,7 @@ public class DrawerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -102,6 +98,9 @@ public class DrawerActivity extends AppCompatActivity {
             builder.setTitle("האם אתה בטוח שברצונך להתנתק?").
                     setNegativeButton("לא", (dialog, which) -> {}).
                     setPositiveButton("כן",(dialog, which) -> {
+                        Intent loggedOut = new Intent("loggedOut");
+                        loggedOut.putExtra("loginStatus",false);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(loggedOut);
                         SharedPreferences SPrefUser = getSharedPreferences("userName",MODE_PRIVATE);
                         SPrefUser.edit().putString("name",null).apply();
                         Intent intent = new Intent(this, LoginActivity.class);

@@ -58,11 +58,8 @@ public class MainActivity extends AppCompatActivity {
             builder.
                     setTitle("אין חיבור אינטרנט").
                     setMessage("אנא בדוק את החיבור ונסה שנית").
-                    setPositiveButton("הבנתי", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-                        }
+                    setPositiveButton("הבנתי", (dialog, which) -> {
+                        startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
                     }).
                     show();
         }

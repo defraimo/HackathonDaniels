@@ -215,6 +215,11 @@ public class RadioTopFragment extends Fragment {
             tvStudentTopName.setText(
                     mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST));
             tvStudentTopName.setSelected(true);
+
+            LocalBroadcastManager sendCurrentPlaying = LocalBroadcastManager.getInstance(getContext());
+            Intent intent = new Intent("currentPlayingRadio");
+            intent.putExtra("programName",mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
+            sendCurrentPlaying.sendBroadcast(intent);
         }
 
         @Override

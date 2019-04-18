@@ -18,12 +18,12 @@ import daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs.MusicLib
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 
-public class InitMusicLibrary extends AsyncTask<Void,Void, List<ProgramsData>> {
+public class InitMusicLibrary extends AsyncTask<Void, Void, List<ProgramsData>> {
     private ArrayList<ProgramsData> programs;
     private WeakReference<MainActivity> mainActivityWeakReference;
     private int i;
 
-    public InitMusicLibrary(ArrayList<ProgramsData> programs, WeakReference<MainActivity> mainActivity,int i) {
+    public InitMusicLibrary(ArrayList<ProgramsData> programs, WeakReference<MainActivity> mainActivity, int i) {
         this.programs = programs;
         this.mainActivityWeakReference = mainActivity;
         this.i = i;
@@ -32,7 +32,7 @@ public class InitMusicLibrary extends AsyncTask<Void,Void, List<ProgramsData>> {
     @Override
     protected List<ProgramsData> doInBackground(Void... voids) {
         MediaPlayer mp = new MediaPlayer();
-        for (int t = 0 ;t < 1; t++) {
+        for (int t = 0; t < 1; t++) {
             ProgramsData model = programs.get(i);
             mp.reset();
             try {
@@ -62,7 +62,13 @@ public class InitMusicLibrary extends AsyncTask<Void,Void, List<ProgramsData>> {
     protected void onPostExecute(List<ProgramsData> programsData) {
         super.onPostExecute(programsData);
 
-        SharedPreferences sharedPreferences = mainActivityWeakReference.get().getSharedPreferences("userName", Context.MODE_PRIVATE);
+        MainActivity mainActivity = mainActivityWeakReference.get();
+        if (mainActivity == null) {
+            return;
+        }
+
+        SharedPreferences sharedPreferences =
+                mainActivity.getSharedPreferences("userName", Context.MODE_PRIVATE);
 //        String isManager = sharedPreferences.getString("managerLogged", "false");
 //        String isUser = sharedPreferences.getString("userLogged", "false");
         String name = sharedPreferences.getString("name", null);
@@ -84,14 +90,13 @@ public class InitMusicLibrary extends AsyncTask<Void,Void, List<ProgramsData>> {
 
         if (name != null) {
             if (name.equals("מנהל")) {
-                Intent intent = new Intent(mainActivityWeakReference.get(), AdminActivity.class);
-                mainActivityWeakReference.get().startActivity(intent);
-                mainActivityWeakReference.get().finish();
-            }
-            else {
-                Intent intent = new Intent(mainActivityWeakReference.get(), DrawerActivity.class);
-                mainActivityWeakReference.get().startActivity(intent);
-                mainActivityWeakReference.get().finish();
+                Intent intent = new Intent(mainActivity, AdminActivity.class);
+                mainActivity.startActivity(intent);
+                mainActivity.finish();
+            } else {
+                Intent intent = new Intent(mainActivity, DrawerActivity.class);
+                mainActivity.startActivity(intent);
+                mainActivity.finish();
             }
         }
     }

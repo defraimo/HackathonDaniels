@@ -3,7 +3,7 @@ package daniel.rad.radiotabsdrawer;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 public class DataHolder {
-    private static DataHolder dataHolder = null;
+    private static DataHolder dataHolder ;
 
     private DataHolder() {
     }
