@@ -59,7 +59,6 @@ public class RemoveProgramFromPlaylistFragment extends Fragment {
 
         RemovePlaylistAdapter.RemoveProgramInteface removeProgramInterface = programsData -> {
              playlist.getProgramsData().remove(programsData);
-            //todo: debug for why it doesn't reach this place when it should
                 for (Playlist playlistRemoveProgram : playlistArrayList) {
                     if (playlistRemoveProgram.getName().equals(playlist.getName())) {
                         playlistRemoveProgram = playlist;
