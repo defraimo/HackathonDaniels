@@ -80,7 +80,7 @@ public class AllPlaylistsFragment extends Fragment implements JsonReaderInterfac
             activity.getSupportFragmentManager().
                     beginTransaction().
                     addToBackStack("allPlaylists").
-                    replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(playlistsList)).
+                    replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(null , playlistsList, true)).
                     commit();
         });
 

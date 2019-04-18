@@ -26,6 +26,7 @@ import java.util.List;
 
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.playlist.chosenPlaylist.CreatePlaylistFragment;
+import daniel.rad.radiotabsdrawer.playlist.removeProgramsFromPlaylist.RemoveProgramFromPlaylistFragment;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
@@ -214,7 +215,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                 activity.getSupportFragmentManager().
                         beginTransaction().
                         addToBackStack("playlistList").
-                        replace(R.id.playlist_frame, PlaylistDetailsFragment.newInstance(playlist, false)).
+                        replace(R.id.playlist_frame, PlaylistDetailsFragment.newInstance(playlist)).
                         commit();
             }
         });
@@ -246,8 +247,8 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                                     AppCompatActivity activity = (AppCompatActivity) context;
                                     activity.getSupportFragmentManager().
                                             beginTransaction().
-                                            addToBackStack("removeProgramFromPlaylist").
-                                            replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(playlist)).
+                                            addToBackStack("AddProgramToPlaylist").
+                                            replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(playlist, playlists,false)).
                                             commit();
                                     return true;
                                 case R.id.itemRemoveProgram:
@@ -255,7 +256,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                                     activity.getSupportFragmentManager().
                                             beginTransaction().
                                             addToBackStack("removeProgramFromPlaylist").
-                                            replace(R.id.playlist_frame, PlaylistDetailsFragment.newInstance(playlist, true)).
+                                            replace(R.id.playlist_frame, RemoveProgramFromPlaylistFragment.newInstance(playlist, playlists)).
                                             commit();
                                     return true;
                                 case R.id.itemRemoveList:
@@ -284,8 +285,8 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                                     AppCompatActivity activity = (AppCompatActivity) context;
                                     activity.getSupportFragmentManager().
                                             beginTransaction().
-                                            addToBackStack("removeProgramFromPlaylist").
-                                            replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(playlist)).
+                                            addToBackStack("addProgramToPlaylist").
+                                            replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(playlist, playlists,false)).
                                             commit();
                                     return true;
                                 case R.id.itemRemoveProgram:
@@ -293,7 +294,8 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                                     activity.getSupportFragmentManager().
                                             beginTransaction().
                                             addToBackStack("removeProgramFromPlaylist").
-                                            replace(R.id.playlist_frame, PlaylistDetailsFragment.newInstance(playlist, true)).
+//                                            replace(R.id.playlist_frame, PlaylistDetailsFragment.newInstance(playlist, playlists, true)).
+                                            replace(R.id.playlist_frame, RemoveProgramFromPlaylistFragment.newInstance(playlist, playlists)).
                                             commit();
                                     return true;
                                 case R.id.itemRemoveList:

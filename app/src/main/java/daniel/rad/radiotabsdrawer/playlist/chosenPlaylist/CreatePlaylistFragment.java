@@ -1,30 +1,22 @@
 package daniel.rad.radiotabsdrawer.playlist.chosenPlaylist;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
@@ -41,32 +33,34 @@ public class CreatePlaylistFragment extends Fragment {
     RecyclerView rvChooseProgram;
     EditText etListName;
     EditText etSearchAddPlaylist;
+    TextView tvCreatePlaylist;
     ImageView ivCreatePlaylist;
     ImageView ivSearchButton;
     Playlist playlist;
-    private static boolean isCreateNew = true;
+    private boolean isCreateNew;
 
     private ArrayList<ProgramsData> programsToCreate;
     private ArrayList<Playlist> playlistArrayList;
     CreatePlaylistAdapter adapter;
+    AddProgramToPlaylistAdapter adapterAddedProg;
 
-    public static CreatePlaylistFragment newInstance(Playlist playlist) {
-        isCreateNew = false;
+    public static CreatePlaylistFragment newInstance(Playlist playlist, ArrayList<Playlist> playlists, boolean isCreate) {
         Bundle args = new Bundle();
         args.putParcelable("playlist", playlist);
+        args.putParcelableArrayList("playlists", playlists);
+        args.putBoolean("isCreate", isCreate);
         CreatePlaylistFragment fragment = new CreatePlaylistFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static CreatePlaylistFragment newInstance(ArrayList<Playlist> playlists) {
-        isCreateNew = true;
-        Bundle args = new Bundle();
-        args.putParcelableArrayList("playlists", playlists);
-        CreatePlaylistFragment fragment = new CreatePlaylistFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public static CreatePlaylistFragment newInstance(ArrayList<Playlist> playlists) {
+//        Bundle args = new Bundle();
+//        args.putParcelableArrayList("playlists", playlists);
+//        CreatePlaylistFragment fragment = new CreatePlaylistFragment();
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,30 +77,35 @@ public class CreatePlaylistFragment extends Fragment {
         etListName = view.findViewById(R.id.etListName);
         etSearchAddPlaylist = view.findViewById(R.id.etSearchProgram);
         ivCreatePlaylist = view.findViewById(R.id.ivCreatePlaylist);
+        tvCreatePlaylist = view.findViewById(R.id.tvCreatePlaylist);
         ivSearchButton = view.findViewById(R.id.ivSearchButton);
-        programsToCreate= new ArrayList<>();
+        programsToCreate = new ArrayList<>();
 
-        CreatePlaylistAdapter.CreatePlaylistAdapterInterface adapterInterface = new CreatePlaylistAdapter.CreatePlaylistAdapterInterface() {
-            @Override
-            public void passProgram(boolean toAdd, ProgramsData programsData) {
-                if(toAdd) programsToCreate.add(programsData);
-                else programsToCreate.remove(programsData);
-            }
+        CreatePlaylistAdapter.CreatePlaylistAdapterInterface createPlaylistAdapterInterface = (toAdd, programsData) -> {
+            if(toAdd) programsToCreate.add(programsData);
+            else programsToCreate.remove(programsData);
+        };
+
+        AddProgramToPlaylistAdapter.AddProgramInterface addProgramInterface = (toAdd, programsData) ->{
+            if (toAdd) playlist.getProgramsData().add(programsData);
+            else playlist.getProgramsData().remove(programsData);
         };
 
         ArrayList<ProgramsData> dataArrayList = ProgramsReceiver.getPrograms();
         rvChooseProgram.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new CreatePlaylistAdapter(dataArrayList, this.getContext(), adapterInterface);
+        adapter = new CreatePlaylistAdapter(dataArrayList, this.getContext(), createPlaylistAdapterInterface);
 
         ArrayList<ProgramsData> sortedList = new ArrayList<>(dataArrayList);
 
         if (getArguments() != null) {
-            if (isCreateNew) {
-                playlistArrayList = getArguments().
-                        getParcelableArrayList("playlists");
-                rvChooseProgram.setAdapter(adapter);
-            } else {
+            playlistArrayList = getArguments().
+                    getParcelableArrayList("playlists");
+            isCreateNew = getArguments().getBoolean("isCreate");
+
+            if (!isCreateNew){
                 playlist = getArguments().getParcelable("playlist");
+                tvCreatePlaylist.setText("עדכן רשימה");
+                etListName.setText(playlist.getName());
                 for (ProgramsData programAll : dataArrayList) {
                     for (ProgramsData playlistProgram : playlist.getProgramsData()) {
                         if (programAll.getProgramName().equalsIgnoreCase(playlistProgram.getProgramName())) {
@@ -114,11 +113,11 @@ public class CreatePlaylistFragment extends Fragment {
                         }
                     }
                 }
-                RecyclerView.Adapter adapterAddedProg = new AddProgramToPlaylistAdapter(sortedList, getContext());
+                adapterAddedProg = new AddProgramToPlaylistAdapter(sortedList, this.getContext(), addProgramInterface);
                 rvChooseProgram.setAdapter(adapterAddedProg);
+            }else {
+                rvChooseProgram.setAdapter(adapter);
             }
-        } else {
-            rvChooseProgram.setAdapter(adapter);
         }
 
 
@@ -134,7 +133,9 @@ public class CreatePlaylistFragment extends Fragment {
                 }
             }
             if (!search.isEmpty()) {
-                rvChooseProgram.setAdapter(new CreatePlaylistAdapter(newList, this.getContext(),adapterInterface));
+                if(isCreateNew)
+                rvChooseProgram.setAdapter(new CreatePlaylistAdapter(newList, this.getContext(), createPlaylistAdapterInterface));
+                else rvChooseProgram.setAdapter(new AddProgramToPlaylistAdapter(newList, this.getContext(), addProgramInterface));
             }
         });
         etSearchAddPlaylist.addTextChangedListener(new TextWatcher() {
@@ -150,16 +151,24 @@ public class CreatePlaylistFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (etSearchAddPlaylist.getText().toString().isEmpty()) {
+                if (etSearchAddPlaylist.getText().toString().isEmpty()){
+                    if(isCreateNew)
                     rvChooseProgram.setAdapter(adapter);
+                    else rvChooseProgram.setAdapter(adapterAddedProg);
                 }
             }
         });
 
         ivCreatePlaylist.setOnClickListener(v -> {
-            //an instance of the data source in order to write to the data base:
             String playlistName = etListName.getText().toString();
+            if(isCreateNew)
             playlistArrayList.add(new Playlist(playlistName, programsToCreate));
+            else
+                for (Playlist playlistToAddTo : playlistArrayList) {
+                    if(playlistToAddTo.getName().equals(playlist.getName())){
+                        playlistToAddTo = playlist;
+                    }
+                }
             //write all playlists to json:
             new PlaylistsJsonWriter(playlistArrayList, getContext()).execute();
         });

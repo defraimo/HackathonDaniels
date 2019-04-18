@@ -14,9 +14,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.playlist.chosenPlaylist.ChosenPlaylistAdapter;
-import daniel.rad.radiotabsdrawer.playlist.removeProgramsFromPlaylist.RemovePlaylistAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,11 +29,12 @@ public class PlaylistDetailsFragment extends Fragment {
     ImageView ivPlayPlaylist;
     EditText etSearchProgram;
     public static RecyclerView rvPlaylistPrograms;
+    ArrayList<Playlist> playlistArrayList;
+    Playlist playlist;
 
-    public static PlaylistDetailsFragment newInstance(Playlist playlist , boolean isRemove){
+    public static PlaylistDetailsFragment newInstance(Playlist playlist) {
         Bundle args = new Bundle();
         args.putParcelable("playlist", playlist);
-        args.putBoolean("isRemove",isRemove);
         PlaylistDetailsFragment detailsFragment = new PlaylistDetailsFragment();
         detailsFragment.setArguments(args);
         return detailsFragment;
@@ -54,27 +56,26 @@ public class PlaylistDetailsFragment extends Fragment {
         ivSearchButton = view.findViewById(R.id.ivSearchButton);
         ivPlayPlaylist = view.findViewById(R.id.ivPlayPlaylist);
         etSearchProgram = view.findViewById(R.id.etSearchProgram);
+        playlistArrayList = new ArrayList<>();
 
-        if(getArguments() != null) {
-            Playlist playlist = getArguments().getParcelable("playlist");
-            boolean isRemove = getArguments().getBoolean("isRemove");
-
-            tvPlaylistName.setText(playlist.getName());
+        if (getArguments() != null) {
+            playlist = getArguments().getParcelable("playlist");
+            if (playlist != null) {
+                tvPlaylistName.setText(playlist.getName());
+            }
 
             rvPlaylistPrograms.setLayoutManager(new LinearLayoutManager(getContext()));
             RecyclerView.Adapter adapter = new ChosenPlaylistAdapter(playlist.getProgramsData(), getContext());
-            RecyclerView.Adapter adapterRemove = new RemovePlaylistAdapter(playlist.getProgramsData(), getContext());
+            rvPlaylistPrograms.setAdapter(adapter);
 
-            if(isRemove){
-                rvPlaylistPrograms.setAdapter(adapterRemove);
-            }else {
-                rvPlaylistPrograms.setAdapter(adapter);
-            }
+            //todo:
+            //1) add search
+            //2)add the play option
+
+            ivPlayPlaylist.setOnClickListener(v -> {
+
+            });
+
         }
-
-        ivPlayPlaylist.setOnClickListener(v -> {
-
-        });
-
     }
 }
