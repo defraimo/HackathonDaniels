@@ -39,7 +39,7 @@ import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
     public ArrayList<Playlist> playlists;
     public WeakReference<Context> contextWeakReference;
-    public static boolean isLoaded;
+    public static boolean isLoaded = false;
 
     public PlaylistsJsonWriter(ArrayList<Playlist> playlists, Context context) {
         this.playlists = playlists;
@@ -68,7 +68,7 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        Log.e("write", "doInBackground: data was saved.... ");
+        System.out.println("isLoaded: " + isLoaded);
         if (!isLoaded) {
             isLoaded = true;
             new ProgramsReceiver((MainActivity) contextWeakReference.get()).execute();

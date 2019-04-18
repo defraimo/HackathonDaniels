@@ -72,7 +72,6 @@ class ChosenPlaylistViewHolder extends RecyclerView.ViewHolder{
     ImageView ivPlay;
     ProgramsData programsData;
     MediaSeekBar sbSong;
-    private boolean isDoublePressed = false;
 
     public ChosenPlaylistViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -83,37 +82,13 @@ class ChosenPlaylistViewHolder extends RecyclerView.ViewHolder{
         ivPlay = itemView.findViewById(R.id.ivPlay);
         sbSong = itemView.findViewById(R.id.sbSong);
 
-        itemView.setOnLongClickListener(v -> {
-            if (!isDoublePressed) {
-                ivPlay.setImageResource(R.drawable.ic_delete_red);
-                isDoublePressed = true;
-            }
-            return true;
-        });
 
-        itemView.setOnClickListener(v -> {
-            if (isDoublePressed){
-                ivPlay.setImageResource(R.drawable.ic_play_grey);
-                isDoublePressed = false;
-            }
-        });
 
         ivPlay.setOnClickListener(v -> {
-            if (isDoublePressed){
-                Animation shake = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.shake);
-                itemView.startAnimation(shake);
-                AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
-                builder.setTitle("האם אתה בטוח שברצונך למחוק את התוכנית מרשימת ההשמעה?").setPositiveButton("כן", (dialog, which) -> {
-
-                }).setNegativeButton("לא", (dialog, which) -> {
-
-                }).show();
-            }
-            else {
                 if (MediaPlayerFragment.mIsPlaying)
                 mediaPlayerFragment.initBnPlay(itemView.getRootView());
                 mediaPlayerFragment.playFunction();
-            }
+
             String mediaSourse = programsData.getMediaSource();
             //TODO: play the media player and change the icon to pause
         });
