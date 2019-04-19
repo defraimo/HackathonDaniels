@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,11 @@ import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,9 +61,13 @@ public class RegularLoginFragment extends Fragment {
 //    private TextView tvFbEmail;
     private CallbackManager cbManager;
     TextView tvManagerLogin;
+    TextView tvCreateUser;
     ImageView ivEnterApp;
     EditText etUserName;
     EditText etPassword;
+
+    private FirebaseAuth mAuth;
+    private static final String TAG = "Log In";
 
     public RegularLoginFragment() {
         // Required empty public constructor
@@ -75,11 +85,14 @@ public class RegularLoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mAuth = FirebaseAuth.getInstance();
+
         loginButton = view.findViewById(R.id.login_button);
         civProfilePicture = view.findViewById(R.id.civProfilePicture);
         ivEnterApp = view.findViewById(R.id.ivEnterApp);
         etUserName = view.findViewById(R.id.etUserName);
         etPassword = view.findViewById(R.id.etPassword);
+        tvCreateUser = view.findViewById(R.id.tvCreateUser);
 //        tvFbName = view.findViewById(R.id.tvFbName);
 //        tvFbEmail = view.findViewById(R.id.tvFbEmail);
         tvManagerLogin = view.findViewById(R.id.tvManagerLogin);
@@ -109,6 +122,14 @@ public class RegularLoginFragment extends Fragment {
             }
         });
 
+        tvCreateUser.setOnClickListener(v -> {
+            getActivity().getSupportFragmentManager().
+                    beginTransaction().
+                    replace(R.id.login_frame,new SignInFragment()).
+                    addToBackStack("regularLogin").
+                    commit();
+        });
+
         tvManagerLogin.setOnClickListener(v -> {
             getActivity().getSupportFragmentManager().
                     beginTransaction().
@@ -124,27 +145,56 @@ public class RegularLoginFragment extends Fragment {
             else if (etPassword.getText() == null){
                 etPassword.setError("חובה להזין סיסמא");
             }
-            else if (etUserName.getText().toString().equalsIgnoreCase(CHECK_USER_NAME)
-                    && etPassword.getText().toString().equalsIgnoreCase(CHECK_PASSWORD)){
-
-                SharedPreferences SPrefUser = view.getContext().getSharedPreferences("userName",MODE_PRIVATE);
-                SPrefUser.edit().putString("name",etUserName.getText().toString()).apply();
-
-                SharedPreferences sharedPreferences = view.getContext().getSharedPreferences("whichUser",MODE_PRIVATE);
-                sharedPreferences.edit().putString("userLogged","true").apply();
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
-                getActivity().finish();
-            }
             else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.
-                        setTitle("שם משתמש או סיסמא שגויים").
-                        setPositiveButton("הבנתי", (dialog, which) -> {
+                mAuth.signInWithEmailAndPassword(etUserName.getText().toString(), etPassword.getText().toString())
+                        .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Log.d(TAG, "signInWithEmail:success");
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    updateUI(user);
 
-                        }).show();
+                                    SharedPreferences SPrefUser = view.getContext().getSharedPreferences("userName",MODE_PRIVATE);
+                                    SPrefUser.edit().putString("name",etUserName.getText().toString()).apply();
+
+                                    SharedPreferences sharedPreferences = view.getContext().getSharedPreferences("whichUser",MODE_PRIVATE);
+                                    sharedPreferences.edit().putString("userLogged","true").apply();
+                                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                                    startActivity(intent);
+                                    getActivity().finish();
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                    builder.
+                                            setTitle("שם משתמש או סיסמא שגויים").
+                                            setPositiveButton("הבנתי", (dialog, which) -> {
+
+                                            }).show();
+                                    updateUI(null);
+                                }
+                            }
+                        });
             }
+//            else if (etUserName.getText().toString().equalsIgnoreCase(CHECK_USER_NAME)
+//                    && etPassword.getText().toString().equalsIgnoreCase(CHECK_PASSWORD)){
+//
+//                SharedPreferences SPrefUser = view.getContext().getSharedPreferences("userName",MODE_PRIVATE);
+//                SPrefUser.edit().putString("name",etUserName.getText().toString()).apply();
+//
+//                SharedPreferences sharedPreferences = view.getContext().getSharedPreferences("whichUser",MODE_PRIVATE);
+//                sharedPreferences.edit().putString("userLogged","true").apply();
+//                Intent intent = new Intent(getActivity(), MainActivity.class);
+//                startActivity(intent);
+//                getActivity().finish();
+//            }
         });
+
+    }
+
+    private void updateUI(FirebaseUser user) {
 
     }
 

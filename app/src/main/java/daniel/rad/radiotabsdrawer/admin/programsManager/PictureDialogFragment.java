@@ -81,18 +81,19 @@ public class PictureDialogFragment extends DialogFragment {
             if (requestCode == PICK_IMAGE) {
                 if (data.getData() != null) {
                     Uri selectedImage = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    // Get the cursor
-                    Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    // Move to first row
-                    cursor.moveToFirst();
-                    //Get the column index of MediaStore.Images.Media.DATA
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    //Gets the String value in the column
-                    ProgramsManagerOptionsFragment.imgDecodableString = cursor.getString(columnIndex);
-                    cursor.close();
-                    // Set the Image in ImageView after decoding the String
-//                    ivProgramImage.setImageBitmap(BitmapFactory.decodeFile(ProgramsManagerOptionsFragment.imgDecodableString));
+//                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//                    // Get the cursor
+//                    Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+//                    // Move to first row
+//                    cursor.moveToFirst();
+//                    //Get the column index of MediaStore.Images.Media.DATA
+//                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                    //Gets the String value in the column
+//                    ProgramsManagerOptionsFragment.imgDecodableString = cursor.getString(columnIndex);
+//                    cursor.close();
+//                    // Set the Image in ImageView after decoding the String
+////                    ivProgramImage.setImageBitmap(BitmapFactory.decodeFile(ProgramsManagerOptionsFragment.imgDecodableString));
+                    imgDecodableString = String.valueOf(selectedImage);
                     ProgramsManagerOptionsFragment.cameraCheckedFilePath = null;
                 }
             } else if (requestCode == CAMERA_REQUEST_CODE) {

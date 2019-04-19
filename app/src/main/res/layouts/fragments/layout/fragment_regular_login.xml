@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="שם משתמש"
+        android:text="אימייל"
         android:textAlignment="textEnd"
         android:textColor="#FFF"
         app:layout_constraintBottom_toTopOf="@+id/imageView13"
@@ -64,7 +64,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="@+id/imageView13"
         app:layout_constraintEnd_toEndOf="@+id/imageView13"
@@ -188,7 +188,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/textView20"
+        android:id="@+id/tvCreateUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -253,7 +253,7 @@
         android:src="@drawable/ic_divider"
         app:layout_constraintEnd_toEndOf="@+id/ivEnterApp"
         app:layout_constraintStart_toStartOf="@+id/ivEnterApp"
-        app:layout_constraintTop_toBottomOf="@+id/textView20" />
+        app:layout_constraintTop_toBottomOf="@+id/tvCreateUser" />
 
     <TextView
         android:id="@+id/textView6"

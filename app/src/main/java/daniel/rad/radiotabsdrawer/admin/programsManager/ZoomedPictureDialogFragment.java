@@ -37,11 +37,7 @@ public class ZoomedPictureDialogFragment extends DialogFragment {
         ivZoomedPic = view.findViewById(R.id.ivZoomedPic);
 
         if (getArguments() != null) {
-            String bitmapPic = getArguments().getString("bitmapPic");
             String uriPic = getArguments().getString("uriPic");
-
-            if (bitmapPic != null)
-                Glide.with(this).load(BitmapFactory.decodeFile(bitmapPic)).into(ivZoomedPic);
 
             if (uriPic != null)
                 Glide.with(this).load(Uri.parse(uriPic)).into(ivZoomedPic);

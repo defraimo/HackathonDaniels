@@ -80,6 +80,7 @@ public class RadioTopFragment extends Fragment {
 
         ivRadioPlay.setOnClickListener(v -> {
             if (mIsPlaying) {
+                MediaPlayerFragment.shouldStartPlaying = false;
                 mMediaBrowserHelper.getTransportControls().pause();
                 ivRadioPlay.animate().scaleX(1.2f).scaleY(1.2f).setDuration(100).withEndAction(() -> {
                     ivRadioPlay.setImageResource(R.drawable.ic_play_radio);
@@ -88,6 +89,7 @@ public class RadioTopFragment extends Fragment {
                     ivRadioPlay.animate().scaleX(1).scaleY(1).setDuration(100);
                 });
             } else {
+                MediaPlayerFragment.shouldStartPlaying = true;
                 mMediaBrowserHelper.getTransportControls().play();
                 ivRadioPlay.animate().scaleX(1.2f).scaleY(1.2f).setDuration(100).withEndAction(() -> {
                     ivRadioPlay.setImageResource(R.drawable.ic_pause_fragment);

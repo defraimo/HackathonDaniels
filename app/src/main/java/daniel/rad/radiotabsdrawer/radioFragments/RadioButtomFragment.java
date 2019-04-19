@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,6 +50,8 @@ public class RadioButtomFragment extends Fragment {
             FirebaseDatabase.getInstance()
                     .getReference("ProgramLikes");
 
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
     public RadioButtomFragment() {
         // Required empty public constructor
     }
@@ -72,20 +76,26 @@ public class RadioButtomFragment extends Fragment {
 
         ivLike.setOnClickListener(v -> {
             if (!liked) {
-                programLikes
-                        .child(program.getVodId())
-                        .child("radshun")
-                        .setValue(1);
-                ivLike.setImageResource(R.drawable.ic_like_red);
-                liked = true;
+                if (user != null) {
+                    String uid = user.getUid();
+                    programLikes
+                            .child(program.getVodId())
+                            .child(uid)
+                            .setValue(1);
+                    ivLike.setImageResource(R.drawable.ic_like_red);
+                    liked = true;
+                }
             }
             else {
-                programLikes
-                        .child(program.getVodId())
-                        .child("radshun")
-                        .setValue(0);
-                ivLike.setImageResource(R.drawable.ic_like_grey);
-                liked = false;
+                if (user != null) {
+                    String uid = user.getUid();
+                    programLikes
+                            .child(program.getVodId())
+                            .child(uid)
+                            .setValue(0);
+                    ivLike.setImageResource(R.drawable.ic_like_grey);
+                    liked = false;
+                }
             }
         });
 
@@ -122,19 +132,22 @@ public class RadioButtomFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (!fromUser) return;
 
-                    Long o = (Long) dataSnapshot.child(program.getVodId()).child("radshun").getValue();
+                    if (user != null) {
+                        String uid = user.getUid();
 
-                    int value = o != null ? o.intValue(): 0;
-                    if (value == 0){
-                        ivLike.setImageResource(R.drawable.ic_like_grey);
-                        liked = false;
-                    }
-                    else if (value == 1){
-                        ivLike.setImageResource(R.drawable.ic_like_red);
-                        liked = true;
-                    }
+                        Long o = (Long) dataSnapshot.child(program.getVodId()).child(uid).getValue();
 
-                    fromUser = false;
+                        int value = o != null ? o.intValue() : 0;
+                        if (value == 0) {
+                            ivLike.setImageResource(R.drawable.ic_like_grey);
+                            liked = false;
+                        } else if (value == 1) {
+                            ivLike.setImageResource(R.drawable.ic_like_red);
+                            liked = true;
+                        }
+
+                        fromUser = false;
+                    }
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -154,19 +167,22 @@ public class RadioButtomFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (!fromUser) return;
 
-                    Long o = (Long) dataSnapshot.child(likedProgram.getVodId()).child("radshun").getValue();
+                    if (user != null) {
+                        String uid = user.getUid();
 
-                    int value = o != null ? o.intValue(): 0;
-                    if (value == 0){
-                        ivLike.setImageResource(R.drawable.ic_like_grey);
-                        liked = false;
-                    }
-                    else if (value == 1){
-                        ivLike.setImageResource(R.drawable.ic_like_red);
-                        liked = true;
-                    }
+                        Long o = (Long) dataSnapshot.child(likedProgram.getVodId()).child(uid).getValue();
 
-                    fromUser = false;
+                        int value = o != null ? o.intValue() : 0;
+                        if (value == 0) {
+                            ivLike.setImageResource(R.drawable.ic_like_grey);
+                            liked = false;
+                        } else if (value == 1) {
+                            ivLike.setImageResource(R.drawable.ic_like_red);
+                            liked = true;
+                        }
+
+                        fromUser = false;
+                    }
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {

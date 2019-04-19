@@ -125,8 +125,12 @@ public class ProgramsManagerOptionsFragment extends Fragment {
     private void showZoomedDialog(){
         ZoomedPictureDialogFragment zoomedDialog = ZoomedPictureDialogFragment.newInstance();
         Bundle bundle = new Bundle();
-        bundle.putString("bitmapPic",imgDecodableString);
-        bundle.putString("uriPic",cameraCheckedFilePath);
+        if (imgDecodableString != null){
+            bundle.putString("uriPic",imgDecodableString);
+        }
+        else if (cameraCheckedFilePath != null){
+            bundle.putString("uriPic",cameraCheckedFilePath);
+        }
         zoomedDialog.setArguments(bundle);
         zoomedDialog.show(getFragmentManager(),"zoomedDialog");
     }
@@ -137,7 +141,7 @@ public class ProgramsManagerOptionsFragment extends Fragment {
         if (imgDecodableString != null){
             //using Glide to set up the pic in the right rotation
             Glide.with(this).
-                    load(BitmapFactory.decodeFile(imgDecodableString)).
+                    load(Uri.parse(imgDecodableString)).
                     into(ivProgramImage);
 //            ivProgramImage.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
             if (newFragment != null)

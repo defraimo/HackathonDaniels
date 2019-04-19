@@ -9,11 +9,47 @@
     android:background="@color/colorPrimaryDark">
 
     <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="שם מלא"
+        android:textAlignment="textEnd"
+        android:textColor="#FFF"
+        app:layout_constraintEnd_toEndOf="@+id/ivUserNameTab"
+        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
+
+    <ImageView
+        android:id="@+id/ivUserNameTab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_bar_grey"
+        app:layout_constraintEnd_toEndOf="@+id/ivEmailTab"
+        app:layout_constraintStart_toStartOf="@+id/ivEmailTab"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <EditText
+        android:id="@+id/etUserFullName"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="@+id/ivUserNameTab"
+        app:layout_constraintEnd_toEndOf="@+id/ivUserNameTab"
+        app:layout_constraintStart_toStartOf="@+id/ivUserNameTab"
+        app:layout_constraintTop_toTopOf="@+id/ivUserNameTab" />
+
+    <TextView
         android:id="@+id/tvFb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="sans-serif-black"
         android:text="הרשמה"
@@ -68,120 +104,160 @@
         app:layout_constraintTop_toTopOf="@+id/imageView10" />
 
     <ImageView
-        android:id="@+id/imageView16"
+        android:id="@+id/ivPasswordTab"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:src="@drawable/ic_bar_grey"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageView17"
+        app:layout_constraintEnd_toEndOf="@+id/ivEmailTab"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/imageView17"
-        app:layout_constraintTop_toBottomOf="@+id/imageView17"
-        app:layout_constraintVertical_bias="0.17000002" />
+        app:layout_constraintStart_toStartOf="@+id/ivEmailTab"
+        app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
     <ImageView
-        android:id="@+id/imageView17"
+        android:id="@+id/ivEmailTab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:src="@drawable/ic_bar_grey"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tvFb"
         app:layout_constraintStart_toStartOf="@+id/tvFb"
-        app:layout_constraintTop_toBottomOf="@+id/tvFb"
-        app:layout_constraintVertical_bias="0.19" />
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
     <TextView
         android:id="@+id/textView14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="מס' טלפון"
+        android:text="אימייל"
         android:textAlignment="textEnd"
         android:textColor="#FFF"
-        app:layout_constraintBottom_toTopOf="@+id/imageView17"
-        app:layout_constraintEnd_toEndOf="@+id/imageView17" />
+        app:layout_constraintEnd_toEndOf="@+id/ivEmailTab"
+        app:layout_constraintTop_toBottomOf="@+id/tvFb" />
 
     <TextView
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="קוד אימות"
+        android:text="סיסמא"
         android:textColor="#FFF"
-        app:layout_constraintBottom_toTopOf="@+id/imageView16"
-        app:layout_constraintEnd_toEndOf="@+id/imageView16" />
+        app:layout_constraintEnd_toEndOf="@+id/ivPasswordTab"
+        app:layout_constraintTop_toBottomOf="@+id/ivUserNameTab" />
 
     <EditText
-        android:id="@+id/etPhoneNum"
+        android:id="@+id/etEmail"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:inputType="phone"
+        android:inputType="textEmailAddress"
         android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView17"
-        app:layout_constraintEnd_toEndOf="@+id/imageView17"
-        app:layout_constraintStart_toStartOf="@+id/imageView17"
-        app:layout_constraintTop_toTopOf="@+id/imageView17" />
+        app:layout_constraintBottom_toBottomOf="@+id/ivEmailTab"
+        app:layout_constraintEnd_toEndOf="@+id/ivEmailTab"
+        app:layout_constraintStart_toStartOf="@+id/ivEmailTab"
+        app:layout_constraintTop_toTopOf="@+id/ivEmailTab" />
 
     <EditText
-        android:id="@+id/etVerificationNum"
+        android:id="@+id/etSignInPassword"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:inputType="number"
+        android:inputType="textPassword"
         android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView16"
-        app:layout_constraintEnd_toEndOf="@+id/imageView16"
-        app:layout_constraintStart_toStartOf="@+id/imageView16"
-        app:layout_constraintTop_toTopOf="@+id/imageView16" />
+        app:layout_constraintBottom_toBottomOf="@+id/ivPasswordTab"
+        app:layout_constraintEnd_toEndOf="@+id/ivPasswordTab"
+        app:layout_constraintStart_toStartOf="@+id/ivPasswordTab"
+        app:layout_constraintTop_toTopOf="@+id/ivPasswordTab" />
 
     <ImageView
-        android:id="@+id/ivNextStep"
+        android:id="@+id/ivSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
         android:src="@drawable/ic_button_blue_long"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageView16"
-        app:layout_constraintStart_toStartOf="@+id/etVerificationNum"
-        app:layout_constraintTop_toBottomOf="@+id/etVerificationNum" />
+        app:layout_constraintEnd_toEndOf="@+id/ivPasswordTab"
+        app:layout_constraintStart_toStartOf="@+id/ivPasswordTab"
+        app:layout_constraintTop_toBottomOf="@+id/ivTab" />
 
     <TextView
         android:id="@+id/textView16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="המשך"
+        android:text="הירשם"
         android:textColor="#FFF"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/ivNextStep"
-        app:layout_constraintEnd_toEndOf="@+id/ivNextStep"
-        app:layout_constraintStart_toStartOf="@+id/ivNextStep"
-        app:layout_constraintTop_toTopOf="@+id/ivNextStep" />
+        app:layout_constraintBottom_toBottomOf="@+id/ivSignUp"
+        app:layout_constraintEnd_toEndOf="@+id/ivSignUp"
+        app:layout_constraintStart_toStartOf="@+id/ivSignUp"
+        app:layout_constraintTop_toTopOf="@+id/ivSignUp" />
 
     <ImageView
-        android:id="@+id/ivEntered"
+        android:id="@+id/ivTab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:src="@drawable/ic_divider"
-        app:layout_constraintBottom_toTopOf="@+id/textView16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etVerificationNum" />
+        app:layout_constraintTop_toBottomOf="@+id/ivUserTakePhoto" />
+
+    <ImageView
+        android:id="@+id/ivUserTakePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_button_small_grey"
+        app:layout_constraintEnd_toEndOf="@+id/ivPasswordTab"
+        app:layout_constraintTop_toBottomOf="@+id/textView20" />
+
+    <ImageView
+        android:id="@+id/ivUserFromGallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_button_small_grey"
+        app:layout_constraintBottom_toBottomOf="@+id/ivUserTakePhoto"
+        app:layout_constraintStart_toStartOf="@+id/ivPasswordTab"
+        app:layout_constraintTop_toTopOf="@+id/ivUserTakePhoto" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="הוסף תמונה"
+        android:textColor="#FFF"
+        app:layout_constraintEnd_toEndOf="@+id/ivPasswordTab"
+        app:layout_constraintTop_toBottomOf="@+id/etSignInPassword" />
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="צלם תמונה"
+        android:textColor="@color/com_facebook_button_background_color_focused_disabled"
+        app:layout_constraintBottom_toBottomOf="@+id/ivUserTakePhoto"
+        app:layout_constraintEnd_toEndOf="@+id/ivUserTakePhoto"
+        app:layout_constraintStart_toStartOf="@+id/ivUserTakePhoto"
+        app:layout_constraintTop_toTopOf="@+id/ivUserTakePhoto" />
+
+    <TextView
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="מגלריה"
+        android:textColor="@color/com_facebook_button_background_color_focused_disabled"
+        app:layout_constraintBottom_toBottomOf="@+id/ivUserFromGallery"
+        app:layout_constraintEnd_toEndOf="@+id/ivUserFromGallery"
+        app:layout_constraintStart_toStartOf="@+id/ivUserFromGallery"
+        app:layout_constraintTop_toTopOf="@+id/ivUserFromGallery" />
 
 </android.support.constraint.ConstraintLayout>

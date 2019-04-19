@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import daniel.rad.radiotabsdrawer.DrawerActivity;
 import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
 import daniel.rad.radiotabsdrawer.R;
 
@@ -37,6 +39,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
     List<Boolean> isSelectedArr;
 
     private ProgramAdapterInterface programAdapterInterface;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     private DatabaseReference programLikes =
             FirebaseDatabase.getInstance()
@@ -58,17 +61,20 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!fromUser) return;
 
-                for (int i = 0; i < programs.size(); i++) {
+                if (user != null) {
+                    String uid = user.getUid();
+                    for (int i = 0; i < programs.size(); i++) {
 
-                    Long o = (Long) dataSnapshot.child(programs.get(i).getVodId()).child("radshun").getValue();
+                        Long o = (Long) dataSnapshot.child(programs.get(i).getVodId()).child(uid).getValue();
 
-                    int value = o != null ? o.intValue(): 0;
-                    if (value == 0){
-                        isSelectedArr.set(i,false);
-                    }
-                    else if (value == 1){
-                        isSelectedArr.set(i,true);
+                        int value = o != null ? o.intValue(): 0;
+                        if (value == 0){
+                            isSelectedArr.set(i,false);
+                        }
+                        else if (value == 1){
+                            isSelectedArr.set(i,true);
 
+                        }
                     }
                 }
 
@@ -110,26 +116,29 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
         }
 
         holder.ivLike.setOnClickListener(v -> {
-            if (!isSelectedArr.get(position)) {
-                programLikes
-                        .child(program.getVodId())
-                        .child("radshun")
-                        .setValue(1);
-                holder.ivLike.setImageResource(R.drawable.ic_filled_heart);
-                isSelectedArr.set(position,true);
+            if (user != null) {
+                String uid = user.getUid();
+
+                if (!isSelectedArr.get(position)) {
+                    programLikes
+                            .child(program.getVodId())
+                            .child(uid)
+                            .setValue(1);
+                    holder.ivLike.setImageResource(R.drawable.ic_filled_heart);
+                    isSelectedArr.set(position, true);
+                } else {
+                    programLikes
+                            .child(program.getVodId())
+                            .child(uid)
+                            .setValue(0);
+                    holder.ivLike.setImageResource(R.drawable.ic_empty_heart);
+                    isSelectedArr.set(position, false);
+                }
+                LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+                Intent intent = new Intent("currentLikePressed");
+                intent.putExtra("program", program);
+                localBroadcastManager.sendBroadcast(intent);
             }
-            else {
-                programLikes
-                        .child(program.getVodId())
-                        .child("radshun")
-                        .setValue(0);
-                holder.ivLike.setImageResource(R.drawable.ic_empty_heart);
-                isSelectedArr.set(position,false);
-            }
-            LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
-            Intent intent = new Intent("currentLikePressed");
-            intent.putExtra("program",program);
-            localBroadcastManager.sendBroadcast(intent);
         });
     }
 

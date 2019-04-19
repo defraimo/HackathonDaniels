@@ -28,9 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.client.MediaBrowserHelper;
@@ -38,7 +36,6 @@ import daniel.rad.radiotabsdrawer.myMediaPlayer.service.MusicService;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs.MusicLibrary;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ui.MediaSeekBar;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
-import daniel.rad.radiotabsdrawer.radioFragments.RadioTopFragment;
 
 
 /**
@@ -65,7 +62,7 @@ public class MediaPlayerFragment extends Fragment {
     private ProgramsData nextProgramToPlay;
 
     //to prevent from the song to start playing when the app is first on
-    static public boolean startedFirstTime;
+    static public boolean shouldStartPlaying = false;
 
     static public boolean mIsPlaying;
 //    static public boolean mIsLoading;
@@ -95,6 +92,7 @@ public class MediaPlayerFragment extends Fragment {
         bnBack.setOnClickListener(v -> {
 //            mIsLoading = true;
             setProgressBarVisible();
+            shouldStartPlaying = true;
             bnBack.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnBack.animate().scaleX(1).scaleY(1).setDuration(200);
 
@@ -120,6 +118,7 @@ public class MediaPlayerFragment extends Fragment {
 
         bnForward.setOnClickListener(v -> {
             setProgressBarVisible();
+            shouldStartPlaying = true;
             bnForward.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnForward.animate().scaleX(1).scaleY(1).setDuration(200);
 
@@ -193,6 +192,7 @@ public class MediaPlayerFragment extends Fragment {
 
     public void playFunction(){
         if (mIsPlaying) {
+            shouldStartPlaying = false;
             mMediaBrowserHelper.getTransportControls().pause();
             bnPlay.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnPlay.setImageResource(R.drawable.ic_play);
@@ -200,6 +200,7 @@ public class MediaPlayerFragment extends Fragment {
                 bnPlay.animate().scaleX(1).scaleY(1).setDuration(200);
             });
         } else {
+            shouldStartPlaying = true;
             mMediaBrowserHelper.getTransportControls().play();
             bnPlay.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnPlay.setImageResource(R.drawable.ic_pause);
@@ -217,6 +218,8 @@ public class MediaPlayerFragment extends Fragment {
             tvProgramName.setText(programsData.getProgramName());
             tvStudentName.setText(programsData.getStudentName());
             setProgressBarVisible();
+
+            shouldStartPlaying = true;
 
             mMediaBrowserHelper.getTransportControls().stop();
 
@@ -261,6 +264,7 @@ public class MediaPlayerFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             String programToPlay = intent.getStringExtra("program");
             if (!programToPlay.equals(currentlyPlayingProgram)){
+                shouldStartPlaying = true;
                 currentlyPlayingProgram = programToPlay;
                 mMediaBrowserHelper = new MediaPlayerFragment.MediaBrowserConnection(getContext());
                 mMediaBrowserHelper.registerCallback(new MediaPlayerFragment.MediaBrowserListener());
@@ -339,10 +343,8 @@ public class MediaPlayerFragment extends Fragment {
 
             // Call prepare now so pressing play just works.
             mediaController.getTransportControls().prepare();
-            if (!MediaPlayerFragment.startedFirstTime) {
-                MediaPlayerFragment.startedFirstTime = true;
-            }
-            else {
+
+            if (MediaPlayerFragment.shouldStartPlaying) {
                 mediaController.getTransportControls().play();
                 setProgressBarVisible();
             }

@@ -68,21 +68,21 @@
         app:layout_constraintTop_toTopOf="@+id/imageView10" />
 
     <ImageView
-        android:id="@+id/imageView16"
+        android:id="@+id/ivPasswordTab"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:src="@drawable/ic_bar_grey"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageView17"
+        app:layout_constraintEnd_toEndOf="@+id/ivEmailTab"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/imageView17"
-        app:layout_constraintTop_toBottomOf="@+id/imageView17"
+        app:layout_constraintStart_toStartOf="@+id/ivEmailTab"
+        app:layout_constraintTop_toBottomOf="@+id/ivEmailTab"
         app:layout_constraintVertical_bias="0.17000002" />
 
     <ImageView
-        android:id="@+id/imageView17"
+        android:id="@+id/ivEmailTab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -103,8 +103,8 @@
         android:text="שם משתמש"
         android:textAlignment="textEnd"
         android:textColor="#FFF"
-        app:layout_constraintBottom_toTopOf="@+id/imageView17"
-        app:layout_constraintEnd_toEndOf="@+id/imageView17" />
+        app:layout_constraintBottom_toTopOf="@+id/ivEmailTab"
+        app:layout_constraintEnd_toEndOf="@+id/ivEmailTab" />
 
     <TextView
         android:id="@+id/textView15"
@@ -114,8 +114,8 @@
         android:layout_marginBottom="8dp"
         android:text="סיסמא"
         android:textColor="#FFF"
-        app:layout_constraintBottom_toTopOf="@+id/imageView16"
-        app:layout_constraintEnd_toEndOf="@+id/imageView16" />
+        app:layout_constraintBottom_toTopOf="@+id/ivPasswordTab"
+        app:layout_constraintEnd_toEndOf="@+id/ivPasswordTab" />
 
     <EditText
         android:id="@+id/etAdminUserName"
@@ -126,10 +126,10 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView17"
-        app:layout_constraintEnd_toEndOf="@+id/imageView17"
-        app:layout_constraintStart_toStartOf="@+id/imageView17"
-        app:layout_constraintTop_toTopOf="@+id/imageView17" />
+        app:layout_constraintBottom_toBottomOf="@+id/ivEmailTab"
+        app:layout_constraintEnd_toEndOf="@+id/ivEmailTab"
+        app:layout_constraintStart_toStartOf="@+id/ivEmailTab"
+        app:layout_constraintTop_toTopOf="@+id/ivEmailTab" />
 
     <EditText
         android:id="@+id/etAdminPassword"
@@ -140,10 +140,10 @@
         android:ems="10"
         android:inputType="textPassword"
         android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView16"
-        app:layout_constraintEnd_toEndOf="@+id/imageView16"
-        app:layout_constraintStart_toStartOf="@+id/imageView16"
-        app:layout_constraintTop_toTopOf="@+id/imageView16" />
+        app:layout_constraintBottom_toBottomOf="@+id/ivPasswordTab"
+        app:layout_constraintEnd_toEndOf="@+id/ivPasswordTab"
+        app:layout_constraintStart_toStartOf="@+id/ivPasswordTab"
+        app:layout_constraintTop_toTopOf="@+id/ivPasswordTab" />
 
     <ImageView
         android:id="@+id/ivEnterApp"
@@ -154,7 +154,7 @@
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_button_blue_long"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageView16"
+        app:layout_constraintEnd_toEndOf="@+id/ivPasswordTab"
         app:layout_constraintStart_toStartOf="@+id/etAdminPassword"
         app:layout_constraintTop_toBottomOf="@+id/etAdminPassword" />
 

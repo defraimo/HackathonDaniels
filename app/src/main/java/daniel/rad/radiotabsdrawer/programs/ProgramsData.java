@@ -95,6 +95,7 @@ public class ProgramsData implements Parcelable {
         this.durationUnit = durationUnit;
     }
 
+
     @Override
     public String toString() {
         return "ProgramsData{" +
