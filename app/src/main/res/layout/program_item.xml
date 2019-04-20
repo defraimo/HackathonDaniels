@@ -31,11 +31,12 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="60dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/layout_bg"
             app:layout_constraintBottom_toBottomOf="@+id/tvChosenProgramName"
             app:layout_constraintEnd_toEndOf="@+id/tvChosenStudentName"
-            app:layout_constraintStart_toStartOf="@+id/tvChosenProgramName"
+            app:layout_constraintStart_toStartOf="@+id/guideline18"
             app:layout_constraintTop_toTopOf="@+id/tvChosenStudentName">
 
         </android.support.constraint.ConstraintLayout>
@@ -45,19 +46,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:text="שם תכנית"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:textColor="#fff"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvChosenStudentName"
-            android:maxEms="18"
-            android:singleLine="true"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
             android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"/>
+            android:maxEms="18"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="שם תכנית"
+            android:textColor="#fff"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvChosenStudentName" />
 
         <TextView
             android:id="@+id/tvChosenStudentName"
@@ -66,12 +67,18 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
             android:fontFamily="sans-serif-black"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:maxEms="12"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
             android:text="שם אדם"
             android:textColor="#fff"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/tvChosenProgramName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -95,6 +102,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/ivPlayProgram"
             app:srcCompat="@drawable/ic_empty_heart" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.2" />
 
 
     </android.support.constraint.ConstraintLayout>

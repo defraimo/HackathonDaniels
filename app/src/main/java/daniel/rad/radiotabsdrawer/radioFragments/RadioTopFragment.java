@@ -22,11 +22,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
 import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
 import daniel.rad.radiotabsdrawer.R;
+import daniel.rad.radiotabsdrawer.login.User;
+import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.client.MediaBrowserHelper;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.MusicService;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
@@ -47,6 +54,10 @@ public class RadioTopFragment extends Fragment {
     public TextView tvStudentTopName;
 
     ProgramsData programsData;
+
+    private DatabaseReference broadcastingUsers =
+            FirebaseDatabase.getInstance()
+                    .getReference("BroadcastingUsers");
 
     public RadioTopFragment() {
         // Required empty public constructor
@@ -97,6 +108,7 @@ public class RadioTopFragment extends Fragment {
                 });
             }
         });
+
     }
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -214,9 +226,32 @@ public class RadioTopFragment extends Fragment {
             tvProgramTopName.setText(
                     mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
             tvProgramTopName.setSelected(true);
-            tvStudentTopName.setText(
-                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST));
-            tvStudentTopName.setSelected(true);
+            List<ProgramsData> programs = ProgramsReceiver.getPrograms();
+            for (ProgramsData program : programs) {
+                if (program.getProgramName().equals(mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE))){
+                    broadcastingUsers.child(program.getVodId()).
+                            addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    StringBuilder students = new StringBuilder();
+                                    int i = 0;
+                                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                        User user = child.getValue(User.class);
+                                        students.append(user.getUsername());
+                                        i++;
+                                        if (i < dataSnapshot.getChildrenCount())
+                                            students.append(", ");
+                                    }
+                                    String broadcastingStudents = students.toString();
+                                    tvStudentTopName.setText(broadcastingStudents);
+                                    tvStudentTopName.setSelected(true);
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                }
+                            });
+                }
+            }
 
             LocalBroadcastManager sendCurrentPlaying = LocalBroadcastManager.getInstance(getContext());
             Intent intent = new Intent("currentPlayingRadio");

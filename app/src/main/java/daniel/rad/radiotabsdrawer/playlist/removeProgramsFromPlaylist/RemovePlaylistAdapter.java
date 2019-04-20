@@ -42,9 +42,6 @@ public class RemovePlaylistAdapter extends RecyclerView.Adapter<RemovePlaylistAd
         ProgramsData programsData = programsDataList.get(i);
 
         holder.tvProgramName.setText(programsData.getProgramName());
-        if (programsData.getStudentName() != null)
-            holder.tvStudentName.setText(programsData.getStudentName());
-        else holder.tvLine.setText(""); //if there is no student the line won't be printed
 
         holder.ivProfilePic.setImageResource(programsData.getProfilePic());
 
@@ -61,8 +58,6 @@ public class RemovePlaylistAdapter extends RecyclerView.Adapter<RemovePlaylistAd
     class RemovePlaylistViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvProgramName;
-        TextView tvStudentName;
-        TextView tvLine;
         CircleImageView ivProfilePic;
         ImageView ivPlay;
         ProgramsData programsData;
@@ -70,9 +65,7 @@ public class RemovePlaylistAdapter extends RecyclerView.Adapter<RemovePlaylistAd
         public RemovePlaylistViewHolder(@NonNull View itemView, final RemoveProgramInteface removeProgramInteface) {
             super(itemView);
             tvProgramName = itemView.findViewById(R.id.tvProgramName);
-            tvStudentName = itemView.findViewById(R.id.tvStudentName);
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
-            tvLine = itemView.findViewById(R.id.tvLine);
             ivPlay = itemView.findViewById(R.id.ivPlay);
             ivPlay.setImageResource(R.drawable.ic_delete_red);
 

@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -61,6 +62,7 @@ public class SignInFragment extends Fragment {
     ImageView ivSignUp;
     ImageView ivUserTakePhoto;
     ImageView ivUserFromGallery;
+    ProgressBar pbSignIn;
 
     public static final int PICK_IMAGE = 1;
     private static final int CAMERA_REQUEST_CODE = 4;
@@ -103,14 +105,17 @@ public class SignInFragment extends Fragment {
         ivSignUp = view.findViewById(R.id.ivSignUp);
         ivUserTakePhoto = view.findViewById(R.id.ivUserTakePhoto);
         ivUserFromGallery = view.findViewById(R.id.ivUserFromGallery);
+        pbSignIn = view.findViewById(R.id.pbSignIn);
         ivSignUp.setEnabled(true);
 
         ivSignUp.setOnClickListener(v -> {
             if (etUserFullName.getText() != null) {
+                pbSignIn.setVisibility(View.VISIBLE);
                 if (imgDecodableString == null && cameraUncheckedFilePath == null){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("מומלץ להוסיף תמונה").
                             setPositiveButton("הוסף", (dialog, which) -> {
+                                pbSignIn.setVisibility(View.INVISIBLE);
                             }).
                             setNegativeButton("המשך ללא תמונה", (dialog, which) -> {
                                 ivSignUp.setEnabled(false);
@@ -121,12 +126,17 @@ public class SignInFragment extends Fragment {
                                                 if (task.isSuccessful()) {
                                                     // Sign in success, update UI with the signed-in user's information
                                                     Log.d(TAG, "createUserWithEmail:success");
+                                                    pbSignIn.setVisibility(View.INVISIBLE);
                                                     FirebaseUser user = mAuth.getCurrentUser();
                                                     createNewUser(user);
-
+                                                    getActivity().getSupportFragmentManager().
+                                                            beginTransaction().
+                                                            replace(R.id.login_frame, new RegularLoginFragment()).
+                                                            commit();
                                                 } else {
                                                     // If sign in fails, display a message to the user.
                                                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                                    pbSignIn.setVisibility(View.INVISIBLE);
                                                     ivSignUp.setEnabled(true);
                                                     if (etSignInPassword.getText().toString().length() < 6) {
                                                         etSignInPassword.setError("הסיסמא צריכה להיות באורך 6 תווים לפחות");
@@ -147,12 +157,14 @@ public class SignInFragment extends Fragment {
                                     if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d(TAG, "createUserWithEmail:success");
+                                        pbSignIn.setVisibility(View.INVISIBLE);
                                         FirebaseUser user = mAuth.getCurrentUser();
                                         createNewUser(user);
 
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                        pbSignIn.setVisibility(View.INVISIBLE);
                                         ivSignUp.setEnabled(true);
                                         if (etSignInPassword.getText().toString().length() < 6) {
                                             etSignInPassword.setError("הסיסמא צריכה להיות באורך 6 תווים לפחות");
@@ -165,6 +177,7 @@ public class SignInFragment extends Fragment {
                 }
             }
             else {
+                pbSignIn.setVisibility(View.INVISIBLE);
                 etUserFullName.setError("שדה חובה");
             }
         });

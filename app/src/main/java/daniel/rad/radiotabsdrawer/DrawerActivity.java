@@ -44,6 +44,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.List;
+
 import daniel.rad.radiotabsdrawer.login.LoginActivity;
 import daniel.rad.radiotabsdrawer.login.User;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.BroadcastsJson;
@@ -65,6 +67,10 @@ public class DrawerActivity extends AppCompatActivity {
     private DatabaseReference users =
             FirebaseDatabase.getInstance()
                     .getReference("Users");
+
+    private DatabaseReference broadcastingUsers =
+            FirebaseDatabase.getInstance()
+                    .getReference("BroadcastingUsers");
 
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
@@ -139,6 +145,33 @@ public class DrawerActivity extends AppCompatActivity {
 
                 }
             });
+
+
+            List<ProgramsData> programs = ProgramsReceiver.getPrograms();
+            for (ProgramsData program : programs) {
+                broadcastingUsers.child(program.getVodId()).
+                        addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        StringBuilder students = new StringBuilder();
+                        int i = 0;
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            User user = child.getValue(User.class);
+                            students.append(user.getUsername());
+                            i++;
+                            if (i < dataSnapshot.getChildrenCount())
+                                students.append(", ");
+                        }
+                        String broadcastingStudents = students.toString();
+                        program.setStudentName(broadcastingStudents);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
         }
     }
 

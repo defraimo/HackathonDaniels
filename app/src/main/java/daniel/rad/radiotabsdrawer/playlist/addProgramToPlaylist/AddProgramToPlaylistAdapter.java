@@ -56,9 +56,6 @@ public class AddProgramToPlaylistAdapter extends RecyclerView.Adapter<AddProgram
         }
 
         holder.tvProgramName.setText(programsData.getProgramName());
-        if (programsData.getStudentName() != null)
-            holder.tvStudentName.setText(programsData.getStudentName());
-        else holder.tvLine.setText(""); //if there is no student the line won't be printed
 
         holder.ivProfilePic.setImageResource(programsData.getProfilePic());
         holder.programsData = programsData;
@@ -86,8 +83,6 @@ public class AddProgramToPlaylistAdapter extends RecyclerView.Adapter<AddProgram
     class AddProgramToPlaylistViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvProgramName;
-        TextView tvStudentName;
-        TextView tvLine;
         CircleImageView ivProfilePic;
         ToggleButton tbCheck;
         ProgramsData programsData;
@@ -95,9 +90,7 @@ public class AddProgramToPlaylistAdapter extends RecyclerView.Adapter<AddProgram
         public AddProgramToPlaylistViewHolder(@NonNull View itemView, final AddProgramInterface addProgramInterface) {
             super(itemView);
             tvProgramName = itemView.findViewById(R.id.tvProgramName);
-            tvStudentName = itemView.findViewById(R.id.tvStudentName);
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
-            tvLine = itemView.findViewById(R.id.tvLine);
             tbCheck = itemView.findViewById(R.id.tbCheck);
         }
 

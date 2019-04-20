@@ -45,9 +45,6 @@ public class ChosenPlaylistAdapter extends RecyclerView.Adapter<ChosenPlaylistVi
         ProgramsData programsData = programsDataList.get(i);
 
         holder.tvProgramName.setText(programsData.getProgramName());
-        if (programsData.getStudentName() != null)
-        holder.tvStudentName.setText(programsData.getStudentName());
-        else holder.tvLine.setText(""); //if there is no student the line won't be printed
 
         holder.ivProfilePic.setImageResource(programsData.getProfilePic());
 
@@ -66,8 +63,6 @@ class ChosenPlaylistViewHolder extends RecyclerView.ViewHolder{
     MediaBrowserHelper mMediaBrowserHelper;
 
     TextView tvProgramName;
-    TextView tvStudentName;
-    TextView tvLine;
     CircleImageView ivProfilePic;
     ImageView ivPlay;
     ProgramsData programsData;
@@ -76,9 +71,7 @@ class ChosenPlaylistViewHolder extends RecyclerView.ViewHolder{
     public ChosenPlaylistViewHolder(@NonNull View itemView) {
         super(itemView);
         tvProgramName = itemView.findViewById(R.id.tvProgramName);
-        tvStudentName = itemView.findViewById(R.id.tvStudentName);
         ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
-        tvLine = itemView.findViewById(R.id.tvLine);
         ivPlay = itemView.findViewById(R.id.ivPlay);
         sbSong = itemView.findViewById(R.id.sbSong);
 

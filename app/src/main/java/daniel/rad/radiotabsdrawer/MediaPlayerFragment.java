@@ -47,8 +47,6 @@ public class MediaPlayerFragment extends Fragment {
     ImageView bnBack;
     ImageView bnForward;
     TextView tvProgramName;
-    TextView tvStudentName;
-    TextView tvPlayerLine;
     public MediaSeekBar sbSong;
     public TextView tvTime;
     ProgressBar pbLoading;
@@ -84,8 +82,6 @@ public class MediaPlayerFragment extends Fragment {
         initTvTime(view);
 
         tvProgramName = view.findViewById(R.id.tvManagerProgramName);
-        tvStudentName = view.findViewById(R.id.tvStudentName);
-        tvPlayerLine = view.findViewById(R.id.tvPlayerLine);
         initProgressBar(view);
 
 
@@ -216,7 +212,6 @@ public class MediaPlayerFragment extends Fragment {
             programsData = intent.getParcelableExtra("program");
             if (programsData.getProgramName().equals(currentlyPlayingProgram)) return;
             tvProgramName.setText(programsData.getProgramName());
-            tvStudentName.setText(programsData.getStudentName());
             setProgressBarVisible();
 
             shouldStartPlaying = true;
@@ -376,9 +371,6 @@ public class MediaPlayerFragment extends Fragment {
             tvProgramName.setText(
                     mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
             tvProgramName.setSelected(true);
-            tvStudentName.setText(
-                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST));
-            tvStudentName.setSelected(true);
         }
 
         @Override

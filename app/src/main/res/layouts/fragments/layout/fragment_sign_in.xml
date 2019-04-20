@@ -260,4 +260,15 @@
         app:layout_constraintStart_toStartOf="@+id/ivUserFromGallery"
         app:layout_constraintTop_toTopOf="@+id/ivUserFromGallery" />
 
+    <ProgressBar
+        android:id="@+id/pbSignIn"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/ivSignUp"
+        app:layout_constraintEnd_toStartOf="@+id/ivSignUp"
+        app:layout_constraintTop_toTopOf="@+id/ivSignUp" />
+
 </android.support.constraint.ConstraintLayout>

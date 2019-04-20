@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FF72C5F1"
-    app:cardCornerRadius="8dp"
+    android:background="#82C6EB"
+    app:cardCornerRadius="16dp"
     android:layout_marginBottom="12dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp">
@@ -13,7 +13,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FF72C5F1">
+        android:background="#82C6EB">
 
 
         <android.support.constraint.ConstraintLayout

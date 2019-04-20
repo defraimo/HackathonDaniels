@@ -33,6 +33,7 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:textColor="#8F18191A"
+        android:textColorHint="#8F090A0A"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/rvProgramsManager"
         app:layout_constraintEnd_toEndOf="parent"

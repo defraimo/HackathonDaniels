@@ -157,8 +157,6 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
 
         ProgramsData program;
 
-        boolean liked;
-
         public ProgramViewHolder(@NonNull View itemView, final ProgramAdapterInterface programAdapterInterface) {
             super(itemView);
             this.ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
@@ -166,6 +164,9 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
             this.tvProgramName = itemView.findViewById(R.id.tvChosenProgramName);
             this.ivPlayProgram = itemView.findViewById(R.id.ivPlayProgram);
             this.ivLike = itemView.findViewById(R.id.ivLike);
+
+            tvPName.setSelected(true);
+            tvProgramName.setSelected(true);
 
             itemView.setOnClickListener((v) -> {
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();

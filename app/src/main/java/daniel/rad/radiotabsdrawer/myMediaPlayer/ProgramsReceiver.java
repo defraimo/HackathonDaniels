@@ -1,6 +1,13 @@
 package daniel.rad.radiotabsdrawer.myMediaPlayer;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +22,7 @@ import java.util.TreeMap;
 
 import daniel.rad.radiotabsdrawer.MainActivity;
 import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
+import daniel.rad.radiotabsdrawer.login.User;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -26,6 +34,9 @@ public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
     private static TreeMap<String,String> vodNames;
     private WeakReference<MainActivity> mainActivityWeakReference;
 
+    private DatabaseReference broadcastingUsers =
+            FirebaseDatabase.getInstance()
+                    .getReference("BroadcastingUsers");
 
     public ProgramsReceiver() {
     }
@@ -83,6 +94,7 @@ public class ProgramsReceiver extends AsyncTask<Void,Void, List<ProgramsData>>{
             String filePath = "http://be.repoai.com:5080/WebRTCAppEE/streams/home/"+vodName;
             String vodId = jsonObject.getString("vodId");
 //            String type = jsonObject.getString("type");
+
             programs.add(
                     new ProgramsData(vodId,vodNameFixed,"",duration,filePath,0,creationDate));
             vodNames.put(vodId,vodName);
