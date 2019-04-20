@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -11,14 +12,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import daniel.rad.radiotabsdrawer.R;
+import daniel.rad.radiotabsdrawer.programs.ProgramsData;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class ZoomedPictureDialogFragment extends DialogFragment {
 
     ImageView ivZoomedPic;
+    ProgressBar pbLoadingZoomedPic;
+
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference storageRef = storage.getReference();
 
     static ZoomedPictureDialogFragment newInstance() {
         return new ZoomedPictureDialogFragment();
@@ -34,17 +46,30 @@ public class ZoomedPictureDialogFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ivZoomedPic = view.findViewById(R.id.ivZoomedPic);
+        if (getArguments()!= null) {
+            ProgramsData program = getArguments().getParcelable("program");
+            ivZoomedPic = view.findViewById(R.id.ivZoomedPic);
+            pbLoadingZoomedPic = view.findViewById(R.id.pbLoadingZoomedPic);
 
-        if (getArguments() != null) {
-            String uriPic = getArguments().getString("uriPic");
+            pbLoadingZoomedPic.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + program.getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                pbLoadingZoomedPic.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(ivZoomedPic);
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    System.out.println("failed downloading pic");
+                    pbLoadingZoomedPic.setVisibility(View.INVISIBLE);
 
-            if (uriPic != null)
-                Glide.with(this).load(Uri.parse(uriPic)).into(ivZoomedPic);
+                    String uriPic = getArguments().getString("uriPic");
+                    if (uriPic != null) {
+                        Glide.with(getContext()).load(Uri.parse(uriPic)).into(ivZoomedPic);
+                    } else {
+                        ivZoomedPic.setImageResource(R.drawable.ic_default_pic);
+                    }
+                }
+            });
         }
-        else {
-            ivZoomedPic.setImageResource(R.drawable.ic_default_pic);
-        }
-
     }
 }

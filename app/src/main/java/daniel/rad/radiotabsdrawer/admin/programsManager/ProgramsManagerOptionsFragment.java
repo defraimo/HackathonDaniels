@@ -1,6 +1,8 @@
 package daniel.rad.radiotabsdrawer.admin.programsManager;
 
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,11 +23,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +41,8 @@ import java.util.List;
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.login.User;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,6 +62,7 @@ public class ProgramsManagerOptionsFragment extends Fragment {
     public ImageView ivProgramImage;
     ProgressBar pbAllUsers;
     ProgressBar pbChosenStudents;
+    ProgressBar pbLoadingPic;
 
     static String imgDecodableString;
 
@@ -68,12 +79,18 @@ public class ProgramsManagerOptionsFragment extends Fragment {
             FirebaseDatabase.getInstance()
                     .getReference("BroadcastingUsers");
 
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference storageRef = storage.getReference();
+
     List<User> allUsers = new ArrayList<>();
     List<User> broadcastUsers = new ArrayList<>();
 
     boolean isLoaded = false;
+    static boolean uploadNeeded = false;
 
     DialogFragment newFragment;
+
+    ProgramsData program;
 
     public ProgramsManagerOptionsFragment() {
         // Required empty public constructor
@@ -99,10 +116,10 @@ public class ProgramsManagerOptionsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ProgramsData model =  getArguments().getParcelable("model");
-        tvManagerProgramName = view.findViewById(R.id.tvManagerProgramName);
+        program =  getArguments().getParcelable("model");
 
-        tvManagerProgramName.setText(model.getProgramName());
+        tvManagerProgramName = view.findViewById(R.id.tvManagerProgramName);
+        tvManagerProgramName.setText(program.getProgramName());
         tvManagerProgramName.setSelected(true);
 
         ivAddStudent = view.findViewById(R.id.ivAddStudent);
@@ -117,6 +134,7 @@ public class ProgramsManagerOptionsFragment extends Fragment {
         tvAddPicFromFB = view.findViewById(R.id.tvAddPicFromFB);
         pbAllUsers = view.findViewById(R.id.pbAllUsers);
         pbChosenStudents = view.findViewById(R.id.pbChosenStudents);
+        pbLoadingPic = view.findViewById(R.id.pbLoadingPic);
 
         ivAddStudent.setOnClickListener(v -> {
             if (!isButtonOnePressed){
@@ -151,7 +169,7 @@ public class ProgramsManagerOptionsFragment extends Fragment {
         pbAllUsers.setVisibility(View.VISIBLE);
         pbChosenStudents.setVisibility(View.VISIBLE);
 
-        ProgramsManagerUsersListAdapter adapter = new ProgramsManagerUsersListAdapter(allUsers, model, getContext());
+        ProgramsManagerUsersListAdapter adapter = new ProgramsManagerUsersListAdapter(allUsers, program, getContext());
 
         users.addValueEventListener(new ValueEventListener() {
             @Override
@@ -163,7 +181,7 @@ public class ProgramsManagerOptionsFragment extends Fragment {
                 rvStudentsList.setLayoutManager(new LinearLayoutManager(getContext()));
                 rvStudentsList.setAdapter(adapter);
 
-                broadcastingUsers.child(model.getVodId()).
+                broadcastingUsers.child(program.getVodId()).
                         addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -173,7 +191,7 @@ public class ProgramsManagerOptionsFragment extends Fragment {
                                 }
                                 pbChosenStudents.setVisibility(View.INVISIBLE);
                                 rvChosenStudent.setLayoutManager(new LinearLayoutManager(getContext()));
-                                rvChosenStudent.setAdapter(new ProgramsManagerChosenUsersListAdapter(broadcastUsers,model,getContext()));
+                                rvChosenStudent.setAdapter(new ProgramsManagerChosenUsersListAdapter(broadcastUsers,program,getContext()));
                                 isLoaded = true;
                             }
                             @Override
@@ -199,7 +217,7 @@ public class ProgramsManagerOptionsFragment extends Fragment {
                     }
                 }
                 if (!search.isEmpty()) {
-                    ProgramsManagerUsersListAdapter usersListAdapter = new ProgramsManagerUsersListAdapter(newList, model, getContext());
+                    ProgramsManagerUsersListAdapter usersListAdapter = new ProgramsManagerUsersListAdapter(newList, program, getContext());
                     rvStudentsList.setAdapter(usersListAdapter);
                 }
             }
@@ -238,6 +256,7 @@ public class ProgramsManagerOptionsFragment extends Fragment {
         else if (cameraCheckedFilePath != null){
             bundle.putString("uriPic",cameraCheckedFilePath);
         }
+        bundle.putParcelable("program",program);
         zoomedDialog.setArguments(bundle);
         zoomedDialog.show(getFragmentManager(),"zoomedDialog");
     }
@@ -245,23 +264,75 @@ public class ProgramsManagerOptionsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (imgDecodableString != null){
-            //using Glide to set up the pic in the right rotation
-            Glide.with(this).
-                    load(Uri.parse(imgDecodableString)).
-                    into(ivProgramImage);
-//            ivProgramImage.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
-            if (newFragment != null)
-                newFragment.dismiss();
-        }
-        else if (cameraCheckedFilePath != null){
-            //using Glide to set up the pic in the right rotation
+        pbLoadingPic.setVisibility(View.VISIBLE);
+        storageRef.child("images/"+program.getVodId()).
+                getDownloadUrl().addOnSuccessListener(uri -> {
+            pbLoadingPic.setVisibility(View.INVISIBLE);
+            Glide.with(getApplicationContext()).load(uri).into(ivProgramImage);
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.out.println("failed downloading pic");
+                pbLoadingPic.setVisibility(View.INVISIBLE);
+                if (imgDecodableString != null){
+                    //using Glide to set up the pic in the right rotation
+                    Glide.with(getContext()).
+                            load(Uri.parse(imgDecodableString)).
+                            into(ivProgramImage);
+                    if (newFragment != null)
+                        newFragment.dismiss();
+                }
+                else if (cameraCheckedFilePath != null){
+                    //using Glide to set up the pic in the right rotation
 
-            Glide.with(this).
-                    load(Uri.parse(cameraCheckedFilePath)).
-                    into(ivProgramImage);
-//            ivProgramImage.setImageURI(Uri.parse(cameraCheckedFilePath));
-            if (newFragment != null)
-                newFragment.dismiss();
+                    Glide.with(getContext()).
+                            load(Uri.parse(cameraCheckedFilePath)).
+                            into(ivProgramImage);
+                    if (newFragment != null)
+                        newFragment.dismiss();
+                }
+            }
+        });
+
+        if (uploadNeeded){
+            if (imgDecodableString != null){
+                uploadImg(imgDecodableString);
+            }
+            else if (cameraCheckedFilePath != null){
+                uploadImg(cameraCheckedFilePath);
+            }
+            uploadNeeded = false;
         }
-    }}
+    }
+
+    private void uploadImg(String picUri){
+        Uri uri = Uri.parse(picUri);
+        StorageReference ref = storageRef.child("images/"+program.getVodId());
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("מעלה תמונה..");
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        ref.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                progressDialog.dismiss();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("העלאת התמונה נכשלה, אנא נסה תמונה אחרת").
+                        setPositiveButton("הבנתי", (dialog, which) -> {
+                        }).show();
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                        .getTotalByteCount());
+                progressDialog.setMessage("מעלה "+(int)progress+"%");
+            }
+        });
+    }
+}

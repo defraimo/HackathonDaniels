@@ -17,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.login.LoginActivity;
 
@@ -80,6 +82,7 @@ public class AdminActivity extends AppCompatActivity {
             builder.setTitle("האם אתה בטוח שברצונך להתנתק?").
                     setNegativeButton("לא", (dialog, which) -> {}).
                     setPositiveButton("כן",(dialog, which) -> {
+                        FirebaseAuth.getInstance().signOut();
                         SharedPreferences SPrefUser = getSharedPreferences("userName",MODE_PRIVATE);
                         SPrefUser.edit().putString("name",null).apply();
                         Intent intent = new Intent(this, LoginActivity.class);

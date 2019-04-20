@@ -2,6 +2,7 @@ package daniel.rad.radiotabsdrawer.programs;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -10,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,6 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +38,8 @@ import daniel.rad.radiotabsdrawer.DrawerActivity;
 import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
 import daniel.rad.radiotabsdrawer.R;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.ProgramViewHolder> {
     private List<ProgramsData> programs;
     private Context context;
@@ -40,6 +47,9 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
 
     private ProgramAdapterInterface programAdapterInterface;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference storageRef = storage.getReference();
 
     private DatabaseReference programLikes =
             FirebaseDatabase.getInstance()
@@ -140,6 +150,20 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
                 localBroadcastManager.sendBroadcast(intent);
             }
         });
+
+        holder.pbLoadingProgramPic.setVisibility(View.VISIBLE);
+        storageRef.child("images/"+program.getVodId()).
+                getDownloadUrl().addOnSuccessListener(uri -> {
+            holder.pbLoadingProgramPic.setVisibility(View.INVISIBLE);
+            Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic);
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.out.println("failed downloading pic");
+                holder.pbLoadingProgramPic.setVisibility(View.INVISIBLE);
+                holder.ivProfilePic.setImageResource(R.drawable.ic_default_pic);
+            }
+        });
     }
 
     @Override
@@ -154,19 +178,22 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
         TextView tvProgramName;
         ImageView ivPlayProgram;
         ImageView ivLike;
+        ProgressBar pbLoadingProgramPic;
 
         ProgramsData program;
 
         public ProgramViewHolder(@NonNull View itemView, final ProgramAdapterInterface programAdapterInterface) {
             super(itemView);
-            this.ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
-            this.tvPName = itemView.findViewById(R.id.tvChosenStudentName);
-            this.tvProgramName = itemView.findViewById(R.id.tvChosenProgramName);
-            this.ivPlayProgram = itemView.findViewById(R.id.ivPlayProgram);
-            this.ivLike = itemView.findViewById(R.id.ivLike);
+            ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
+            tvPName = itemView.findViewById(R.id.tvChosenStudentName);
+            tvProgramName = itemView.findViewById(R.id.tvChosenProgramName);
+            ivPlayProgram = itemView.findViewById(R.id.ivPlayProgram);
+            ivLike = itemView.findViewById(R.id.ivLike);
+            pbLoadingProgramPic = itemView.findViewById(R.id.pbLoadingProgramPic);
 
             tvPName.setSelected(true);
             tvProgramName.setSelected(true);
+            pbLoadingProgramPic.setVisibility(View.VISIBLE);
 
             itemView.setOnClickListener((v) -> {
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();

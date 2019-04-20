@@ -154,7 +154,6 @@ public class RegularLoginFragment extends Fragment {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "signInWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    updateUI(user);
 
                                     SharedPreferences SPrefUser = view.getContext().getSharedPreferences("userName",MODE_PRIVATE);
                                     SPrefUser.edit().putString("name",etUserName.getText().toString()).apply();
@@ -173,7 +172,6 @@ public class RegularLoginFragment extends Fragment {
                                             setPositiveButton("הבנתי", (dialog, which) -> {
 
                                             }).show();
-                                    updateUI(null);
                                 }
                             }
                         });
@@ -191,10 +189,6 @@ public class RegularLoginFragment extends Fragment {
 //                getActivity().finish();
 //            }
         });
-
-    }
-
-    private void updateUI(FirebaseUser user) {
 
     }
 

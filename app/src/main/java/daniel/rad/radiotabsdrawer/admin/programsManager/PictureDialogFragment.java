@@ -1,11 +1,14 @@
 package daniel.rad.radiotabsdrawer.admin.programsManager;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +18,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +35,8 @@ import java.util.Date;
 
 import daniel.rad.radiotabsdrawer.BuildConfig;
 import daniel.rad.radiotabsdrawer.R;
+import daniel.rad.radiotabsdrawer.login.RegularLoginFragment;
+import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 import static daniel.rad.radiotabsdrawer.admin.programsManager.ProgramsManagerOptionsFragment.imgDecodableString;
 
@@ -49,6 +63,7 @@ public class PictureDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         bnTakePic = view.findViewById(R.id.bnTakePic);
         bnFromGalary = view.findViewById(R.id.bnFromGalary);
 
@@ -78,6 +93,7 @@ public class PictureDialogFragment extends DialogFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
+            ProgramsManagerOptionsFragment.uploadNeeded = true;
             if (requestCode == PICK_IMAGE) {
                 if (data.getData() != null) {
                     Uri selectedImage = data.getData();
