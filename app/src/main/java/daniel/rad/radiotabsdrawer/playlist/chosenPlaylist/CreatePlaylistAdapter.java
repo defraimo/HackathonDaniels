@@ -14,6 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +27,15 @@ import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import daniel.rad.radiotabsdrawer.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class CreatePlaylistAdapter extends RecyclerView.Adapter<CreatePlaylistAdapter.CreatePlaylistViewHolder> {
     List<ProgramsData> programsDataList;
     Context context;
     ArrayList<Boolean> isSelectedArr;
+
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference storageRef = storage.getReference();
 
     private CreatePlaylistAdapterInterface createPlaylistAdapterInterface;
 
@@ -63,7 +73,17 @@ public class CreatePlaylistAdapter extends RecyclerView.Adapter<CreatePlaylistAd
 
         holder.tvProgramName.setText(programsData.getProgramName());
 
-        holder.ivProfilePic.setImageResource(programsData.getProfilePic());
+//        holder.ivProfilePic.setImageResource(programsData.getProfilePic());
+        storageRef.child("images/" + programsDataList.get(position).getVodId()).
+                getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic);
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.out.println("failed downloading pic");
+                holder.ivProfilePic.setImageResource(programsData.getProfilePic());
+            }
+        });
         holder.programsData = programsData;
 
         holder.tbCheck.setOnClickListener(v -> {

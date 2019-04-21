@@ -256,13 +256,23 @@
         app:layout_constraintTop_toBottomOf="@+id/tvCreateUser" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/tvForgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="שחכת סיסמא?"
+        android:text="שכחת סיסמא?"
         android:textColor="@color/com_facebook_button_background_color_focused_disabled"
         app:layout_constraintStart_toStartOf="@+id/ivEnterApp"
         app:layout_constraintTop_toBottomOf="@+id/ivEnterApp" />
+
+    <ProgressBar
+        android:id="@+id/pbForgotPassword"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/tvForgotPassword"
+        app:layout_constraintEnd_toStartOf="@+id/tvForgotPassword"
+        app:layout_constraintTop_toTopOf="@+id/tvForgotPassword" />
 </android.support.constraint.ConstraintLayout>

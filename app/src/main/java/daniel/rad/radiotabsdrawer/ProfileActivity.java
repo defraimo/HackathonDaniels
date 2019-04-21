@@ -10,6 +10,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -29,8 +31,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import daniel.rad.radiotabsdrawer.login.LoginActivity;
 import daniel.rad.radiotabsdrawer.login.User;
+import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
+import daniel.rad.radiotabsdrawer.programs.ProgramsAdapter;
+import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -39,10 +47,18 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView ivProfilePic;
     User currentUser;
     ProgressBar pbLoadingPic;
+    RecyclerView rvStudentsPrograms;
+    ProgressBar pbStudentsPrograms;
 
     private DatabaseReference users =
             FirebaseDatabase.getInstance()
                     .getReference("Users");
+
+    private DatabaseReference broadcastingUsers =
+            FirebaseDatabase.getInstance()
+                    .getReference("BroadcastingUsers");
+
+    List<ProgramsData> usersPrograms;
 
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
@@ -59,6 +75,8 @@ public class ProfileActivity extends AppCompatActivity {
         tvUserName = findViewById(R.id.tvUserName);
         ivProfilePic = findViewById(R.id.ivProfilePic);
         pbLoadingPic = findViewById(R.id.pbLoadingPic);
+        rvStudentsPrograms = findViewById(R.id.rvStudentsPrograms);
+        pbStudentsPrograms = findViewById(R.id.pbStudentsPrograms);
 
         tvDisconnect.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -72,6 +90,16 @@ public class ProfileActivity extends AppCompatActivity {
                         finish();
             }).show();
         });
+
+        ProgramsUserAdapter.UserProgramAdapterInterface adapterInterface = chosenProgram -> {
+            System.out.println(chosenProgram);
+
+            Intent intent = new Intent("currentProgram");
+            intent.putExtra("program",chosenProgram);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+            Intent intentDrawer = new Intent(this,DrawerActivity.class);
+            startActivity(intentDrawer);
+        };
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -114,6 +142,31 @@ public class ProfileActivity extends AppCompatActivity {
 
                 }
             });
+
+            usersPrograms = new ArrayList<>();
+            List<ProgramsData> allPrograms = ProgramsReceiver.getPrograms();
+            pbStudentsPrograms.setVisibility(View.VISIBLE);
+            for (ProgramsData program : allPrograms) {
+                broadcastingUsers.child(program.getVodId()).
+                        addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            User userValue = child.getValue(User.class);
+                            if (userValue.getUserID().equals(user.getUid())){
+                                usersPrograms.add(program);
+                                break;
+                            }
+                        }
+                        rvStudentsPrograms.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        rvStudentsPrograms.setAdapter(new ProgramsUserAdapter(usersPrograms,getApplicationContext(),adapterInterface));
+                        pbStudentsPrograms.setVisibility(View.INVISIBLE);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+            }
         }
     }
 

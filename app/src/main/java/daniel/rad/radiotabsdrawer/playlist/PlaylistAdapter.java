@@ -18,8 +18,14 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +35,21 @@ import daniel.rad.radiotabsdrawer.playlist.chosenPlaylist.CreatePlaylistFragment
 import daniel.rad.radiotabsdrawer.playlist.removeProgramsFromPlaylist.RemoveProgramFromPlaylistFragment;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
     ArrayList<Playlist> playlists;
     Context context;
+
+    boolean pic1;
+    boolean pic2;
+    boolean pic3;
+    boolean pic4;
+    boolean allPic;
+    int defaultPic;
+
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference storageRef = storage.getReference();
 
     public PlaylistAdapter(ArrayList<Playlist> playlists, Context context) {
         this.playlists = playlists;
@@ -51,7 +69,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
         Playlist playlist = playlists.get(i);
 
         String playlistName = playlist.getName();
-        int defaultPic;
         holder.tvPlayList.setText(playlistName);
         if (playlistName.equals("מומלצים")) {
             defaultPic = R.drawable.ic_default_recommended;
@@ -63,6 +80,360 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
 
         ArrayList<ProgramsData> programsDataList = (ArrayList<ProgramsData>) playlist.getProgramsData();
         holder.ivProfileAll.setImageResource(defaultPic);
+
+        playlistPics(holder, programsDataList);
+
+        holder.playlist = playlist;
+        holder.context = context;
+        holder.playlists = playlists;
+    }
+
+    @Override
+    public int getItemCount() {
+        return playlists.size();
+    }
+
+    private void playlistPics(PlayListViewHolder holder,ArrayList<ProgramsData> programsDataList) {
+        if (programsDataList.size() == 0){
+            holder.ivProfileAll.setVisibility(View.VISIBLE);
+            holder.ivProfilePic1.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic2.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic3.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic4.setVisibility(View.INVISIBLE);
+
+            holder.ivProfileAll.setImageResource(defaultPic);
+        }
+        else if (programsDataList.size() == 1) {
+            holder.pbLoadingAllPic.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(0).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfileAll);
+                allPic = true;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                    holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
+                    holder.ivProfileAll.setImageResource(defaultPic);
+                    allPic = false;
+                }
+            });
+            holder.ivProfileAll.setVisibility(View.VISIBLE);
+            holder.ivProfilePic1.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic2.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic3.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic4.setVisibility(View.INVISIBLE);
+        } else if (programsDataList.size() == 2){
+            holder.pbLoadingPic1.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(0).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingPic1.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic1);
+                pic1 = true;
+                allPic = false;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    holder.pbLoadingPic1.setVisibility(View.INVISIBLE);
+                    holder.ivProfilePic1.setImageResource(defaultPic);
+                    pic1 = false;
+                }
+            });
+
+            holder.pbLoadingPic4.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(0).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingPic4.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic4);
+                pic4 = true;
+                allPic = false;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    holder.pbLoadingPic4.setVisibility(View.INVISIBLE);
+                    holder.ivProfilePic4.setImageResource(defaultPic);
+                    pic4 = false;
+                }
+            });
+
+            holder.pbLoadingPic2.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(1).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingPic2.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic2);
+                pic2 = true;
+                allPic = false;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    holder.pbLoadingPic2.setVisibility(View.INVISIBLE);
+                    holder.ivProfilePic2.setImageResource(defaultPic);
+                    pic2 = false;
+                }
+            });
+
+            holder.pbLoadingPic3.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(1).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingPic3.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic3);
+                pic3 = true;
+                allPic = false;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    holder.pbLoadingPic3.setVisibility(View.INVISIBLE);
+                    holder.ivProfilePic3.setImageResource(defaultPic);
+                    pic3 = false;
+                }
+            });
+
+            holder.ivProfileAll.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic1.setVisibility(View.VISIBLE);
+            holder.ivProfilePic2.setVisibility(View.VISIBLE);
+            holder.ivProfilePic3.setVisibility(View.VISIBLE);
+            holder.ivProfilePic4.setVisibility(View.VISIBLE);
+        }
+        else if (programsDataList.size() == 3){
+            holder.pbLoadingPic1.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(0).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingPic1.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic1);
+                pic1 = true;
+                allPic = false;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    holder.pbLoadingPic1.setVisibility(View.INVISIBLE);
+                    holder.ivProfilePic1.setImageResource(defaultPic);
+                    pic1 = false;
+                }
+            });
+
+            holder.pbLoadingPic4.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(0).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingPic4.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic4);
+                pic4 = true;
+                allPic = false;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    holder.pbLoadingPic4.setVisibility(View.INVISIBLE);
+                    holder.ivProfilePic4.setImageResource(defaultPic);
+                    pic4 = false;
+                }
+            });
+
+            holder.pbLoadingPic2.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(1).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingPic2.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic2);
+                pic2 = true;
+                allPic = false;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    holder.pbLoadingPic2.setVisibility(View.INVISIBLE);
+                    holder.ivProfilePic2.setImageResource(defaultPic);
+                    pic2 = false;
+                }
+            });
+
+            holder.pbLoadingPic3.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(2).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingPic3.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic3);
+                pic3 = true;
+                allPic = false;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    holder.pbLoadingPic3.setVisibility(View.INVISIBLE);
+                    holder.ivProfilePic3.setImageResource(defaultPic);
+                    pic3 = false;
+                }
+            });
+
+            holder.ivProfileAll.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic1.setVisibility(View.VISIBLE);
+            holder.ivProfilePic2.setVisibility(View.VISIBLE);
+            holder.ivProfilePic3.setVisibility(View.VISIBLE);
+            holder.ivProfilePic4.setVisibility(View.VISIBLE);
+        }
+        else if (programsDataList.size() >= 4){
+            holder.pbLoadingPic1.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(0).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingPic1.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic1);
+                pic1 = true;
+                allPic = false;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    holder.pbLoadingPic1.setVisibility(View.INVISIBLE);
+                    holder.ivProfilePic1.setImageResource(defaultPic);
+                    pic1 = false;
+                }
+            });
+
+            holder.pbLoadingPic4.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(3).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingPic4.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic4);
+                pic4 = true;
+                allPic = false;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    holder.pbLoadingPic4.setVisibility(View.INVISIBLE);
+                    holder.ivProfilePic4.setImageResource(defaultPic);
+                    pic4 = false;
+                }
+            });
+
+            holder.pbLoadingPic2.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(1).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingPic2.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic2);
+                pic2 = true;
+                allPic = false;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    holder.pbLoadingPic2.setVisibility(View.INVISIBLE);
+                    holder.ivProfilePic2.setImageResource(defaultPic);
+                    pic2 = false;
+                }
+            });
+
+            holder.pbLoadingPic3.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(2).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingPic3.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic3);
+                pic3 = true;
+                allPic = false;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    holder.pbLoadingPic3.setVisibility(View.INVISIBLE);
+                    holder.ivProfilePic3.setImageResource(defaultPic);
+                    pic3 = false;
+                }
+            });
+
+            holder.ivProfileAll.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic1.setVisibility(View.VISIBLE);
+            holder.ivProfilePic2.setVisibility(View.VISIBLE);
+            holder.ivProfilePic3.setVisibility(View.VISIBLE);
+            holder.ivProfilePic4.setVisibility(View.VISIBLE);
+        }
+
+        /*if (pic1 && !pic2 && pic3 && !pic4){
+            holder.ivProfileAll.setVisibility(View.VISIBLE);
+            holder.ivProfilePic1.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic2.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic3.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic4.setVisibility(View.INVISIBLE);
+
+            holder.pbLoadingAllPic.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(0).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfileAll);
+                allPic = true;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    System.out.println("failed downloading main pic");
+                    holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
+                    holder.ivProfileAll.setImageResource(defaultPic);
+                    allPic = false;
+                }
+            });
+        }
+        else if (!pic1 && pic2 && !pic3 && pic4){
+            holder.ivProfileAll.setVisibility(View.VISIBLE);
+            holder.ivProfilePic1.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic2.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic3.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic4.setVisibility(View.INVISIBLE);
+
+            holder.pbLoadingAllPic.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(1).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfileAll);
+                allPic = true;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    System.out.println("failed downloading main pic");
+                    holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
+                    holder.ivProfileAll.setImageResource(defaultPic);
+                    allPic = false;
+                }
+            });
+        }
+        else if (!pic1 && !pic2 && pic3 && !pic4){
+            holder.ivProfileAll.setVisibility(View.VISIBLE);
+            holder.ivProfilePic1.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic2.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic3.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic4.setVisibility(View.INVISIBLE);
+
+            holder.pbLoadingAllPic.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(2).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfileAll);
+                allPic = true;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    System.out.println("failed downloading main pic");
+                    holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
+                    holder.ivProfileAll.setImageResource(defaultPic);
+                    allPic = false;
+                }
+            });
+        }
+        else if (!pic1 && !pic2 && !pic3 && pic4){
+            holder.ivProfileAll.setVisibility(View.VISIBLE);
+            holder.ivProfilePic1.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic2.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic3.setVisibility(View.INVISIBLE);
+            holder.ivProfilePic4.setVisibility(View.INVISIBLE);
+
+            holder.pbLoadingAllPic.setVisibility(View.VISIBLE);
+            storageRef.child("images/" + programsDataList.get(3).getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfileAll);
+                allPic = true;
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    System.out.println("failed downloading main pic");
+                    holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
+                    holder.ivProfileAll.setImageResource(defaultPic);
+                    allPic = false;
+                }
+            });
+        }*/
+
+    }
+
+    private void playlistPicLocal(@NonNull PlayListViewHolder holder, ArrayList<ProgramsData> programsDataList) {
         if (programsDataList.size() == 0) {
             holder.ivProfileAll.setImageResource(defaultPic);
             holder.ivProfilePic1.setVisibility(View.INVISIBLE);
@@ -166,17 +537,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 holder.ivProfilePic4.setVisibility(View.INVISIBLE);
             }
         }
-
-        holder.playlist = playlist;
-        holder.context = context;
-        holder.playlists = playlists;
-
     }
 
-    @Override
-    public int getItemCount() {
-        return playlists.size();
-    }
 }
 
 class PlayListViewHolder extends RecyclerView.ViewHolder {
@@ -188,6 +550,11 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
     ImageView ivProfilePic4;
     ImageView ivProfileAll;
     ImageView ivDeletePlaylist;
+    ProgressBar pbLoadingPic1;
+    ProgressBar pbLoadingPic2;
+    ProgressBar pbLoadingPic3;
+    ProgressBar pbLoadingPic4;
+    ProgressBar pbLoadingAllPic;
     Playlist playlist;
     Context context;
     Animation mShakeAnimation;
@@ -202,6 +569,11 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
         ivProfilePic3 = itemView.findViewById(R.id.ivProfilePic3);
         ivProfilePic4 = itemView.findViewById(R.id.ivProfilePic4);
         ivProfileAll = itemView.findViewById(R.id.ivProfileAll);
+        pbLoadingPic1 = itemView.findViewById(R.id.pbLoadingPic1);
+        pbLoadingPic2 = itemView.findViewById(R.id.pbLoadingPic2);
+        pbLoadingPic3 = itemView.findViewById(R.id.pbLoadingPic3);
+        pbLoadingPic4 = itemView.findViewById(R.id.pbLoadingPic4);
+        pbLoadingAllPic = itemView.findViewById(R.id.pbLoadingAllPic);
         ivDeletePlaylist = itemView.findViewById(R.id.ivDeletePlaylist);
 
         itemView.setOnClickListener(v -> {
@@ -302,7 +674,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                                     new AlertDialog.Builder(context).
                                             setTitle("האם אתה בטוח שתרצה להסיר רשימה זו?").
                                             setPositiveButton("כן", (dialog, which) -> {
-                                                Toast.makeText(context, "הרשימה הוסרה!", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, "הרשימה הוסרה", Toast.LENGTH_SHORT).show();
                                                 playlists.remove(playlist);
                                                 new PlaylistsJsonWriter(playlists, context).execute();
                                                 mShakeAnimation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.stop_shake);

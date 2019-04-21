@@ -27,28 +27,13 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="sans-serif-black"
+        android:paddingTop="8dp"
         android:text="שם התלמיד"
         android:textColor="#FFF"
         android:textSize="24sp"
-        android:paddingTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/framePrograms"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/tvDisconnect"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2">
-
-    </FrameLayout>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline3"
@@ -109,5 +94,44 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/ivProfilePic"
         app:layout_constraintTop_toTopOf="@+id/ivProfilePic" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvStudentsPrograms"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvDisconnect"
+        app:layout_constraintEnd_toStartOf="@+id/guideline20"
+        app:layout_constraintStart_toStartOf="@+id/guideline19"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        tools:listitem="@layout/admin_program_item" />
+
+    <ProgressBar
+        android:id="@+id/pbStudentsPrograms"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/rvStudentsPrograms"
+        app:layout_constraintEnd_toEndOf="@+id/rvStudentsPrograms"
+        app:layout_constraintStart_toStartOf="@+id/rvStudentsPrograms"
+        app:layout_constraintTop_toTopOf="@+id/rvStudentsPrograms" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.16" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.84" />
 
 </android.support.constraint.ConstraintLayout>

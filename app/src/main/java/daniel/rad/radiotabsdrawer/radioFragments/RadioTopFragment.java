@@ -19,14 +19,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -37,6 +41,9 @@ import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.client.MediaBrowserHelper;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.MusicService;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,12 +59,17 @@ public class RadioTopFragment extends Fragment {
     ImageView ivRadioPlay;
     public TextView tvProgramTopName;
     public TextView tvStudentTopName;
+    ProgressBar pbRadioPic;
+    CircleImageView ivProfilePic;
 
     ProgramsData programsData;
 
     private DatabaseReference broadcastingUsers =
             FirebaseDatabase.getInstance()
                     .getReference("BroadcastingUsers");
+
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference storageRef = storage.getReference();
 
     public RadioTopFragment() {
         // Required empty public constructor
@@ -78,6 +90,8 @@ public class RadioTopFragment extends Fragment {
         ivRadioPlay = view.findViewById(R.id.ivRadioPlay);
         tvProgramTopName = view.findViewById(R.id.tvManagerProgramName);
         tvStudentTopName = view.findViewById(R.id.tvStudentName);
+        pbRadioPic = view.findViewById(R.id.pbRadioPic);
+        ivProfilePic = view.findViewById(R.id.ivProfilePic);
         initTextViews(view);
         mediaPlayerFragment = new MediaPlayerFragment();
 
@@ -119,6 +133,20 @@ public class RadioTopFragment extends Fragment {
             tvStudentTopName.setText(programsData.getStudentName());
             tvProgramTopName.setSelected(true);
             tvStudentTopName.setSelected(true);
+
+            pbRadioPic.setVisibility(View.VISIBLE);
+            storageRef.child("images/"+programsData.getVodId()).
+                    getDownloadUrl().addOnSuccessListener(uri -> {
+                pbRadioPic.setVisibility(View.INVISIBLE);
+                Glide.with(getApplicationContext()).load(uri).into(ivProfilePic);
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    System.out.println("failed downloading pic");
+                    pbRadioPic.setVisibility(View.INVISIBLE);
+                    ivProfilePic.setImageResource(R.drawable.ic_default_pic);
+                }
+            });
         }
     };
 
@@ -245,6 +273,20 @@ public class RadioTopFragment extends Fragment {
                                     String broadcastingStudents = students.toString();
                                     tvStudentTopName.setText(broadcastingStudents);
                                     tvStudentTopName.setSelected(true);
+
+                                    pbRadioPic.setVisibility(View.VISIBLE);
+                                    storageRef.child("images/"+program.getVodId()).
+                                            getDownloadUrl().addOnSuccessListener(uri -> {
+                                        pbRadioPic.setVisibility(View.INVISIBLE);
+                                        Glide.with(getApplicationContext()).load(uri).into(ivProfilePic);
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            System.out.println("failed downloading pic");
+                                            pbRadioPic.setVisibility(View.INVISIBLE);
+                                            ivProfilePic.setImageResource(R.drawable.ic_default_pic);
+                                        }
+                                    });
                                 }
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {

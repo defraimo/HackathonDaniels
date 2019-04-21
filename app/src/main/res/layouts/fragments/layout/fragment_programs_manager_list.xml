@@ -8,16 +8,6 @@
     android:background="@color/colorPrimaryDark"
     tools:context=".admin.programsManager.ProgramsManagerListFragment">
 
-    <ImageView
-        android:id="@+id/ivSearch2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_admin_program"
-        app:layout_constraintBottom_toBottomOf="@+id/etSearch"
-        app:layout_constraintEnd_toEndOf="@+id/etSearch"
-        app:layout_constraintStart_toStartOf="@+id/etSearch"
-        app:layout_constraintTop_toTopOf="@+id/etSearch" />
-
     <EditText
         android:id="@+id/etSearch"
         android:layout_width="wrap_content"
@@ -26,14 +16,15 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:ems="10"
+        android:ems="8"
         android:fontFamily="sans-serif-medium"
         android:hint="חיפוש"
         android:inputType="textPersonName"
+        android:backgroundTint="#BBB9B9"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:textColor="#8F18191A"
-        android:textColorHint="#8F090A0A"
+        android:textColor="#FFF"
+        android:textColorHint="#FFF"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/rvProgramsManager"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,11 +36,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:src="@drawable/ic_grey_search_symbol"
-        app:layout_constraintBottom_toBottomOf="@+id/ivSearch2"
-        app:layout_constraintStart_toStartOf="@+id/ivSearch2"
-        app:layout_constraintTop_toTopOf="@+id/ivSearch2"
-        tools:srcCompat="@drawable/ic_grey_search_symbol" />
+        android:src="@drawable/ic_white_search_symbol"
+        app:layout_constraintBottom_toBottomOf="@+id/etSearch"
+        app:layout_constraintStart_toStartOf="@+id/etSearch"
+        app:layout_constraintTop_toTopOf="@+id/etSearch"
+        tools:srcCompat="@drawable/ic_white_search_symbol" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvProgramsManager"

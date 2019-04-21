@@ -139,7 +139,7 @@ public class ProgramsManagerOptionsFragment extends Fragment {
         ivAddStudent.setOnClickListener(v -> {
             if (!isButtonOnePressed){
                 ivAddStudent.setImageResource(R.drawable.ic_search_bar);
-                tvAddStudent.setTextColor(Color.parseColor("#FFFFFFFF"));
+                tvAddStudent.setTextColor(Color.parseColor("#FFF"));
                 isButtonOnePressed = true;
                 ivAddPicFromFB.setImageResource(R.drawable.ic_search_bar_unpressed);
                 tvAddPicFromFB.setTextColor(Color.argb(100,206,204,204));
@@ -150,7 +150,7 @@ public class ProgramsManagerOptionsFragment extends Fragment {
         ivAddPicFromFB.setOnClickListener(v -> {
             if (!isButtonTwoPressed){
                 ivAddPicFromFB.setImageResource(R.drawable.ic_search_bar);
-                tvAddPicFromFB.setTextColor(Color.parseColor("#FFFFFFFF"));
+                tvAddPicFromFB.setTextColor(Color.parseColor("#FFF"));
                 isButtonTwoPressed = true;
                 ivAddStudent.setImageResource(R.drawable.ic_search_bar_unpressed);
                 tvAddStudent.setTextColor(Color.argb(100,206,204,204));
@@ -274,6 +274,7 @@ public class ProgramsManagerOptionsFragment extends Fragment {
             public void onFailure(@NonNull Exception e) {
                 System.out.println("failed downloading pic");
                 pbLoadingPic.setVisibility(View.INVISIBLE);
+                ivProgramImage.setImageResource(R.drawable.ic_default_pic);
                 if (imgDecodableString != null){
                     //using Glide to set up the pic in the right rotation
                     Glide.with(getContext()).

@@ -64,10 +64,10 @@ public class ManagerLoginFragment extends Fragment {
         ivEnterApp = view.findViewById(R.id.ivEnterApp);
 
         ivEnterApp.setOnClickListener(v -> {
-            if (etAdminUserName.getText() == null){
+            if (etAdminUserName.getText().toString().equals("")){
                 etAdminUserName.setError("חובה להזין שם משתמש");
             }
-            else if (etAdminPassword.getText() == null){
+            else if (etAdminPassword.getText().toString().equals("")){
                 etAdminPassword.setError("חובה להזין סיסמא");
             }
             else if (etAdminUserName.getText().toString().equalsIgnoreCase(ADMIN_USER_NAME)){

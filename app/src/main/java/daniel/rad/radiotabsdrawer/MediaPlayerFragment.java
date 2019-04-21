@@ -61,6 +61,7 @@ public class MediaPlayerFragment extends Fragment {
 
     //to prevent from the song to start playing when the app is first on
     static public boolean shouldStartPlaying = false;
+    static public boolean fromPlaylist = false;
 
     static public boolean mIsPlaying;
 //    static public boolean mIsLoading;
@@ -89,11 +90,20 @@ public class MediaPlayerFragment extends Fragment {
 //            mIsLoading = true;
             setProgressBarVisible();
             shouldStartPlaying = true;
+            mMediaBrowserHelper.getTransportControls().stop();
             bnBack.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnBack.animate().scaleX(1).scaleY(1).setDuration(200);
 
                 //getting the previous program
-                List<ProgramsData> programsList = ProgramsReceiver.getPrograms();
+                List<ProgramsData> programsList;
+                if (!fromPlaylist) {
+                    //when no playlist selected
+                    programsList = ProgramsReceiver.getPrograms();
+                }
+                else {
+                    //when playlist selected
+                    programsList = ProgramsReceiver.getPrograms(); //TODO: change to the playlist list
+                }
                 for (int i = 0; i < programsList.size(); i++) {
                     if (programsList.get(i).getProgramName().equals(currentlyPlayingProgram)){
                         if (i == 0){
@@ -115,6 +125,7 @@ public class MediaPlayerFragment extends Fragment {
         bnForward.setOnClickListener(v -> {
             setProgressBarVisible();
             shouldStartPlaying = true;
+            mMediaBrowserHelper.getTransportControls().stop();
             bnForward.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnForward.animate().scaleX(1).scaleY(1).setDuration(200);
 

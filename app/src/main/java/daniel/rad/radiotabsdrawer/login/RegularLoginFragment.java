@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +32,9 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -52,9 +55,6 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  */
 public class RegularLoginFragment extends Fragment {
 
-    private static final String CHECK_USER_NAME = "c";
-    private static final String CHECK_PASSWORD = "c";
-
     private LoginButton loginButton;
     private CircleImageView civProfilePicture;
 //    private TextView tvFbName;
@@ -65,6 +65,8 @@ public class RegularLoginFragment extends Fragment {
     ImageView ivEnterApp;
     EditText etUserName;
     EditText etPassword;
+    TextView tvForgotPassword;
+    ProgressBar pbForgotPassword;
 
     private FirebaseAuth mAuth;
     private static final String TAG = "Log In";
@@ -93,19 +95,25 @@ public class RegularLoginFragment extends Fragment {
         etUserName = view.findViewById(R.id.etUserName);
         etPassword = view.findViewById(R.id.etPassword);
         tvCreateUser = view.findViewById(R.id.tvCreateUser);
+        tvForgotPassword = view.findViewById(R.id.tvForgotPassword);
+        pbForgotPassword = view.findViewById(R.id.pbForgotPassword);
 //        tvFbName = view.findViewById(R.id.tvFbName);
 //        tvFbEmail = view.findViewById(R.id.tvFbEmail);
         tvManagerLogin = view.findViewById(R.id.tvManagerLogin);
         cbManager = CallbackManager.Factory.create();
         loginButton.setReadPermissions(Arrays.asList("email","public_profile"));
-        checkLoginStatus();
+
+//        checkLoginStatus();
+
+        cbManager = CallbackManager.Factory.create();
 
         loginButton.registerCallback(cbManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                handleFacebookAccessToken(loginResult.getAccessToken());
                 Toast.makeText(getApplicationContext(), "התחברת בהצלחה!", Toast.LENGTH_SHORT).show();
-                SharedPreferences sharedPreferences = view.getContext().getSharedPreferences("whoIsLogged",MODE_PRIVATE);
-//                sharedPreferences.edit().putString("userName",tvFbName.getText().toString()).apply();
+                SharedPreferences sharedPreferences = view.getContext().getSharedPreferences("whichUser",MODE_PRIVATE);
+                sharedPreferences.edit().putString("userLogged","true").apply();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
                 getActivity().finish();
@@ -139,10 +147,10 @@ public class RegularLoginFragment extends Fragment {
         });
 
         ivEnterApp.setOnClickListener(v -> {
-            if (etUserName.getText() == null){
-                etUserName.setError("חובה להזין שם משתמש");
+            if (etUserName.getText().toString().equals("")){
+                etUserName.setError("חובה להזין כתובת אימייל");
             }
-            else if (etPassword.getText() == null){
+            else if (etPassword.getText().toString().equals("")){
                 etPassword.setError("חובה להזין סיסמא");
             }
             else {
@@ -168,7 +176,7 @@ public class RegularLoginFragment extends Fragment {
                                     Log.w(TAG, "signInWithEmail:failure", task.getException());
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                                     builder.
-                                            setTitle("שם משתמש או סיסמא שגויים").
+                                            setTitle("כתובת האימייל או הסיסמא שגויים").
                                             setPositiveButton("הבנתי", (dialog, which) -> {
 
                                             }).show();
@@ -176,18 +184,37 @@ public class RegularLoginFragment extends Fragment {
                             }
                         });
             }
-//            else if (etUserName.getText().toString().equalsIgnoreCase(CHECK_USER_NAME)
-//                    && etPassword.getText().toString().equalsIgnoreCase(CHECK_PASSWORD)){
-//
-//                SharedPreferences SPrefUser = view.getContext().getSharedPreferences("userName",MODE_PRIVATE);
-//                SPrefUser.edit().putString("name",etUserName.getText().toString()).apply();
-//
-//                SharedPreferences sharedPreferences = view.getContext().getSharedPreferences("whichUser",MODE_PRIVATE);
-//                sharedPreferences.edit().putString("userLogged","true").apply();
-//                Intent intent = new Intent(getActivity(), MainActivity.class);
-//                startActivity(intent);
-//                getActivity().finish();
-//            }
+        });
+
+        tvForgotPassword.setOnClickListener(v -> {
+            if (etUserName.getText().toString().equals("")){
+                etUserName.setError("חובה להזין כתובת אימייל");
+            }
+            else {
+                pbForgotPassword.setVisibility(View.VISIBLE);
+                FirebaseAuth.getInstance().sendPasswordResetEmail(etUserName.getText().toString())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                pbForgotPassword.setVisibility(View.INVISIBLE);
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "Email sent.");
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                    builder.
+                                            setTitle("בוצע איפוס סיסמא").
+                                            setMessage("מייל נשלח לכתובת האימייל שלך עם הסיסמא החדשה").
+                                            setPositiveButton("הבנתי", (dialog, which) -> {
+                                            }).show();
+                                } else {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                    builder.
+                                            setTitle("כתובת האימייל לא נמצאת במערכת").
+                                            setPositiveButton("הזן אימייל תקין", (dialog, which) -> {
+                                            }).show();
+                                }
+                            }
+                        });
+            }
         });
 
     }
@@ -204,24 +231,46 @@ public class RegularLoginFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        cbManager.onActivityResult(requestCode,resultCode,data);
         super.onActivityResult(requestCode, resultCode, data);
+        cbManager.onActivityResult(requestCode,resultCode,data);
     }
 
-    AccessTokenTracker tokenTracker = new AccessTokenTracker() {
-        @Override
-        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-            if (currentAccessToken == null){
-                //null = user is logged out
-//                tvFbName.setText("");
-//                tvFbEmail.setText("");
-                civProfilePicture.setImageResource(0);
-                Toast.makeText(getActivity(), "User Logged out!",Toast.LENGTH_LONG).show();
-            }else {
-                loadProfile(currentAccessToken);
-            }
-        }
-    };
+//    AccessTokenTracker tokenTracker = new AccessTokenTracker() {
+//        @Override
+//        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+//            if (currentAccessToken == null){
+//                //null = user is logged out
+////                tvFbName.setText("");
+////                tvFbEmail.setText("");
+//                civProfilePicture.setImageResource(0);
+//                Toast.makeText(getActivity(), "User Logged out!",Toast.LENGTH_LONG).show();
+//            }else {
+//                loadProfile(currentAccessToken);
+//            }
+//        }
+//    };
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(getContext(), "ההתחברות נכשלה",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
 
     private void loadProfile(AccessToken newAccessToken){
         GraphRequest request = GraphRequest.newMeRequest(newAccessToken, new GraphRequest.GraphJSONObjectCallback() {

@@ -123,6 +123,80 @@
             app:layout_constraintTop_toTopOf="@+id/tvPlaylist"
             app:srcCompat="@drawable/ic_edit" />
 
+        <ProgressBar
+            android:id="@+id/pbLoadingPic1"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/ivProfilePic3"
+            app:layout_constraintEnd_toEndOf="@+id/ivProfilePic1"
+            app:layout_constraintStart_toStartOf="@+id/ivProfilePic1"
+            app:layout_constraintTop_toTopOf="@+id/guideline10" />
+
+        <ProgressBar
+            android:id="@+id/pbLoadingPic2"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/ivProfilePic4"
+            app:layout_constraintEnd_toStartOf="@+id/ivProfilePic1"
+            app:layout_constraintStart_toStartOf="@+id/ivProfilePic2"
+            app:layout_constraintTop_toTopOf="@+id/guideline10" />
+
+        <ProgressBar
+            android:id="@+id/pbLoadingPic3"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/ivProfilePic3"
+            app:layout_constraintEnd_toEndOf="@+id/ivProfilePic3"
+            app:layout_constraintStart_toStartOf="@+id/ivProfilePic3"
+            app:layout_constraintTop_toTopOf="@+id/ivProfilePic3" />
+
+        <ProgressBar
+            android:id="@+id/pbLoadingPic4"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/ivProfilePic4"
+            app:layout_constraintEnd_toStartOf="@+id/ivProfilePic3"
+            app:layout_constraintStart_toStartOf="@+id/ivProfilePic4"
+            app:layout_constraintTop_toTopOf="@+id/ivProfilePic4" />
+
+        <ProgressBar
+            android:id="@+id/pbLoadingAllPic"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/ivProfileAll"
+            app:layout_constraintEnd_toEndOf="@+id/ivProfileAll"
+            app:layout_constraintStart_toStartOf="@+id/ivProfileAll"
+            app:layout_constraintTop_toTopOf="@+id/guideline10" />
+
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>

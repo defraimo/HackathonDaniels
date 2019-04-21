@@ -10,17 +10,27 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.List;
 
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class RemovePlaylistAdapter extends RecyclerView.Adapter<RemovePlaylistAdapter.RemovePlaylistViewHolder> {
     List<ProgramsData> programsDataList;
     Context context;
 
     private RemoveProgramInteface removeProgramInteface;
+
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference storageRef = storage.getReference();
 
     public RemovePlaylistAdapter(List<ProgramsData> programsDataList, Context context, RemoveProgramInteface removeProgramInteface) {
         this.programsDataList = programsDataList;
@@ -43,8 +53,17 @@ public class RemovePlaylistAdapter extends RecyclerView.Adapter<RemovePlaylistAd
 
         holder.tvProgramName.setText(programsData.getProgramName());
 
-        holder.ivProfilePic.setImageResource(programsData.getProfilePic());
-
+//        holder.ivProfilePic.setImageResource(programsData.getProfilePic());
+        storageRef.child("images/" + programsDataList.get(i).getVodId()).
+                getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic);
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.out.println("failed downloading pic");
+                holder.ivProfilePic.setImageResource(programsData.getProfilePic());
+            }
+        });
         holder.programsData = programsData;
 
     }
