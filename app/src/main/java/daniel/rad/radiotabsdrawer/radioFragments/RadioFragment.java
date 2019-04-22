@@ -37,6 +37,5 @@ public class RadioFragment extends Fragment {
         FragmentManager fm = getFragmentManager();
 
         fm.beginTransaction().replace(R.id.top_frame,new RadioTopFragment()).commit();
-        fm.beginTransaction().replace(R.id.buttom_frame,new RadioButtomFragment()).commit();
     }
 }

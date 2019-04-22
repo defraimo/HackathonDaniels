@@ -24,6 +24,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +42,7 @@ import daniel.rad.radiotabsdrawer.login.User;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.client.MediaBrowserHelper;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.MusicService;
+import daniel.rad.radiotabsdrawer.programs.ChosenProgramFragment;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -71,6 +74,23 @@ public class RadioTopFragment extends Fragment {
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference storageRef = storage.getReference();
 
+    ImageView ivLike;
+    ImageView ivComment;
+    ImageView ivShare;
+    boolean liked;
+    boolean fromUser = true;
+    ProgramsData program;
+
+    List<ProgramsData> programs;
+
+    ProgramsData likedProgram;
+
+    private DatabaseReference programLikes =
+            FirebaseDatabase.getInstance()
+                    .getReference("ProgramLikes");
+
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
     public RadioTopFragment() {
         // Required empty public constructor
     }
@@ -92,6 +112,9 @@ public class RadioTopFragment extends Fragment {
         tvStudentTopName = view.findViewById(R.id.tvStudentName);
         pbRadioPic = view.findViewById(R.id.pbRadioPic);
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
+        ivLike = view.findViewById(R.id.ivLike);
+        ivComment = view.findViewById(R.id.ivComment);
+        ivShare = view.findViewById(R.id.ivShare);
         initTextViews(view);
         mediaPlayerFragment = new MediaPlayerFragment();
 
@@ -102,6 +125,49 @@ public class RadioTopFragment extends Fragment {
 
         mMediaBrowserHelper = new RadioTopFragment.MediaBrowserConnection(getContext());
         mMediaBrowserHelper.registerCallback(new RadioTopFragment.MediaBrowserListener());
+
+        programs = ProgramsReceiver.getPrograms();
+
+        ivLike.setOnClickListener(v -> {
+            if (!liked) {
+                if (user != null) {
+                    String uid = user.getUid();
+                    programLikes
+                            .child(program.getVodId())
+                            .child(uid)
+                            .setValue(1);
+                    ivLike.setImageResource(R.drawable.ic_like_red);
+                    liked = true;
+                }
+            }
+            else {
+                if (user != null) {
+                    String uid = user.getUid();
+                    programLikes
+                            .child(program.getVodId())
+                            .child(uid)
+                            .setValue(0);
+                    ivLike.setImageResource(R.drawable.ic_like_grey);
+                    liked = false;
+                }
+            }
+        });
+
+        ivComment.setOnClickListener(v -> {
+            getFragmentManager().
+                    beginTransaction().
+                    addToBackStack("radioHomePage").
+                    replace(R.id.top_frame,ChosenProgramFragment.newInstance(program)).
+                    commit();
+        });
+
+        ivShare.setOnClickListener(v -> {
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("text/plain");
+            share.putExtra(Intent.EXTRA_TEXT, "מוזמנ/ת להקשיב לתוכנית "+program.getProgramName()+" של "+tvStudentTopName.getText().toString()+"! *קישור כניסה לאפליקצייה*");
+
+            startActivity(Intent.createChooser(share, "היכן תרצה לשתף את התוכנית?"));
+        });
 
         ivRadioPlay.setOnClickListener(v -> {
             if (mIsPlaying) {
@@ -124,6 +190,82 @@ public class RadioTopFragment extends Fragment {
         });
 
     }
+
+    BroadcastReceiver broadcastNameReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String programName = intent.getStringExtra("programName");
+            for (ProgramsData programsData : programs) {
+                if (programsData.getProgramName().equals(programName)){
+                    program = programsData;
+                    break;
+                }
+            }
+
+            programLikes.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (!fromUser) return;
+
+                    if (user != null) {
+                        String uid = user.getUid();
+
+                        Long o = (Long) dataSnapshot.child(program.getVodId()).child(uid).getValue();
+
+                        int value = o != null ? o.intValue() : 0;
+                        if (value == 0) {
+                            ivLike.setImageResource(R.drawable.ic_like_grey);
+                            liked = false;
+                        } else if (value == 1) {
+                            ivLike.setImageResource(R.drawable.ic_like_red);
+                            liked = true;
+                        }
+
+                        fromUser = false;
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    };
+
+    BroadcastReceiver likesReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            likedProgram = intent.getParcelableExtra("program");
+            fromUser = true;
+            programLikes.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (!fromUser) return;
+
+                    if (user != null) {
+                        String uid = user.getUid();
+
+                        Long o = (Long) dataSnapshot.child(likedProgram.getVodId()).child(uid).getValue();
+
+                        int value = o != null ? o.intValue() : 0;
+                        if (value == 0) {
+                            ivLike.setImageResource(R.drawable.ic_like_grey);
+                            liked = false;
+                        } else if (value == 1) {
+                            ivLike.setImageResource(R.drawable.ic_like_red);
+                            liked = true;
+                        }
+
+                        fromUser = false;
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    };
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -171,6 +313,8 @@ public class RadioTopFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastNameReceiver);
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(likesReceiver);
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastReceiver);
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mediaPlayerStatusReceiver);
     }
@@ -178,6 +322,8 @@ public class RadioTopFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastNameReceiver,new IntentFilter("currentPlayingRadio"));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(likesReceiver,new IntentFilter("currentLikePressed"));
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver,new IntentFilter("currentProgram"));
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(mediaPlayerStatusReceiver,new IntentFilter("currentPlayerStatus"));
     }

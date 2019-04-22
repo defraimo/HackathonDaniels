@@ -4,11 +4,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -26,16 +24,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,13 +36,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import daniel.rad.radiotabsdrawer.login.LoginActivity;
 import daniel.rad.radiotabsdrawer.login.User;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.BroadcastsJson;
-import daniel.rad.radiotabsdrawer.myMediaPlayer.LoadPrograms;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
+import daniel.rad.radiotabsdrawer.profile.ProfileActivity;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 public class DrawerActivity extends AppCompatActivity {
@@ -73,6 +66,7 @@ public class DrawerActivity extends AppCompatActivity {
                     .getReference("BroadcastingUsers");
 
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+    private List<ProgramsData> usersPrograms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +74,8 @@ public class DrawerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_drawer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        passingProgramFromProfile();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -125,18 +121,11 @@ public class DrawerActivity extends AppCompatActivity {
                             getDownloadUrl().addOnSuccessListener(uri -> {
                                 pbLoadingPic.setVisibility(View.INVISIBLE);
                                 currentUser.setUriPic(uri);
-        //                                if (currentUser.getUserPic() != null) {
-        //                                   Glide.with(getApplicationContext()).
-        //                                        load(Uri.parse(currentUser.getUserPic())).
-        //                                        into(ivProfile);
-        //                                }
                                 Glide.with(getApplicationContext()).load(uri).into(ivProfile);
 
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    System.out.println("failed downloading pic");
-                                }
+                            }).addOnFailureListener(e -> {
+                                System.out.println("failed downloading pic");
+                                pbLoadingPic.setVisibility(View.INVISIBLE);
                             });
                 }
 
@@ -172,7 +161,38 @@ public class DrawerActivity extends AppCompatActivity {
                     }
                 });
             }
+
+            btnMyStreams.setVisibility(View.INVISIBLE);
+            btnMyStreams.setClickable(false);
+            usersPrograms = new ArrayList<>();
+            for (ProgramsData program : programs) {
+                broadcastingUsers.child(program.getVodId()).
+                        addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                    User userValue = child.getValue(User.class);
+                                    if (userValue.getUserID().equals(user.getUid())){
+                                        btnMyStreams.setVisibility(View.VISIBLE);
+                                        btnMyStreams.setClickable(true);
+                                        return;
+                                    }
+                                }
+
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
+            }
         }
+    }
+
+    private void passingProgramFromProfile() {
+        ProgramsData programFromProfile = getIntent().getParcelableExtra("program");
+        Intent intent = new Intent("currentProgram");
+        intent.putExtra("program",programFromProfile);
+        LocalBroadcastManager.getInstance(DrawerActivity.this).sendBroadcast(intent);
     }
 
 

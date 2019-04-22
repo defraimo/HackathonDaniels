@@ -34,6 +34,7 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import daniel.rad.radiotabsdrawer.BuildConfig;
+import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.LoadPrograms;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
@@ -171,7 +172,7 @@ public class MusicLibrary {
                     mp1.getDuration(),
                     model.getDurationUnit(),
                     model.getMediaSource(),
-                    model.getProfilePic(),
+                    R.drawable.ic_app_icon,
                     model.getCreationDate(),
                     false
             );
