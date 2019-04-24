@@ -97,7 +97,7 @@ public class MusicLibrary {
                     model.getDurationUnit(),
                     model.getMediaSource(),
                     model.getProfilePic(),
-                    model.getCreationDate(),
+                    String.valueOf(model.getCreationDate()),
                     false
             );
         }
@@ -112,7 +112,7 @@ public class MusicLibrary {
                 model.getDurationUnit(),
                 model.getMediaSource(),
                 model.getProfilePic(),
-                model.getCreationDate(),
+                String.valueOf(model.getCreationDate()),
                 false
         );
     }
@@ -144,7 +144,7 @@ public class MusicLibrary {
                                 model.getDurationUnit(),
                                 model.getMediaSource(),
                                 model.getProfilePic(),
-                                model.getCreationDate(),
+                                String.valueOf(model.getCreationDate()),
                                 false
                         );
                         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
@@ -173,7 +173,7 @@ public class MusicLibrary {
                     model.getDurationUnit(),
                     model.getMediaSource(),
                     R.drawable.ic_app_icon,
-                    model.getCreationDate(),
+                    String.valueOf(model.getCreationDate()),
                     false
             );
             LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
