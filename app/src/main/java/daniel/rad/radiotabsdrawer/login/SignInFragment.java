@@ -109,7 +109,7 @@ public class SignInFragment extends Fragment {
         ivSignUp.setEnabled(true);
 
         ivSignUp.setOnClickListener(v -> {
-            if (etUserFullName.getText().toString().equals("")) {
+            if (!etUserFullName.getText().toString().equals("")) {
                 pbSignIn.setVisibility(View.VISIBLE);
                 if (imgDecodableString == null && cameraUncheckedFilePath == null){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

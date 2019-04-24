@@ -1,10 +1,7 @@
-package daniel.rad.radiotabsdrawer;
+package daniel.rad.radiotabsdrawer.profile;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import daniel.rad.radiotabsdrawer.admin.programsManager.ProgramsManagerOptionsFragment;
+import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 public class ProgramsUserAdapter extends RecyclerView.Adapter<ProgramsUserAdapter.ProgramsViewHolder> {
@@ -41,6 +38,10 @@ public class ProgramsUserAdapter extends RecyclerView.Adapter<ProgramsUserAdapte
         ProgramsData programsData = programs.get(i);
         holder.tvChosenProgramName.setText(programsData.getProgramName());
         holder.program = programsData;
+
+        holder.itemView.setOnClickListener(v -> {
+            userProgramAdapterInterface.onItemClicked(programsData);
+        });
     }
 
     @Override
@@ -56,10 +57,6 @@ public class ProgramsUserAdapter extends RecyclerView.Adapter<ProgramsUserAdapte
             super(itemView);
             tvChosenProgramName = itemView.findViewById(R.id.tvChosenProgramName);
             tvChosenProgramName.setSelected(true);
-
-            itemView.setOnClickListener(v -> {
-                userProgramAdapterInterface.onItemClicked(program);
-            });
         }
     }
 

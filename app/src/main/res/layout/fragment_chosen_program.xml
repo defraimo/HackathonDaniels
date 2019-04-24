@@ -5,17 +5,25 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".programs.ChosenProgramFragment"
-    android:background="#FF1E202A">
+    android:background="#FF1E202A"
+    tools:context=".programs.ChosenProgramFragment">
 
     <TextView
         android:id="@+id/tvChosenStudentName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:maxEms="14"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
         android:text="שם התלמיד"
         android:textColor="#FFF"
-        android:textSize="24sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/tvChosenProgramName"
         app:layout_constraintStart_toStartOf="@+id/tvChosenProgramName"
         app:layout_constraintTop_toBottomOf="@+id/tvChosenProgramName" />
@@ -29,11 +37,12 @@
         android:layout_marginEnd="8dp"
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
-        android:fontFamily="sans-serif-black"
-        android:lines="2"
         android:marqueeRepeatLimit="marquee_forever"
         android:maxEms="14"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
         android:scrollHorizontally="true"
+        android:singleLine="true"
         android:text="שם התוכנית"
         android:textAlignment="center"
         android:textColor="#FFF"
@@ -46,18 +55,19 @@
         android:id="@+id/rvChosenComments"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline5"
-        android:background="#FF1E202A"/>
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="#FF1E202A"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toTopOf="@+id/imageView14"
+        app:layout_constraintEnd_toEndOf="@+id/imageView14"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/ivComment"
+        app:layout_constraintTop_toBottomOf="@+id/ivAddToFav"
+        app:reverseLayout="true"
+        tools:listitem="@layout/comments_item" />
 
     <ImageView
         android:id="@+id/ivAddToFav"
@@ -65,9 +75,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
         android:src="@drawable/ic_favourite"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvChosenStudentName" />
 
@@ -80,5 +88,52 @@
         app:layout_constraintBottom_toBottomOf="@+id/ivAddToFav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ivAddToFav" />
+
+    <ImageView
+        android:id="@+id/imageView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_comment_text_blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ivComment" />
+
+    <ImageView
+        android:id="@+id/ivComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_button_comment"
+        app:layout_constraintBottom_toBottomOf="@+id/etComment"
+        app:layout_constraintEnd_toStartOf="@+id/imageView14"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etComment" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="הגב"
+        android:textColor="#FFF"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivComment"
+        app:layout_constraintEnd_toEndOf="@+id/ivComment"
+        app:layout_constraintStart_toStartOf="@+id/ivComment"
+        app:layout_constraintTop_toTopOf="@+id/ivComment" />
+
+    <EditText
+        android:id="@+id/etComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/transparent"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textColor="#FFF"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView14"
+        app:layout_constraintEnd_toEndOf="@+id/imageView14"
+        app:layout_constraintStart_toStartOf="@+id/imageView14"
+        app:layout_constraintTop_toTopOf="@+id/imageView14" />
 
 </android.support.constraint.ConstraintLayout>

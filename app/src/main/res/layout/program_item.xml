@@ -35,34 +35,34 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/layout_bg"
-            app:layout_constraintBottom_toBottomOf="@+id/tvChosenProgramName"
-            app:layout_constraintEnd_toEndOf="@+id/tvChosenStudentName"
+            app:layout_constraintBottom_toBottomOf="@+id/tvChosenStudentName"
+            app:layout_constraintEnd_toEndOf="@+id/tvChosenProgramName"
             app:layout_constraintStart_toStartOf="@+id/guideline18"
-            app:layout_constraintTop_toTopOf="@+id/tvChosenStudentName">
+            app:layout_constraintTop_toTopOf="@+id/tvChosenProgramName">
 
         </android.support.constraint.ConstraintLayout>
 
         <TextView
-            android:id="@+id/tvChosenProgramName"
+            android:id="@+id/tvChosenStudentName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
             android:marqueeRepeatLimit="marquee_forever"
-            android:maxEms="18"
+            android:maxEms="14"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:scrollHorizontally="true"
             android:singleLine="true"
-            android:text="שם תכנית"
+            android:text="שם האדם"
             android:textColor="#fff"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvChosenStudentName" />
+            app:layout_constraintTop_toBottomOf="@+id/tvChosenProgramName" />
 
         <TextView
-            android:id="@+id/tvChosenStudentName"
+            android:id="@+id/tvChosenProgramName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -77,10 +77,10 @@
             android:paddingEnd="5dp"
             android:scrollHorizontally="true"
             android:singleLine="true"
-            android:text="שם אדם"
+            android:text="שם התוכנית"
             android:textColor="#fff"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/tvChosenProgramName"
+            app:layout_constraintBottom_toTopOf="@+id/tvChosenStudentName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

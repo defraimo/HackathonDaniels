@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -30,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
+import daniel.rad.radiotabsdrawer.login.User;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.client.MediaBrowserHelper;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.MusicService;
@@ -84,7 +86,6 @@ public class MediaPlayerFragment extends Fragment {
 
         tvProgramName = view.findViewById(R.id.tvManagerProgramName);
         initProgressBar(view);
-
 
         bnBack.setOnClickListener(v -> {
 //            mIsLoading = true;

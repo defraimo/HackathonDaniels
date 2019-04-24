@@ -100,11 +100,11 @@ public class RadioButtomFragment extends Fragment {
         });
 
         ivComment.setOnClickListener(v -> {
-            getFragmentManager().
-                    beginTransaction().
-                    addToBackStack("radioHomePage").
-                    replace(R.id.buttom_frame,new ButtomCommentsRadioFragment()).
-                    commit();
+//            getFragmentManager().
+//                    beginTransaction().
+//                    addToBackStack("radioHomePage").
+//                    replace(R.id.buttom_frame,new ButtomCommentsRadioFragment()).
+//                    commit();
         });
 
         ivShare.setOnClickListener(v -> {
