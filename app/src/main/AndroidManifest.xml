@@ -58,7 +58,8 @@
             android:name=".DrawerActivity"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
 
         <service
             android:name=".myMediaPlayer.service.MusicService"
