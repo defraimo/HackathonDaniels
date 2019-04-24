@@ -49,7 +49,7 @@ public class InitMusicLibrary extends AsyncTask<Void, Void, List<ProgramsData>> 
                     model.getDurationUnit(),
                     model.getMediaSource(),
                     model.getProfilePic(),
-                    model.getCreationDate(),
+                    String.valueOf(model.getCreationDate()),
                     false
             );
             i++;

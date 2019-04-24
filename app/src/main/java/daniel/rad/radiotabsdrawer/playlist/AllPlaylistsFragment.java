@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +34,9 @@ public class AllPlaylistsFragment extends Fragment implements JsonReaderInterfac
     PlaylistJsonReader jsonReader;
     PlaylistAdapter adapter;
 
-    public static AllPlaylistsFragment newInstance(ArrayList<Playlist> playlistArraylist) {
+    public static AllPlaylistsFragment newInstance(Playlist playlist) {
         Bundle args = new Bundle();
-        args.putParcelableArrayList("playlists", playlistArraylist);
+        args.putParcelable("playlist", playlist);
         AllPlaylistsFragment fragment = new AllPlaylistsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -49,10 +50,10 @@ public class AllPlaylistsFragment extends Fragment implements JsonReaderInterfac
         return view;
     }
 
-
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
+        Log.d("test", "onResume: ");
         jsonReader = new PlaylistJsonReader(progressBar, getContext());
         jsonReader.dataPasser = this;
         jsonReader.execute();
@@ -61,7 +62,7 @@ public class AllPlaylistsFragment extends Fragment implements JsonReaderInterfac
     @Override
     public void passData(ArrayList<Playlist> playlists) {
         playlistsList = playlists;
-        adapter= new PlaylistAdapter(playlists , getContext());
+        adapter = new PlaylistAdapter(playlists, getContext());
         rvPlaylist.setAdapter(adapter);
     }
 
@@ -80,12 +81,11 @@ public class AllPlaylistsFragment extends Fragment implements JsonReaderInterfac
             activity.getSupportFragmentManager().
                     beginTransaction().
                     addToBackStack("allPlaylists").
-                    replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(null , playlistsList, true)).
+                    replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(null, null, true)).
                     commit();
         });
 
     }
-
 
 
 }

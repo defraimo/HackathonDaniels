@@ -7,12 +7,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -28,14 +32,12 @@ public class RemoveProgramFromPlaylistFragment extends Fragment {
     ImageView ivRemoveSearchButton;
     EditText etRemoveSearchProgram;
     public RecyclerView rvRemovePlaylistPrograms;
-    ArrayList<Playlist> playlistArrayList;
     Playlist playlist;
     RemovePlaylistAdapter removePlaylistAdapter;
 
-    public static RemoveProgramFromPlaylistFragment newInstance(Playlist playlist, ArrayList<Playlist> playlistArrayList) {
+    public static RemoveProgramFromPlaylistFragment newInstance(Playlist playlist) {
         Bundle args = new Bundle();
         args.putParcelable("playlist", playlist);
-        args.putParcelableArrayList("playlists", playlistArrayList);
         RemoveProgramFromPlaylistFragment fragment = new RemoveProgramFromPlaylistFragment();
         fragment.setArguments(args);
         return fragment;
@@ -57,20 +59,15 @@ public class RemoveProgramFromPlaylistFragment extends Fragment {
         rvRemovePlaylistPrograms = view.findViewById(R.id.rvRemovePlaylistPrograms);
 
 
-        RemovePlaylistAdapter.RemoveProgramInteface removeProgramInterface = programsData -> {
-             playlist.getProgramsData().remove(programsData);
-                for (Playlist playlistRemoveProgram : playlistArrayList) {
-                    if (playlistRemoveProgram.getName().equals(playlist.getName())) {
-                        playlistRemoveProgram = playlist;
-                    }
-                }
-                new PlaylistsJsonWriter(playlistArrayList, view.getContext()).execute();
+        RemovePlaylistAdapter.RemoveProgramInterface removeProgramInterface = programsData -> {
+            playlist.getProgramsData().remove(programsData);
+            new PlaylistsJsonWriter(playlist, programsData, view.getContext(), PlaylistsJsonWriter.REMOVE_PROGRAM).
+                    execute();
         };
 
         if (getArguments() != null) {
-            playlistArrayList = getArguments().getParcelableArrayList("playlists");
-            if(getArguments().getParcelable("playlist") != null)
-            playlist = getArguments().getParcelable("playlist");
+            if (getArguments().getParcelable("playlist") != null)
+                playlist = getArguments().getParcelable("playlist");
 
             tvRemovePlaylistName.setText(playlist.getName());
 
@@ -79,9 +76,13 @@ public class RemoveProgramFromPlaylistFragment extends Fragment {
             rvRemovePlaylistPrograms.setLayoutManager(new LinearLayoutManager(view.getContext()));
             rvRemovePlaylistPrograms.setAdapter(removePlaylistAdapter);
         }
+    }
 
-
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("shit", "onResume: ");
+        removePlaylistAdapter.notifyDataSetChanged();
     }
 }
 

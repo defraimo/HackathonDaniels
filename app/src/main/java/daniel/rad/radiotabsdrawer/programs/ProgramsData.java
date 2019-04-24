@@ -42,6 +42,7 @@ public class ProgramsData implements Parcelable {
         else this.profilePic = profilePic;
         this.creationDate = creationDate;
     }
+    public ProgramsData(){}
 
     public String getProgramName() {
         return programName;
@@ -67,8 +68,8 @@ public class ProgramsData implements Parcelable {
     public void setMediaSource(String mediaSource) {
         this.mediaSource = mediaSource;
     }
-    public String getCreationDate() {
-        return String.valueOf(creationDate);
+    public long getCreationDate() {
+        return creationDate;
     }
     public void setCreationDate(long creationDate) {
         this.creationDate = creationDate;
@@ -85,9 +86,9 @@ public class ProgramsData implements Parcelable {
     public void setVodId(String vodId) {
         this.vodId = vodId;
     }
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
+//    public void setDuration(long duration) {
+//        this.duration = duration;
+//    }
     public TimeUnit getDurationUnit() {
         return durationUnit;
     }

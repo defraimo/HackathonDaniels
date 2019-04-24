@@ -1,29 +1,17 @@
 package daniel.rad.radiotabsdrawer.playlist;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.cloudant.client.api.ClientBuilder;
-import com.cloudant.client.api.CloudantClient;
-import com.cloudant.client.api.Database;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -32,101 +20,140 @@ import java.util.ArrayList;
 import daniel.rad.radiotabsdrawer.MainActivity;
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
-import daniel.rad.radiotabsdrawer.playlist.chosenPlaylist.CreatePlaylistFragment;
+import daniel.rad.radiotabsdrawer.playlist.removeProgramsFromPlaylist.RemovePlaylistAdapter;
+import daniel.rad.radiotabsdrawer.playlist.removeProgramsFromPlaylist.RemoveProgramFromPlaylistFragment;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 
 public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
-    public ArrayList<Playlist> playlists;
+    public Playlist playlist;
+    public ProgramsData program;
     public WeakReference<Context> contextWeakReference;
-    public static boolean isLoaded = false;
 
-    public PlaylistsJsonWriter(ArrayList<Playlist> playlists, Context context) {
-        this.playlists = playlists;
+    private int choice;
+    public static final int CREATE_PLAYLIST = 1;
+    public static final int DELETE_PLAYLIST = 2;
+    public static final int ADD_PROGRAM = 3;
+    public static final int REMOVE_PROGRAM = 4;
+    public static final int ADD_TO_FAVS = 5;
+
+    public PlaylistsJsonWriter(Playlist playlist, Context context, int choice) {
+        this.playlist = playlist;
         contextWeakReference = new WeakReference<>(context);
+        this.choice = choice;
+    }
+
+    public PlaylistsJsonWriter(Playlist playlist, ProgramsData program, Context context, int choice) {
+        this.program = program;
+        this.playlist = playlist;
+        contextWeakReference = new WeakReference<>(context);
+        this.choice = choice;
+    }
+    public PlaylistsJsonWriter(ProgramsData program, Context context, int choice) {
+        this.program = program;
+        contextWeakReference = new WeakReference<>(context);
+        this.choice = choice;
     }
     public PlaylistsJsonWriter() {
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+
+            DatabaseReference userPlaylists = FirebaseDatabase.getInstance().
+                    getReference("userPlaylists");
+            DatabaseReference userName = userPlaylists.child(user.getUid());
+
+            switch (choice) {
+                case CREATE_PLAYLIST:
+                    createPlaylist(userName);
+                    break;
+                case DELETE_PLAYLIST:
+                    deletePlaylist(userName);
+                    break;
+                case ADD_PROGRAM:
+                    addProgram(userName);
+                    break;
+                case REMOVE_PROGRAM:
+                    removeProgram(userName);
+                    break;
+                case ADD_TO_FAVS:
+                    Log.d("shit", "doInBackground: addtofavs ");
+                    addToFavs(userName);
+                    break;
+                default:
+                    System.out.println("Nothing chosen");
+                    break;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        if (choice == REMOVE_PROGRAM) {
+            AppCompatActivity activity = (AppCompatActivity) contextWeakReference.get();
+            activity.getSupportFragmentManager().
+                    beginTransaction().
+                    replace(R.id.playlist_frame, RemoveProgramFromPlaylistFragment.newInstance(playlist)).
+                    commit();
+        } else {
+            AppCompatActivity activity = (AppCompatActivity) contextWeakReference.get();
+            activity.getSupportFragmentManager().
+                    beginTransaction().
+                    replace(R.id.playlist_frame, AllPlaylistsFragment.newInstance(playlist)).
+                    commit();
+        }
+    }
+
+    private void removeProgram(DatabaseReference userName) {
+        userName.child(playlist.getName()).child(program.getVodId()).removeValue();
+    }
+
+    private void addToFavs(DatabaseReference userName) {
+        DatabaseReference name = userName.child("מועדפים");
+        name.child(program.getVodId()).setValue(program);
+    }
+
+    private void addProgram(DatabaseReference userName) {
+        DatabaseReference name = userName.child(playlist.getName());
+        for (ProgramsData programsData : playlist.getProgramsData()) {
+            name.child(programsData.getVodId()).setValue(programsData);
+        }
+    }
+
+    private void deletePlaylist(DatabaseReference userName) {
+        userName.child(playlist.getName()).removeValue();
+    }
+
+    private void createPlaylist(DatabaseReference userName) {
+        for (ProgramsData programsDatum : playlist.getProgramsData()) {
+            userName.child(playlist.getName()).child(programsDatum.getVodId()).setValue(programsDatum);
+        }
+    }
+
+    private void writeToFile() {
         Context context = contextWeakReference.get();
         String path = "/data/data/" + context.getPackageName();
         File filePath = new File(path, "playlists.json");
-        try (FileWriter out = new FileWriter(filePath, false)) {
-//        jsonConverter(context);
-            String playlistsJson = gsonConverter();
-            System.out.println(playlistsJson);
+        try (FileWriter out = new FileWriter(filePath)) {
+            //jsonConverter(context);
+            String playlistsJson = gsonConverter(context);
             out.write(playlistsJson);
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return null;
     }
 
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        System.out.println("isLoaded: " + isLoaded);
-        if (!isLoaded) {
-            isLoaded = true;
-            new ProgramsReceiver((MainActivity) contextWeakReference.get()).execute();
-        }else{
-            AppCompatActivity activity = (AppCompatActivity) contextWeakReference.get();
-            activity.getSupportFragmentManager().
-                    beginTransaction().
-                    addToBackStack("allPlaylists").
-                    replace(R.id.playlist_frame, AllPlaylistsFragment.newInstance(playlists)).
-                    commit();
-        }
-    }
-
-    private String gsonConverter() {
+    private String gsonConverter(Context context) {
         Gson gson = new Gson();
-        String playlistsJson = gson.toJson(playlists);
-        System.out.println("playlistJson: " + playlistsJson);
-
+        String playlistsJson = gson.toJson(playlist);
+        System.out.println(playlistsJson);
         return playlistsJson;
-
-    }
-
-    private void jsonConverter(Context context) {
-        JSONArray jsonArray = new JSONArray();
-        JSONObject singlePlaylist = new JSONObject();
-        JSONArray playlistPrograms = new JSONArray();
-        JSONObject singleProgram = new JSONObject();
-        //todo: needs to be replaced with db access:
-        String path = "/data/data/" + context.getPackageName();
-        File filePath = new File(path, "playlists.json");
-
-        try (FileWriter out = new FileWriter(filePath)) {
-            int i = 0;
-            for (Playlist playlist : playlists) {
-                for (ProgramsData program : playlist.getProgramsData()) {
-                    singleProgram.put("vodId", program.getVodId());
-                    singleProgram.put("programName", program.getProgramName());
-                    singleProgram.put("studentName", program.getStudentName());
-                    singleProgram.put("duration", program.getDuration());
-                    singleProgram.put("mediaSource", program.getMediaSource());
-                    singleProgram.put("profilePic", program.getProfilePic());
-                    singleProgram.put("creationDate", program.getCreationDate());
-//                    playlistPrograms.put(singleProgram);
-                    playlistPrograms.put(i, singleProgram);
-                }
-
-                singlePlaylist.put("name", playlist.getName());
-                singlePlaylist.put("programs", playlistPrograms);
-                jsonArray.put(i, singlePlaylist);
-                i++;
-            }
-            out.write(jsonArray.toString());
-            out.flush();
-        } catch (JSONException e) {
-            System.out.println(e.getMessage());
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
     }
 
 }
