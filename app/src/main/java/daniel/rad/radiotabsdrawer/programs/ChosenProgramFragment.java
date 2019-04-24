@@ -42,6 +42,7 @@ public class ChosenProgramFragment extends Fragment {
     ImageView ivShare;
     ImageView ivComment;
     EditText etComment;
+    TextView tvNoComments;
 
     private DatabaseReference programComments =
             FirebaseDatabase.getInstance()
@@ -87,6 +88,7 @@ public class ChosenProgramFragment extends Fragment {
             ivShare = view.findViewById(R.id.ivShare);
             ivComment = view.findViewById(R.id.ivComment);
             etComment = view.findViewById(R.id.etComment);
+            tvNoComments = view.findViewById(R.id.tvNoComments);
 
             rvChosenComments.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -119,6 +121,7 @@ public class ChosenProgramFragment extends Fragment {
                                         etComment.setText("");
                                         String fullComment = currentUser.getUsername()+": "+comment;
                                         programComments.child(model.getVodId()).child(""+(counter+1)).setValue(fullComment);
+                                        rvChosenComments.scrollToPosition(comments.size()-1);
                                     }
                                 }
 
@@ -147,7 +150,14 @@ public class ChosenProgramFragment extends Fragment {
                             comments.add(comment);
                         }
                     }
+                    if (comments.isEmpty()){
+                        tvNoComments.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        tvNoComments.setVisibility(View.GONE);
+                    }
                     rvChosenComments.setAdapter(new CommentsAdapter(comments,getContext()));
+                    rvChosenComments.scrollToPosition(comments.size()-1);
                 }
 
                 @Override

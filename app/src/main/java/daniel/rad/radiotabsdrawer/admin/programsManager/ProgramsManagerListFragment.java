@@ -19,7 +19,6 @@ import java.util.ArrayList;
 
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
-import daniel.rad.radiotabsdrawer.programs.ProgramsAdapter;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 /**
@@ -30,7 +29,10 @@ public class ProgramsManagerListFragment extends Fragment {
     RecyclerView rvProgramsManager;
     ImageView ivProgramSearch;
     EditText etSearch;
-
+    ImageView ivProgramsManager;
+    ImageView ivCommentsManager;
+    private boolean programsManagerWasChosen = true;
+    ProgramsManagerAdapter adapter;
 
     public ProgramsManagerListFragment() {
         // Required empty public constructor
@@ -50,10 +52,29 @@ public class ProgramsManagerListFragment extends Fragment {
         rvProgramsManager = view.findViewById(R.id.rvProgramsManager);
         ivProgramSearch = view.findViewById(R.id.ivProgramSearch);
         etSearch = view.findViewById(R.id.etSearch);
+        ivProgramsManager = view.findViewById(R.id.ivProgramsManager);
+        ivCommentsManager = view.findViewById(R.id.ivCommentsManager);
 
         rvProgramsManager.setLayoutManager(new LinearLayoutManager(getContext()));
-        ProgramsManagerAdapter adapter = new ProgramsManagerAdapter(ProgramsReceiver.getPrograms(), getContext());
+
+        adapter = new ProgramsManagerAdapter(ProgramsReceiver.getPrograms(), getContext(),true);
         rvProgramsManager.setAdapter(adapter);
+
+        ivProgramsManager.setOnClickListener(v -> {
+            if (!programsManagerWasChosen) {
+                adapter = new ProgramsManagerAdapter(ProgramsReceiver.getPrograms(), getContext(), true);
+                rvProgramsManager.setAdapter(adapter);
+                programsManagerWasChosen = true;
+            }
+        });
+
+        ivCommentsManager.setOnClickListener(v -> {
+            if (programsManagerWasChosen) {
+                adapter = new ProgramsManagerAdapter(ProgramsReceiver.getPrograms(), getContext(), false);
+                rvProgramsManager.setAdapter(adapter);
+                programsManagerWasChosen = false;
+            }
+        });
 
         ivProgramSearch.setOnClickListener((v)->{
             ArrayList<ProgramsData> newList = new ArrayList<>();
@@ -67,7 +88,13 @@ public class ProgramsManagerListFragment extends Fragment {
                 }
             }
             if(!search.isEmpty()) {
-                ProgramsManagerAdapter searchAdapter = new ProgramsManagerAdapter(newList, getContext());
+                ProgramsManagerAdapter searchAdapter;
+                if (programsManagerWasChosen){
+                    searchAdapter = new ProgramsManagerAdapter(newList, getContext(), true);
+                }
+                else {
+                    searchAdapter = new ProgramsManagerAdapter(newList, getContext(), false);
+                }
                 rvProgramsManager.setAdapter(searchAdapter);
             }
         });
@@ -88,7 +115,5 @@ public class ProgramsManagerListFragment extends Fragment {
                 }
             }
         });
-
-
     }
 }

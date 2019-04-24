@@ -69,13 +69,13 @@
                 android:id="@+id/tabItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ניהול תוכניות" />
+                android:text="תוכניות/תגובות" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/tabItem2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ניהול תגובות" />
+                android:text="התראות" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/tabItem3"

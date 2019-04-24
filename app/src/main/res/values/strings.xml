@@ -20,4 +20,5 @@
     <string name="fb_login_protocol_scheme">fb351552232142545</string>
 
     <string name="log_out">התנתק</string>
+    <string name="notifications">התראות</string>
 </resources>

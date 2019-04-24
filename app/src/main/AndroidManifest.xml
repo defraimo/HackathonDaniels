@@ -21,6 +21,10 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:supportsRtl"
         tools:targetApi="m">
+        <service
+            android:name=".admin.notificationManager.MyNotificationsService"
+            android:enabled="true"
+            android:exported="true"></service>
         <activity
             android:name=".admin.AdminActivity"
             android:screenOrientation="portrait"

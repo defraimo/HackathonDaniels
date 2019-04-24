@@ -9,19 +9,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import daniel.rad.radiotabsdrawer.R;
+import daniel.rad.radiotabsdrawer.admin.commentsManager.CommentsManagerOfProgramFragment;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 public class ProgramsManagerAdapter extends RecyclerView.Adapter<ProgramsManagerAdapter.ProgramsViewHolder> {
     List<ProgramsData> programs;
     Context context;
+    boolean programOrComment;
 
-    public ProgramsManagerAdapter(List<ProgramsData> programs, Context context) {
+    public ProgramsManagerAdapter(List<ProgramsData> programs, Context context, boolean programOrComment) {
         this.programs = programs;
         this.context = context;
+        this.programOrComment = programOrComment;
     }
 
     @NonNull
@@ -37,6 +39,7 @@ public class ProgramsManagerAdapter extends RecyclerView.Adapter<ProgramsManager
         ProgramsData programsData = programs.get(i);
         holder.tvChosenProgramName.setText(programsData.getProgramName());
         holder.program = programsData;
+        holder.programOrComment = programOrComment;
     }
 
     @Override
@@ -47,6 +50,7 @@ public class ProgramsManagerAdapter extends RecyclerView.Adapter<ProgramsManager
     class ProgramsViewHolder extends RecyclerView.ViewHolder{
         TextView tvChosenProgramName;
         ProgramsData program;
+        boolean programOrComment;
 
         public ProgramsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -54,11 +58,20 @@ public class ProgramsManagerAdapter extends RecyclerView.Adapter<ProgramsManager
             tvChosenProgramName.setSelected(true);
 
             itemView.setOnClickListener(v -> {
-                AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                activity.getSupportFragmentManager().beginTransaction().
-                        addToBackStack("programsManager").
-                        replace(R.id.program_manager_layout,ProgramsManagerOptionsFragment.newInstance(program)).
-                        commit();
+                if (programOrComment) { //if pressed on programs manager
+                    AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                    activity.getSupportFragmentManager().beginTransaction().
+                            addToBackStack("programsManager").
+                            replace(R.id.program_manager_layout, ProgramsManagerOptionsFragment.newInstance(program)).
+                            commit();
+                }
+                else { //if pressed on comments manager
+                    AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                    activity.getSupportFragmentManager().beginTransaction().
+                            addToBackStack("programCommentsManager").
+                            replace(R.id.program_manager_layout, CommentsManagerOfProgramFragment.newInstance(program)).
+                            commit();
+                }
             });
         }
     }

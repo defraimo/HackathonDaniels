@@ -31,6 +31,7 @@ import java.util.List;
 
 import daniel.rad.radiotabsdrawer.DrawerActivity;
 import daniel.rad.radiotabsdrawer.R;
+import daniel.rad.radiotabsdrawer.admin.notificationManager.MyNotificationsService;
 import daniel.rad.radiotabsdrawer.login.LoginActivity;
 import daniel.rad.radiotabsdrawer.login.User;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
@@ -79,6 +80,11 @@ public class ProfileActivity extends AppCompatActivity {
             builder.setTitle("האם אתה בטוח שברצונך להתנתק?").
                     setNegativeButton("לא", (dialog, which) -> {}).
                     setPositiveButton("כן",(dialog, which) -> {
+                        stopService(new Intent(ProfileActivity.this, MyNotificationsService.class));
+                        FirebaseAuth.getInstance().signOut();
+                        Intent loggedOut = new Intent("loggedOut");
+                        loggedOut.putExtra("loginStatus",false);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(loggedOut);
                         SharedPreferences SPrefUser = getSharedPreferences("userName",MODE_PRIVATE);
                         SPrefUser.edit().putString("name",null).apply();
                         Intent intent = new Intent(this, LoginActivity.class);
@@ -110,11 +116,6 @@ public class ProfileActivity extends AppCompatActivity {
                             getDownloadUrl().addOnSuccessListener(uri -> {
                         pbLoadingPic.setVisibility(View.INVISIBLE);
                         currentUser.setUriPic(uri);
-//                                if (currentUser.getUserPic() != null) {
-//                                   Glide.with(getApplicationContext()).
-//                                        load(Uri.parse(currentUser.getUserPic())).
-//                                        into(ivProfile);
-//                                }
                         Glide.with(getApplicationContext()).load(uri).into(ivProfilePic);
 
                     }).addOnFailureListener(e -> System.out.println("failed downloading pic"));

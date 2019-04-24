@@ -12,15 +12,14 @@
         android:id="@+id/etSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginBottom="8dp"
+        android:backgroundTint="#BBB9B9"
         android:ems="8"
         android:fontFamily="sans-serif-medium"
         android:hint="חיפוש"
         android:inputType="textPersonName"
-        android:backgroundTint="#BBB9B9"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:textColor="#FFF"
@@ -28,7 +27,6 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/rvProgramsManager"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -59,4 +57,24 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.15" />
+
+    <ImageView
+        android:id="@+id/ivProgramsManager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_button_comment"
+        app:layout_constraintBottom_toBottomOf="@+id/ivCommentsManager"
+        app:layout_constraintStart_toEndOf="@+id/ivCommentsManager"
+        app:layout_constraintTop_toTopOf="@+id/ivCommentsManager" />
+
+    <ImageView
+        android:id="@+id/ivCommentsManager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_button_comment"
+        app:layout_constraintBottom_toBottomOf="@+id/etSearch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etSearch" />
 </android.support.constraint.ConstraintLayout>

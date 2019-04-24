@@ -7,9 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,11 +21,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import daniel.rad.radiotabsdrawer.R;
+import daniel.rad.radiotabsdrawer.admin.programsManager.ProgramsManagerAdapter;
+import daniel.rad.radiotabsdrawer.login.User;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
@@ -31,6 +38,10 @@ import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 public class StatisticsFragment extends Fragment {
 
     RecyclerView rvStatistics;
+    ImageView ivProgramSearch;
+    EditText etSearch;
+
+    private boolean programsManagerWasChosen = true;
 
     private DatabaseReference programsNumOfPlays =
             FirebaseDatabase.getInstance()
@@ -52,10 +63,47 @@ public class StatisticsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvStatistics = view.findViewById(R.id.rvStatistics);
+        ivProgramSearch = view.findViewById(R.id.ivProgramSearch);
+        etSearch = view.findViewById(R.id.etSearch);
 
         rvStatistics.setLayoutManager(new LinearLayoutManager(getContext()));
-//        List<ProgramsData> sortedPrograms = sortPrograms(ProgramsReceiver.getPrograms());
-        rvStatistics.setAdapter(new StatisticsAdapter(ProgramsReceiver.getPrograms(),getContext()));
+//                List<ProgramsData> sortedPrograms = sortPrograms(ProgramsReceiver.getPrograms());
+        LikesStatisticsAdapter adapter = new LikesStatisticsAdapter(ProgramsReceiver.getPrograms(), getContext());
+        rvStatistics.setAdapter(adapter);
+
+        ivProgramSearch.setOnClickListener((v)->{
+            ArrayList<ProgramsData> newList = new ArrayList<>();
+            ArrayList<ProgramsData> allPrograms = (ArrayList<ProgramsData>) ProgramsReceiver.getPrograms();
+            String search = etSearch.getText().toString().trim().toLowerCase();
+            for (ProgramsData program : allPrograms) {
+                if (program.getProgramName().toLowerCase().contains(search)){
+                    newList.add(program);
+                }else if(program.getStudentName().toLowerCase().contains(search)){
+                    newList.add(program);
+                }
+            }
+            if(!search.isEmpty()) {
+                LikesStatisticsAdapter searchAdapter = new LikesStatisticsAdapter(newList, getContext());
+                rvStatistics.setAdapter(searchAdapter);
+            }
+        });
+
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(etSearch.getText().toString().isEmpty()){
+                    rvStatistics.setAdapter(adapter);
+                }
+            }
+        });
     }
 
     private List<ProgramsData> sortPrograms(List<ProgramsData> programs){ //TODO: sort the programs by plays

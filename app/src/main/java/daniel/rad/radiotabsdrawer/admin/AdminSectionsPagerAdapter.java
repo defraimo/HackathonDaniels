@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import daniel.rad.radiotabsdrawer.admin.notificationManager.NotificationsManagerFragment;
 import daniel.rad.radiotabsdrawer.admin.programsManager.ProgramManagerFragment;
 import daniel.rad.radiotabsdrawer.admin.statisticsManager.StatisticsFragment;
 
@@ -15,7 +16,7 @@ public class AdminSectionsPagerAdapter extends FragmentPagerAdapter {
             super(fm);
         }
 
-        String[] tabNames = new String[]{"ניהול תוכניות","ניהול תגובות","סטטיסטיקות"};
+        String[] tabNames = new String[]{"ניהול תוכניות/תגובות","ניהול התראות","סטטיסטיקות"};
 
     @Nullable
     @Override
@@ -29,7 +30,7 @@ public class AdminSectionsPagerAdapter extends FragmentPagerAdapter {
                 case 0:
                     return new ProgramManagerFragment();
                 case 1:
-                    return new CommentsManagerFragment();
+                    return new NotificationsManagerFragment();
                 case 2:
                     return new StatisticsFragment();
             }

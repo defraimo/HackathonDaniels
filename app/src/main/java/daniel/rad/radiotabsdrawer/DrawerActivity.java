@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -39,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import daniel.rad.radiotabsdrawer.admin.notificationManager.MyNotificationsService;
 import daniel.rad.radiotabsdrawer.login.LoginActivity;
 import daniel.rad.radiotabsdrawer.login.User;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.BroadcastsJson;
@@ -57,6 +57,8 @@ public class DrawerActivity extends AppCompatActivity {
     User currentUser;
     ProgressBar pbLoadingPic;
 
+    boolean fromManager = false;
+
     private DatabaseReference users =
             FirebaseDatabase.getInstance()
                     .getReference("Users");
@@ -64,6 +66,10 @@ public class DrawerActivity extends AppCompatActivity {
     private DatabaseReference broadcastingUsers =
             FirebaseDatabase.getInstance()
                     .getReference("BroadcastingUsers");
+
+    private DatabaseReference notifications =
+            FirebaseDatabase.getInstance()
+                    .getReference("Notifications");
 
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private List<ProgramsData> usersPrograms;
@@ -99,6 +105,24 @@ public class DrawerActivity extends AppCompatActivity {
         tvUserId = findViewById(R.id.tvUserId);
         ivProfile = findViewById(R.id.ivProfile);
         pbLoadingPic = findViewById(R.id.pbLoadingPic);
+
+        //start the notification server
+        notifications.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (fromManager) {
+                    startService(new Intent(DrawerActivity.this, MyNotificationsService.class));
+                }
+                else {
+                    fromManager = true;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -221,6 +245,7 @@ public class DrawerActivity extends AppCompatActivity {
             builder.setTitle("האם אתה בטוח שברצונך להתנתק?").
                     setNegativeButton("לא", (dialog, which) -> {}).
                     setPositiveButton("כן",(dialog, which) -> {
+                        stopService(new Intent(DrawerActivity.this, MyNotificationsService.class));
                         FirebaseAuth.getInstance().signOut();
                         Intent loggedOut = new Intent("loggedOut");
                         loggedOut.putExtra("loginStatus",false);

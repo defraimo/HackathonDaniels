@@ -116,7 +116,7 @@ public class ProgramsManagerOptionsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        program =  getArguments().getParcelable("model");
+        program = getArguments().getParcelable("model");
 
         tvManagerProgramName = view.findViewById(R.id.tvManagerProgramName);
         tvManagerProgramName.setText(program.getProgramName());
@@ -139,10 +139,10 @@ public class ProgramsManagerOptionsFragment extends Fragment {
         ivAddStudent.setOnClickListener(v -> {
             if (!isButtonOnePressed){
                 ivAddStudent.setImageResource(R.drawable.ic_search_bar);
-                tvAddStudent.setTextColor(Color.parseColor("#FFF"));
+                tvAddStudent.setTextColor(Color.parseColor("#FFFFFF"));
                 isButtonOnePressed = true;
                 ivAddPicFromFB.setImageResource(R.drawable.ic_search_bar_unpressed);
-                tvAddPicFromFB.setTextColor(Color.argb(100,206,204,204));
+                tvAddPicFromFB.setTextColor(Color.parseColor("#9B9B9B"));
                 isButtonTwoPressed = false;
             }
         });
@@ -150,10 +150,10 @@ public class ProgramsManagerOptionsFragment extends Fragment {
         ivAddPicFromFB.setOnClickListener(v -> {
             if (!isButtonTwoPressed){
                 ivAddPicFromFB.setImageResource(R.drawable.ic_search_bar);
-                tvAddPicFromFB.setTextColor(Color.parseColor("#FFF"));
+                tvAddPicFromFB.setTextColor(Color.parseColor("#FFFFFF"));
                 isButtonTwoPressed = true;
                 ivAddStudent.setImageResource(R.drawable.ic_search_bar_unpressed);
-                tvAddStudent.setTextColor(Color.argb(100,206,204,204));
+                tvAddStudent.setTextColor(Color.parseColor("#9B9B9B"));
                 isButtonOnePressed = false;
             }
         });
