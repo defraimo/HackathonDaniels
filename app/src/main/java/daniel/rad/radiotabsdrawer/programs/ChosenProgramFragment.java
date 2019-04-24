@@ -14,7 +14,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+
 import daniel.rad.radiotabsdrawer.R;
+import daniel.rad.radiotabsdrawer.playlist.Playlist;
+import daniel.rad.radiotabsdrawer.playlist.PlaylistsJsonWriter;
 
 
 /**
@@ -66,6 +73,11 @@ public class ChosenProgramFragment extends Fragment {
                 share.putExtra(Intent.EXTRA_TEXT, "מוזמנ/ת להקשיב לתוכנית - "+model.getProgramName()+" של "+model.getStudentName()+"! *קישור כניסה לאפליקצייה*");
 
                 startActivity(Intent.createChooser(share, "היכן תרצה לשתף את התוכנית?"));
+            });
+
+            ivAddToFav.setOnClickListener(v->{
+                Toast.makeText(v.getContext(), "נוסף למועדפים", Toast.LENGTH_SHORT).show();
+                new PlaylistsJsonWriter(model, v.getContext(), PlaylistsJsonWriter.ADD_TO_FAVS).execute();
             });
         }
     }

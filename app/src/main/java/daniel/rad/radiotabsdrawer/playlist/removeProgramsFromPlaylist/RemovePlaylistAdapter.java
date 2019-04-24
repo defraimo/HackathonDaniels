@@ -27,15 +27,15 @@ public class RemovePlaylistAdapter extends RecyclerView.Adapter<RemovePlaylistAd
     List<ProgramsData> programsDataList;
     Context context;
 
-    private RemoveProgramInteface removeProgramInteface;
+    private RemoveProgramInterface removeProgramInterface;
 
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference storageRef = storage.getReference();
 
-    public RemovePlaylistAdapter(List<ProgramsData> programsDataList, Context context, RemoveProgramInteface removeProgramInteface) {
+    public RemovePlaylistAdapter(List<ProgramsData> programsDataList, Context context, RemoveProgramInterface removeProgramInterface) {
         this.programsDataList = programsDataList;
         this.context = context;
-        this.removeProgramInteface = removeProgramInteface;
+        this.removeProgramInterface = removeProgramInterface;
     }
 
     @NonNull
@@ -43,7 +43,7 @@ public class RemovePlaylistAdapter extends RecyclerView.Adapter<RemovePlaylistAd
     public RemovePlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.program_in_playlist_item, viewGroup, false);
-        RemovePlaylistViewHolder holder = new RemovePlaylistViewHolder(view, removeProgramInteface);
+        RemovePlaylistViewHolder holder = new RemovePlaylistViewHolder(view, removeProgramInterface);
         return holder;
     }
 
@@ -81,7 +81,7 @@ public class RemovePlaylistAdapter extends RecyclerView.Adapter<RemovePlaylistAd
         ImageView ivPlay;
         ProgramsData programsData;
 
-        public RemovePlaylistViewHolder(@NonNull View itemView, final RemoveProgramInteface removeProgramInteface) {
+        public RemovePlaylistViewHolder(@NonNull View itemView, final RemoveProgramInterface removeProgramInterface) {
             super(itemView);
             tvProgramName = itemView.findViewById(R.id.tvProgramName);
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
@@ -92,7 +92,7 @@ public class RemovePlaylistAdapter extends RecyclerView.Adapter<RemovePlaylistAd
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 builder.setTitle("האם אתה בטוח שברצונך למחוק את התוכנית מרשימת ההשמעה?").
                         setPositiveButton("כן", (dialog, which) -> {
-                            removeProgramInteface.passProgramToRemove(programsData);
+                            removeProgramInterface.passProgramToRemove(programsData);
                         }).
                         setNegativeButton("לא", (dialog, which) -> {
                         }).show();
@@ -102,7 +102,7 @@ public class RemovePlaylistAdapter extends RecyclerView.Adapter<RemovePlaylistAd
         }
     }
 
-    public interface RemoveProgramInteface{
+    public interface RemoveProgramInterface {
         void passProgramToRemove(ProgramsData programsData);
     }
 }

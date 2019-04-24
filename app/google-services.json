@@ -1,0 +1,80 @@
+{
+  "project_info": {
+    "project_number": "790936853409",
+    "firebase_url": "https://koletzion-bdd5d.firebaseio.com",
+    "project_id": "koletzion-bdd5d",
+    "storage_bucket": "koletzion-bdd5d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790936853409:android:97648087f45192b7",
+        "android_client_info": {
+          "package_name": "daniel.rad.radiotabsdrawer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "790936853409-r2l9q1mdid0muv874nif29f2u27oqkod.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "daniel.rad.radiotabsdrawer",
+            "certificate_hash": "e613f8d3519ca02109baecec0e1d971962f18516"
+          }
+        },
+        {
+          "client_id": "790936853409-69r0k05ifgbharpudnl97bnnd5pk2m76.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "daniel.rad.radiotabsdrawer",
+            "certificate_hash": "7040705964de3629cea5ad76d8b6b4ce65aaa909"
+          }
+        },
+        {
+          "client_id": "790936853409-7o2acn3trm6v9dnf4cru5d4u9d8evnnk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "daniel.rad.radiotabsdrawer",
+            "certificate_hash": "497950ebfcb2b6df2e2eb3c29126d8b678628884"
+          }
+        },
+        {
+          "client_id": "790936853409-10mcheqenggkiidmejukde214g0apukq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "daniel.rad.radiotabsdrawer",
+            "certificate_hash": "6d934f1a62b75f2577f2013da39db95527e37872"
+          }
+        },
+        {
+          "client_id": "790936853409-8jtu31b456e2qc4ttrcjqp00ba69vqv3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "daniel.rad.radiotabsdrawer",
+            "certificate_hash": "f644f5f497d089855d72e0632eb9225024373292"
+          }
+        },
+        {
+          "client_id": "790936853409-6bqotlqsdppo5f4si9to6j9tkm3nj70l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAa49w8LmlM1XPo2zfZ_Iln0ywLoi1dEaU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "790936853409-6bqotlqsdppo5f4si9to6j9tkm3nj70l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

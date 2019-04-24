@@ -432,7 +432,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
         }*/
 
     }
-
     private void playlistPicLocal(@NonNull PlayListViewHolder holder, ArrayList<ProgramsData> programsDataList) {
         if (programsDataList.size() == 0) {
             holder.ivProfileAll.setImageResource(defaultPic);
@@ -628,7 +627,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                                     activity.getSupportFragmentManager().
                                             beginTransaction().
                                             addToBackStack("removeProgramFromPlaylist").
-                                            replace(R.id.playlist_frame, RemoveProgramFromPlaylistFragment.newInstance(playlist, playlists)).
+                                            replace(R.id.playlist_frame, RemoveProgramFromPlaylistFragment.newInstance(playlist)).
                                             commit();
                                     return true;
                                 case R.id.itemRemoveList:
@@ -666,8 +665,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                                     activity.getSupportFragmentManager().
                                             beginTransaction().
                                             addToBackStack("removeProgramFromPlaylist").
-//                                            replace(R.id.playlist_frame, PlaylistDetailsFragment.newInstance(playlist, playlists, true)).
-                                            replace(R.id.playlist_frame, RemoveProgramFromPlaylistFragment.newInstance(playlist, playlists)).
+                                            replace(R.id.playlist_frame, RemoveProgramFromPlaylistFragment.newInstance(playlist)).
                                             commit();
                                     return true;
                                 case R.id.itemRemoveList:
@@ -675,8 +673,8 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                                             setTitle("האם אתה בטוח שתרצה להסיר רשימה זו?").
                                             setPositiveButton("כן", (dialog, which) -> {
                                                 Toast.makeText(context, "הרשימה הוסרה", Toast.LENGTH_SHORT).show();
-                                                playlists.remove(playlist);
-                                                new PlaylistsJsonWriter(playlists, context).execute();
+                                                new PlaylistsJsonWriter(playlist, context , PlaylistsJsonWriter.DELETE_PLAYLIST).execute();
+
                                                 mShakeAnimation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.stop_shake);
                                                 itemView.startAnimation(mShakeAnimation);
                                                 ivDeletePlaylist.setVisibility(View.GONE);
