@@ -3,11 +3,11 @@ package daniel.rad.radiotabsdrawer.admin.notificationManager;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class CostumeNotification implements Parcelable {
+public class CustomNotification implements Parcelable {
     private String title;
     private String text;
 
-    public CostumeNotification(String title, String text) {
+    public CustomNotification(String title, String text) {
         this.title = title;
         this.text = text;
     }
@@ -27,7 +27,7 @@ public class CostumeNotification implements Parcelable {
 
     @Override
     public String toString() {
-        return "CostumeNotification{" +
+        return "CustomNotification{" +
                 "title='" + title + '\'' +
                 ", text='" + text + '\'' +
                 '}';
@@ -44,20 +44,20 @@ public class CostumeNotification implements Parcelable {
         dest.writeString(this.text);
     }
 
-    protected CostumeNotification(Parcel in) {
+    protected CustomNotification(Parcel in) {
         this.title = in.readString();
         this.text = in.readString();
     }
 
-    public static final Parcelable.Creator<CostumeNotification> CREATOR = new Parcelable.Creator<CostumeNotification>() {
+    public static final Parcelable.Creator<CustomNotification> CREATOR = new Parcelable.Creator<CustomNotification>() {
         @Override
-        public CostumeNotification createFromParcel(Parcel source) {
-            return new CostumeNotification(source);
+        public CustomNotification createFromParcel(Parcel source) {
+            return new CustomNotification(source);
         }
 
         @Override
-        public CostumeNotification[] newArray(int size) {
-            return new CostumeNotification[size];
+        public CustomNotification[] newArray(int size) {
+            return new CustomNotification[size];
         }
     };
 }

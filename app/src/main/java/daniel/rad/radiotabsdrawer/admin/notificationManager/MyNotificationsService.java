@@ -83,7 +83,7 @@ public class MyNotificationsService extends IntentService {
         Notification notification = new NotificationCompat.Builder(MyNotificationsService.this, CHANNEL_ID).
                 setContentTitle(title).
                 setContentText(text).
-                setSmallIcon(R.drawable.ic_app_mini_icon).
+                setSmallIcon(R.drawable.ic_notification).
                 setAutoCancel(true).
                 setContentIntent(pendingIntent).
                 build();

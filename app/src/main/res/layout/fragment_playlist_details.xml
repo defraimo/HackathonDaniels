@@ -82,15 +82,15 @@ tools:context=".playlist.PlaylistDetailsFragment">
     app:layout_constraintStart_toStartOf="@+id/etSearchProgram"
     app:layout_constraintTop_toTopOf="@+id/ivSearch" />
 
-<ImageView
-    android:id="@+id/ivPlayPlaylist"
-    android:layout_width="wrap_content"
-    android:layout_height="0dp"
-    android:src="@drawable/ic_mini_play"
-    app:layout_constraintBottom_toBottomOf="@+id/etSearchProgram"
-    app:layout_constraintEnd_toStartOf="@+id/etSearchProgram"
-    app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="@+id/etSearchProgram" />
+    <ImageView
+        android:id="@+id/ivPlayPlaylist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_play_grey_big"
+        app:layout_constraintBottom_toBottomOf="@+id/etSearchProgram"
+        app:layout_constraintEnd_toStartOf="@+id/etSearchProgram"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etSearchProgram" />
 
 </android.support.constraint.ConstraintLayout>

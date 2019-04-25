@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +57,7 @@ public class NotificationsManagerFragment extends Fragment {
                 etText.setError("שדה חובה");
             }
             else {
-                notifications.setValue(new CostumeNotification(etTitle.getText().toString(), etText.getText().toString()));
+                notifications.setValue(new CustomNotification(etTitle.getText().toString(), etText.getText().toString()));
                 Toast.makeText(getContext(), "ההתראה נשלחה", Toast.LENGTH_SHORT).show();
                 etTitle.setText("");
                 etText.setText("");

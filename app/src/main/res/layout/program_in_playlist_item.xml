@@ -20,7 +20,7 @@
             android:text="שם התוכנית"
             android:textColor="#FFF"
             android:textSize="18sp"
-            android:maxEms="12"
+            android:maxEms="10"
             android:singleLine="true"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
