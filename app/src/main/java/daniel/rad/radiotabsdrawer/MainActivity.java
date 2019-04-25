@@ -50,16 +50,6 @@ public class MainActivity extends AppCompatActivity {
                 load(R.drawable.loading_icon).
                 into(gifImageView);
 
-        //asking for permission to write the file:
-        //todo: check why the app doesn't wait for permission and continues
-        String writingToDisk = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-        if (ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{writingToDisk}, 1);
-        }
-
-
         getSupportActionBar().hide();
     }
 

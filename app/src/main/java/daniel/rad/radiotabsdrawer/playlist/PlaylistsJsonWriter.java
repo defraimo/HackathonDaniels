@@ -36,6 +36,7 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
     public static final int ADD_PROGRAM = 3;
     public static final int REMOVE_PROGRAM = 4;
     public static final int ADD_TO_FAVS = 5;
+    public static final int RECOMMENDED_PLAYLIST = 6;
 
     public PlaylistsJsonWriter(Playlist playlist, Context context, int choice) {
         this.playlist = playlist;
@@ -80,8 +81,10 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
                     removeProgram(userName);
                     break;
                 case ADD_TO_FAVS:
-                    Log.d("shit", "doInBackground: addtofavs ");
                     addToFavs(userName);
+                    break;
+                case RECOMMENDED_PLAYLIST:
+                    writeRecommended(userName);
                     break;
                 default:
                     System.out.println("Nothing chosen");
@@ -99,7 +102,9 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
                     beginTransaction().
                     replace(R.id.playlist_frame, RemoveProgramFromPlaylistFragment.newInstance(playlist)).
                     commit();
-        } else {
+        } else if(choice == RECOMMENDED_PLAYLIST) {
+            //not supposed to do anything, made to write the recommended playlist and continue.
+        }else{
             AppCompatActivity activity = (AppCompatActivity) contextWeakReference.get();
             activity.getSupportFragmentManager().
                     beginTransaction().
@@ -134,27 +139,14 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    private void writeToFile() {
-        Context context = contextWeakReference.get();
-        String path = "/data/data/" + context.getPackageName();
-        File filePath = new File(path, "playlists.json");
-        try (FileWriter out = new FileWriter(filePath)) {
-            //jsonConverter(context);
-            String playlistsJson = gsonConverter(context);
-            out.write(playlistsJson);
-            out.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void writeRecommended(DatabaseReference userName) {
+        //deletes previous version of recommended:
+        userName.child(playlist.getName()).removeValue();
+
+        //write the new version:
+        for (ProgramsData programsDatum : playlist.getProgramsData()) {
+            userName.child(playlist.getName()).child(programsDatum.getVodId()).setValue(programsDatum);
         }
-
     }
-
-    private String gsonConverter(Context context) {
-        Gson gson = new Gson();
-        String playlistsJson = gson.toJson(playlist);
-        System.out.println(playlistsJson);
-        return playlistsJson;
-    }
-
 }
 
