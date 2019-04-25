@@ -70,13 +70,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
 
         String playlistName = playlist.getName();
         holder.tvPlayList.setText(playlistName);
-        if (playlistName.equals("מומלצים")) {
-            defaultPic = R.drawable.ic_default_recommended;
-        } else if (playlistName.equals("מועדפים")) {
-            defaultPic = R.drawable.ic_default_favourite;
-        } else {
-            defaultPic = R.drawable.ic_default_pic;
-        }
+
+        defaultPicChooser(playlistName);
 
         ArrayList<ProgramsData> programsDataList = (ArrayList<ProgramsData>) playlist.getProgramsData();
         holder.ivProfileAll.setImageResource(defaultPic);
@@ -86,6 +81,16 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
         holder.playlist = playlist;
         holder.context = context;
         holder.playlists = playlists;
+    }
+
+    private void defaultPicChooser(String playlistName) {
+        if (playlistName.contains("מומלצי")) {
+            defaultPic = R.drawable.ic_default_recommended;
+        } else if (playlistName.equals("מועדפים")) {
+            defaultPic = R.drawable.ic_default_favourite;
+        } else {
+            defaultPic = R.drawable.ic_default_pic;
+        }
     }
 
     @Override
@@ -115,6 +120,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 public void onFailure(@NonNull Exception e) {
 
                     holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
+
+                    defaultPicChooser(holder.playlist.getName());
                     holder.ivProfileAll.setImageResource(defaultPic);
                     allPic = false;
                 }
@@ -136,6 +143,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     holder.pbLoadingPic1.setVisibility(View.INVISIBLE);
+
+                    defaultPicChooser(holder.playlist.getName());
                     holder.ivProfilePic1.setImageResource(defaultPic);
                     pic1 = false;
                 }
@@ -152,6 +161,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     holder.pbLoadingPic4.setVisibility(View.INVISIBLE);
+
+                    defaultPicChooser(holder.playlist.getName());
                     holder.ivProfilePic4.setImageResource(defaultPic);
                     pic4 = false;
                 }
@@ -168,6 +179,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     holder.pbLoadingPic2.setVisibility(View.INVISIBLE);
+                    defaultPicChooser(holder.playlist.getName());
                     holder.ivProfilePic2.setImageResource(defaultPic);
                     pic2 = false;
                 }
@@ -184,6 +196,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     holder.pbLoadingPic3.setVisibility(View.INVISIBLE);
+                    defaultPicChooser(holder.playlist.getName());
                     holder.ivProfilePic3.setImageResource(defaultPic);
                     pic3 = false;
                 }
@@ -207,6 +220,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     holder.pbLoadingPic1.setVisibility(View.INVISIBLE);
+                    defaultPicChooser(holder.playlist.getName());
                     holder.ivProfilePic1.setImageResource(defaultPic);
                     pic1 = false;
                 }
@@ -223,6 +237,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     holder.pbLoadingPic4.setVisibility(View.INVISIBLE);
+                    defaultPicChooser(holder.playlist.getName());
                     holder.ivProfilePic4.setImageResource(defaultPic);
                     pic4 = false;
                 }
@@ -239,6 +254,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     holder.pbLoadingPic2.setVisibility(View.INVISIBLE);
+                    defaultPicChooser(holder.playlist.getName());
                     holder.ivProfilePic2.setImageResource(defaultPic);
                     pic2 = false;
                 }
@@ -255,6 +271,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     holder.pbLoadingPic3.setVisibility(View.INVISIBLE);
+                    defaultPicChooser(holder.playlist.getName());
                     holder.ivProfilePic3.setImageResource(defaultPic);
                     pic3 = false;
                 }
@@ -278,6 +295,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     holder.pbLoadingPic1.setVisibility(View.INVISIBLE);
+
+                    defaultPicChooser(holder.playlist.getName());
                     holder.ivProfilePic1.setImageResource(defaultPic);
                     pic1 = false;
                 }
@@ -294,6 +313,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     holder.pbLoadingPic4.setVisibility(View.INVISIBLE);
+
+                    defaultPicChooser(holder.playlist.getName());
                     holder.ivProfilePic4.setImageResource(defaultPic);
                     pic4 = false;
                 }
@@ -310,6 +331,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     holder.pbLoadingPic2.setVisibility(View.INVISIBLE);
+
+                    defaultPicChooser(holder.playlist.getName());
                     holder.ivProfilePic2.setImageResource(defaultPic);
                     pic2 = false;
                 }
@@ -326,6 +349,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     holder.pbLoadingPic3.setVisibility(View.INVISIBLE);
+
+                    defaultPicChooser(holder.playlist.getName());
                     holder.ivProfilePic3.setImageResource(defaultPic);
                     pic3 = false;
                 }
@@ -337,100 +362,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             holder.ivProfilePic3.setVisibility(View.VISIBLE);
             holder.ivProfilePic4.setVisibility(View.VISIBLE);
         }
-
-        /*if (pic1 && !pic2 && pic3 && !pic4){
-            holder.ivProfileAll.setVisibility(View.VISIBLE);
-            holder.ivProfilePic1.setVisibility(View.INVISIBLE);
-            holder.ivProfilePic2.setVisibility(View.INVISIBLE);
-            holder.ivProfilePic3.setVisibility(View.INVISIBLE);
-            holder.ivProfilePic4.setVisibility(View.INVISIBLE);
-
-            holder.pbLoadingAllPic.setVisibility(View.VISIBLE);
-            storageRef.child("images/" + programsDataList.get(0).getVodId()).
-                    getDownloadUrl().addOnSuccessListener(uri -> {
-                holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfileAll);
-                allPic = true;
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    System.out.println("failed downloading main pic");
-                    holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
-                    holder.ivProfileAll.setImageResource(defaultPic);
-                    allPic = false;
-                }
-            });
-        }
-        else if (!pic1 && pic2 && !pic3 && pic4){
-            holder.ivProfileAll.setVisibility(View.VISIBLE);
-            holder.ivProfilePic1.setVisibility(View.INVISIBLE);
-            holder.ivProfilePic2.setVisibility(View.INVISIBLE);
-            holder.ivProfilePic3.setVisibility(View.INVISIBLE);
-            holder.ivProfilePic4.setVisibility(View.INVISIBLE);
-
-            holder.pbLoadingAllPic.setVisibility(View.VISIBLE);
-            storageRef.child("images/" + programsDataList.get(1).getVodId()).
-                    getDownloadUrl().addOnSuccessListener(uri -> {
-                holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfileAll);
-                allPic = true;
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    System.out.println("failed downloading main pic");
-                    holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
-                    holder.ivProfileAll.setImageResource(defaultPic);
-                    allPic = false;
-                }
-            });
-        }
-        else if (!pic1 && !pic2 && pic3 && !pic4){
-            holder.ivProfileAll.setVisibility(View.VISIBLE);
-            holder.ivProfilePic1.setVisibility(View.INVISIBLE);
-            holder.ivProfilePic2.setVisibility(View.INVISIBLE);
-            holder.ivProfilePic3.setVisibility(View.INVISIBLE);
-            holder.ivProfilePic4.setVisibility(View.INVISIBLE);
-
-            holder.pbLoadingAllPic.setVisibility(View.VISIBLE);
-            storageRef.child("images/" + programsDataList.get(2).getVodId()).
-                    getDownloadUrl().addOnSuccessListener(uri -> {
-                holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfileAll);
-                allPic = true;
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    System.out.println("failed downloading main pic");
-                    holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
-                    holder.ivProfileAll.setImageResource(defaultPic);
-                    allPic = false;
-                }
-            });
-        }
-        else if (!pic1 && !pic2 && !pic3 && pic4){
-            holder.ivProfileAll.setVisibility(View.VISIBLE);
-            holder.ivProfilePic1.setVisibility(View.INVISIBLE);
-            holder.ivProfilePic2.setVisibility(View.INVISIBLE);
-            holder.ivProfilePic3.setVisibility(View.INVISIBLE);
-            holder.ivProfilePic4.setVisibility(View.INVISIBLE);
-
-            holder.pbLoadingAllPic.setVisibility(View.VISIBLE);
-            storageRef.child("images/" + programsDataList.get(3).getVodId()).
-                    getDownloadUrl().addOnSuccessListener(uri -> {
-                holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfileAll);
-                allPic = true;
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    System.out.println("failed downloading main pic");
-                    holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
-                    holder.ivProfileAll.setImageResource(defaultPic);
-                    allPic = false;
-                }
-            });
-        }*/
-
     }
     private void playlistPicLocal(@NonNull PlayListViewHolder holder, ArrayList<ProgramsData> programsDataList) {
         if (programsDataList.size() == 0) {
@@ -590,6 +521,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                         commit();
             }
         });
+
         itemView.setOnLongClickListener(v -> {
             if (!isDoublePressed) {
                 ivDeletePlaylist.setVisibility(View.VISIBLE);
@@ -609,7 +541,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                 MenuPopupHelper optionsMenu = new MenuPopupHelper(context, menuBuilder, ivDeletePlaylist);
                 optionsMenu.setForceShowIcon(true);
 
-                if (playlist.getName().equals("מועדפים") || playlist.getName().equals("מומלצים")) {
+                if (playlist.getName().equals("מועדפים") || playlist.getName().contains("מומלצי")) {
                     menuBuilder.setCallback(new MenuBuilder.Callback() {
                         @Override
                         public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {

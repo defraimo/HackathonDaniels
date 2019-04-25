@@ -9,12 +9,16 @@ import android.os.AsyncTask;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import daniel.rad.radiotabsdrawer.DrawerActivity;
 import daniel.rad.radiotabsdrawer.MainActivity;
 import daniel.rad.radiotabsdrawer.admin.AdminActivity;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs.MusicLibrary;
+import daniel.rad.radiotabsdrawer.playlist.Playlist;
+import daniel.rad.radiotabsdrawer.playlist.PlaylistsJsonWriter;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
 
@@ -94,10 +98,36 @@ public class InitMusicLibrary extends AsyncTask<Void, Void, List<ProgramsData>> 
                 mainActivity.startActivity(intent);
                 mainActivity.finish();
             } else {
+                recommendedPlaylist();
+
                 Intent intent = new Intent(mainActivity, DrawerActivity.class);
                 mainActivity.startActivity(intent);
                 mainActivity.finish();
             }
+        }
+    }
+
+    private void recommendedPlaylist() {
+        ArrayList<ProgramsData> randomPrograms = new ArrayList<>();
+        int currentWeek = Calendar.WEEK_OF_YEAR;
+        SharedPreferences recommendedUpdate = mainActivityWeakReference.get().getSharedPreferences("recommendedUpdate", Context.MODE_PRIVATE);
+        int prefWeek = recommendedUpdate.getInt("currentWeek", -1);
+
+        if (currentWeek != prefWeek) {
+            List<ProgramsData> programs = ProgramsReceiver.getPrograms();
+            Collections.shuffle(programs);
+            for (int i = 0; i < 6; i++) {
+                ProgramsData programsData = programs.get(i);
+                randomPrograms.add(programsData);
+            }
+
+            Playlist playlist = new Playlist("מומלצי השבוע", randomPrograms);
+            recommendedUpdate.edit().putInt("currentWeek", currentWeek).apply();
+            new PlaylistsJsonWriter(
+                    playlist,
+                    mainActivityWeakReference.get(),
+                    PlaylistsJsonWriter.RECOMMENDED_PLAYLIST
+            ).execute();
         }
     }
 }
