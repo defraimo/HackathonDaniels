@@ -98,8 +98,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
         return playlists.size();
     }
 
-    private void playlistPics(PlayListViewHolder holder,ArrayList<ProgramsData> programsDataList) {
-        if (programsDataList.size() == 0){
+    private void playlistPics(PlayListViewHolder holder, ArrayList<ProgramsData> programsDataList) {
+        if (programsDataList.size() == 0) {
             holder.ivProfileAll.setVisibility(View.VISIBLE);
             holder.ivProfilePic1.setVisibility(View.INVISIBLE);
             holder.ivProfilePic2.setVisibility(View.INVISIBLE);
@@ -107,8 +107,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             holder.ivProfilePic4.setVisibility(View.INVISIBLE);
 
             holder.ivProfileAll.setImageResource(defaultPic);
-        }
-        else if (programsDataList.size() == 1) {
+        } else if (programsDataList.size() == 1) {
             holder.pbLoadingAllPic.setVisibility(View.VISIBLE);
             storageRef.child("images/" + programsDataList.get(0).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
@@ -131,7 +130,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             holder.ivProfilePic2.setVisibility(View.INVISIBLE);
             holder.ivProfilePic3.setVisibility(View.INVISIBLE);
             holder.ivProfilePic4.setVisibility(View.INVISIBLE);
-        } else if (programsDataList.size() == 2){
+        } else if (programsDataList.size() == 2) {
             holder.pbLoadingPic1.setVisibility(View.VISIBLE);
             storageRef.child("images/" + programsDataList.get(0).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
@@ -207,8 +206,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             holder.ivProfilePic2.setVisibility(View.VISIBLE);
             holder.ivProfilePic3.setVisibility(View.VISIBLE);
             holder.ivProfilePic4.setVisibility(View.VISIBLE);
-        }
-        else if (programsDataList.size() == 3){
+        } else if (programsDataList.size() == 3) {
             holder.pbLoadingPic1.setVisibility(View.VISIBLE);
             storageRef.child("images/" + programsDataList.get(0).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
@@ -282,8 +280,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             holder.ivProfilePic2.setVisibility(View.VISIBLE);
             holder.ivProfilePic3.setVisibility(View.VISIBLE);
             holder.ivProfilePic4.setVisibility(View.VISIBLE);
-        }
-        else if (programsDataList.size() >= 4){
+        } else if (programsDataList.size() >= 4) {
             holder.pbLoadingPic1.setVisibility(View.VISIBLE);
             storageRef.child("images/" + programsDataList.get(0).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
@@ -363,6 +360,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             holder.ivProfilePic4.setVisibility(View.VISIBLE);
         }
     }
+
     private void playlistPicLocal(@NonNull PlayListViewHolder holder, ArrayList<ProgramsData> programsDataList) {
         if (programsDataList.size() == 0) {
             holder.ivProfileAll.setImageResource(defaultPic);
@@ -524,6 +522,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
 
         itemView.setOnLongClickListener(v -> {
             if (!isDoublePressed) {
+                if(playlist.getName().contains("מומלצי"))return false;
                 ivDeletePlaylist.setVisibility(View.VISIBLE);
                 mShakeAnimation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.shake);
                 itemView.startAnimation(mShakeAnimation);
@@ -541,7 +540,8 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                 MenuPopupHelper optionsMenu = new MenuPopupHelper(context, menuBuilder, ivDeletePlaylist);
                 optionsMenu.setForceShowIcon(true);
 
-                if (playlist.getName().equals("מועדפים") || playlist.getName().contains("מומלצי")) {
+
+                if (playlist.getName().equals("מועדפים")) {
                     menuBuilder.setCallback(new MenuBuilder.Callback() {
                         @Override
                         public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
@@ -551,7 +551,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                                     activity.getSupportFragmentManager().
                                             beginTransaction().
                                             addToBackStack("AddProgramToPlaylist").
-                                            replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(playlist, playlists,false)).
+                                            replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(playlist, playlists, false)).
                                             commit();
                                     return true;
                                 case R.id.itemRemoveProgram:
@@ -575,6 +575,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                             }
                             return false;
                         }
+
                         @Override
                         public void onMenuModeChange(MenuBuilder menuBuilder) {
                         }
@@ -589,7 +590,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                                     activity.getSupportFragmentManager().
                                             beginTransaction().
                                             addToBackStack("addProgramToPlaylist").
-                                            replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(playlist, playlists,false)).
+                                            replace(R.id.playlist_frame, CreatePlaylistFragment.newInstance(playlist, playlists, false)).
                                             commit();
                                     return true;
                                 case R.id.itemRemoveProgram:
@@ -605,7 +606,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                                             setTitle("האם אתה בטוח שתרצה להסיר רשימה זו?").
                                             setPositiveButton("כן", (dialog, which) -> {
                                                 Toast.makeText(context, "הרשימה הוסרה", Toast.LENGTH_SHORT).show();
-                                                new PlaylistsJsonWriter(playlist, context , PlaylistsJsonWriter.DELETE_PLAYLIST).execute();
+                                                new PlaylistsJsonWriter(playlist, context, PlaylistsJsonWriter.DELETE_PLAYLIST).execute();
 
                                                 mShakeAnimation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.stop_shake);
                                                 itemView.startAnimation(mShakeAnimation);
@@ -622,6 +623,7 @@ class PlayListViewHolder extends RecyclerView.ViewHolder {
                             }
                             return false;
                         }
+
                         @Override
                         public void onMenuModeChange(MenuBuilder menuBuilder) {
                         }
