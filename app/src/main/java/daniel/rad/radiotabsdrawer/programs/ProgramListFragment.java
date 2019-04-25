@@ -49,6 +49,7 @@ public class ProgramListFragment extends Fragment {
 
             Intent intent = new Intent("currentProgram");
             intent.putExtra("program",chosenProgram);
+            intent.putExtra("isFromPlaylist",false);
             LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
         };
 

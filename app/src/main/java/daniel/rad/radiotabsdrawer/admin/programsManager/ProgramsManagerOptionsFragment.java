@@ -51,12 +51,10 @@ public class ProgramsManagerOptionsFragment extends Fragment {
 
     TextView tvManagerProgramName;
     ImageView ivAddStudent;
-    ImageView ivAddPicFromFB;
     ImageView ivEditPic;
     EditText etSearchUser;
     ImageView ivUserSearch;
     TextView tvAddStudent;
-    TextView tvAddPicFromFB;
     RecyclerView rvChosenStudent;
     RecyclerView rvStudentsList;
     public ImageView ivProgramImage;
@@ -123,7 +121,6 @@ public class ProgramsManagerOptionsFragment extends Fragment {
         tvManagerProgramName.setSelected(true);
 
         ivAddStudent = view.findViewById(R.id.ivAddStudent);
-        ivAddPicFromFB = view.findViewById(R.id.ivAddPicFromFB);
         ivEditPic = view.findViewById(R.id.ivEditPic);
         ivProgramImage = view.findViewById(R.id.ivProgramImage);
         rvChosenStudent = view.findViewById(R.id.rvChosenStudent);
@@ -131,32 +128,9 @@ public class ProgramsManagerOptionsFragment extends Fragment {
         etSearchUser = view.findViewById(R.id.etSearchUser);
         ivUserSearch = view.findViewById(R.id.ivUserSearch);
         tvAddStudent = view.findViewById(R.id.tvAddStudent);
-        tvAddPicFromFB = view.findViewById(R.id.tvAddPicFromFB);
         pbAllUsers = view.findViewById(R.id.pbAllUsers);
         pbChosenStudents = view.findViewById(R.id.pbChosenStudents);
         pbLoadingPic = view.findViewById(R.id.pbLoadingPic);
-
-        ivAddStudent.setOnClickListener(v -> {
-            if (!isButtonOnePressed){
-                ivAddStudent.setImageResource(R.drawable.ic_search_bar);
-                tvAddStudent.setTextColor(Color.parseColor("#FFFFFF"));
-                isButtonOnePressed = true;
-                ivAddPicFromFB.setImageResource(R.drawable.ic_search_bar_unpressed);
-                tvAddPicFromFB.setTextColor(Color.parseColor("#9B9B9B"));
-                isButtonTwoPressed = false;
-            }
-        });
-
-        ivAddPicFromFB.setOnClickListener(v -> {
-            if (!isButtonTwoPressed){
-                ivAddPicFromFB.setImageResource(R.drawable.ic_search_bar);
-                tvAddPicFromFB.setTextColor(Color.parseColor("#FFFFFF"));
-                isButtonTwoPressed = true;
-                ivAddStudent.setImageResource(R.drawable.ic_search_bar_unpressed);
-                tvAddStudent.setTextColor(Color.parseColor("#9B9B9B"));
-                isButtonOnePressed = false;
-            }
-        });
 
         ivEditPic.setOnClickListener(v -> {
             showDialog();

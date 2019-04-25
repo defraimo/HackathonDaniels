@@ -8,46 +8,37 @@
     android:background="@color/colorPrimaryDark"
     tools:context=".admin.programsManager.ProgramsManagerOptionsFragment">
 
-    <ImageView
-        android:id="@+id/ivSearch3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_user_search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivAddStudent" />
-
     <EditText
         android:id="@+id/etSearchUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="7"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="#BBB9B9"
+        android:ems="8"
         android:fontFamily="sans-serif-medium"
         android:hint="חיפוש"
         android:inputType="textPersonName"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:textColor="#8F18191A"
-        android:textColorHint="#8F090A0A"
+        android:textColor="#FFF"
+        android:textColorHint="#FFF"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/ivSearch3"
-        app:layout_constraintEnd_toEndOf="@+id/ivSearch3"
-        app:layout_constraintStart_toStartOf="@+id/ivSearch3"
-        app:layout_constraintTop_toTopOf="@+id/ivSearch3" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddStudent" />
 
     <ImageView
         android:id="@+id/ivUserSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:src="@drawable/ic_grey_search_symbol"
-        app:layout_constraintBottom_toBottomOf="@+id/ivSearch3"
+        android:src="@drawable/ic_white_search_symbol"
+        app:layout_constraintBottom_toBottomOf="@+id/etSearchUser"
         app:layout_constraintStart_toStartOf="@+id/etSearchUser"
-        app:layout_constraintTop_toTopOf="@+id/ivSearch3"
-        tools:srcCompat="@drawable/ic_grey_search_symbol" />
+        app:layout_constraintTop_toTopOf="@+id/etSearchUser"
+        tools:srcCompat="@drawable/ic_white_search_symbol" />
 
     <ImageView
         android:id="@+id/ivAddPlaylist6"
@@ -73,21 +64,13 @@
         android:id="@+id/ivAddStudent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_search_bar"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_search_bar_long"
         app:layout_constraintBottom_toBottomOf="@+id/tvAddStudent"
-        app:layout_constraintEnd_toEndOf="@+id/tvAddStudent"
-        app:layout_constraintStart_toStartOf="@+id/tvAddStudent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvAddStudent" />
-
-    <ImageView
-        android:id="@+id/ivAddPicFromFB"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_search_bar_unpressed"
-        app:layout_constraintBottom_toBottomOf="@+id/tvAddPicFromFB"
-        app:layout_constraintEnd_toEndOf="@+id/tvAddPicFromFB"
-        app:layout_constraintStart_toStartOf="@+id/tvAddPicFromFB"
-        app:layout_constraintTop_toTopOf="@+id/tvAddPicFromFB" />
 
     <ImageView
         android:id="@+id/ivNameList2"
@@ -133,22 +116,6 @@
         android:textColor="#FFF"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline12"
-        app:layout_constraintTop_toTopOf="@+id/guideline13" />
-
-    <TextView
-        android:id="@+id/tvAddPicFromFB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        android:paddingStart="4dp"
-        android:paddingEnd="4dp"
-        android:text="הוסף תמונה מהתלמיד"
-        android:textColor="#9B9B9B"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline12"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline13" />
 
@@ -237,12 +204,12 @@
         android:id="@+id/rvStudentsList"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline17"
         app:layout_constraintStart_toStartOf="@+id/guideline16"
-        app:layout_constraintTop_toBottomOf="@+id/ivSearch3"
+        app:layout_constraintTop_toBottomOf="@+id/etSearchUser"
         tools:listitem="@layout/user_in_list_item" />
 
     <ProgressBar

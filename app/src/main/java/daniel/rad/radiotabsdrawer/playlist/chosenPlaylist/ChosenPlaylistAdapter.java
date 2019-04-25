@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
@@ -74,7 +75,12 @@ public class ChosenPlaylistAdapter extends RecyclerView.Adapter<ChosenPlaylistVi
         holder.ivPlay.setOnClickListener(v -> {
             Intent intent = new Intent("currentProgram");
             intent.putExtra("program",programsData);
+            intent.putExtra("isFromPlaylist",true);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+            Intent intentPlaylist = new Intent("currentlyPlayingPlaylist");
+            intentPlaylist.putExtra("playlist",(ArrayList) programsDataList);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intentPlaylist);
         });
 
         holder.programsData = programsData;
@@ -89,7 +95,6 @@ public class ChosenPlaylistAdapter extends RecyclerView.Adapter<ChosenPlaylistVi
 class ChosenPlaylistViewHolder extends RecyclerView.ViewHolder{
 
     MediaPlayerFragment mediaPlayerFragment;
-    MediaBrowserHelper mMediaBrowserHelper;
 
     TextView tvProgramName;
     CircleImageView ivProfilePic;

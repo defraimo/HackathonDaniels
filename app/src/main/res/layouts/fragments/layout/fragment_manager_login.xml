@@ -23,17 +23,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline9" />
 
-    <ImageView
-        android:id="@+id/imageView8"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:src="@color/colorDark"
-        app:layout_constraintBottom_toTopOf="@+id/guideline9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.625" />
-
     <android.support.constraint.Guideline
         android:id="@+id/guideline9"
         android:layout_width="wrap_content"
@@ -67,83 +56,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView10" />
 
-    <ImageView
-        android:id="@+id/ivPasswordTab"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/ic_bar_grey"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/ivEmailTab"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/ivEmailTab"
-        app:layout_constraintTop_toBottomOf="@+id/ivEmailTab"
-        app:layout_constraintVertical_bias="0.17000002" />
-
-    <ImageView
-        android:id="@+id/ivEmailTab"
+    <EditText
+        android:id="@+id/etAdminUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:src="@drawable/ic_bar_grey"
+        android:ems="10"
+        android:hint="אימייל"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/colorAccent"
+        android:backgroundTint="#FFF"
+        android:textColorHint="#59999797"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tvFb"
         app:layout_constraintStart_toStartOf="@+id/tvFb"
         app:layout_constraintTop_toBottomOf="@+id/tvFb"
-        app:layout_constraintVertical_bias="0.19" />
-
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="שם משתמש"
-        android:textAlignment="textEnd"
-        android:textColor="#FFF"
-        app:layout_constraintBottom_toTopOf="@+id/ivEmailTab"
-        app:layout_constraintEnd_toEndOf="@+id/ivEmailTab" />
-
-    <TextView
-        android:id="@+id/textView15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="סיסמא"
-        android:textColor="#FFF"
-        app:layout_constraintBottom_toTopOf="@+id/ivPasswordTab"
-        app:layout_constraintEnd_toEndOf="@+id/ivPasswordTab" />
-
-    <EditText
-        android:id="@+id/etAdminUserName"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="@+id/ivEmailTab"
-        app:layout_constraintEnd_toEndOf="@+id/ivEmailTab"
-        app:layout_constraintStart_toStartOf="@+id/ivEmailTab"
-        app:layout_constraintTop_toTopOf="@+id/ivEmailTab" />
+        app:layout_constraintVertical_bias="0.100000024" />
 
     <EditText
         android:id="@+id/etAdminPassword"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="#FFF"
         android:ems="10"
+        android:gravity="right"
+        android:hint="סיסמא"
         android:inputType="textPassword"
         android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="@+id/ivPasswordTab"
-        app:layout_constraintEnd_toEndOf="@+id/ivPasswordTab"
-        app:layout_constraintStart_toStartOf="@+id/ivPasswordTab"
-        app:layout_constraintTop_toTopOf="@+id/ivPasswordTab" />
+        android:textColorHint="#59999797"
+        app:layout_constraintEnd_toEndOf="@+id/etAdminUserName"
+        app:layout_constraintStart_toStartOf="@+id/etAdminUserName"
+        app:layout_constraintTop_toBottomOf="@+id/etAdminUserName" />
 
     <ImageView
         android:id="@+id/ivEnterApp"
@@ -154,8 +99,8 @@
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_button_blue_long"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/ivPasswordTab"
-        app:layout_constraintStart_toStartOf="@+id/etAdminPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etAdminPassword" />
 
     <TextView
@@ -183,5 +128,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etAdminPassword" />
+
+    <ImageView
+        android:id="@+id/imageView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_password"
+        app:layout_constraintBottom_toBottomOf="@+id/etAdminPassword"
+        app:layout_constraintStart_toEndOf="@+id/etAdminPassword"
+        app:layout_constraintTop_toTopOf="@+id/etAdminPassword" />
+
+    <ImageView
+        android:id="@+id/imageView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_email"
+        app:layout_constraintBottom_toBottomOf="@+id/etAdminUserName"
+        app:layout_constraintStart_toEndOf="@+id/etAdminUserName"
+        app:layout_constraintTop_toTopOf="@+id/etAdminUserName" />
 
 </android.support.constraint.ConstraintLayout>

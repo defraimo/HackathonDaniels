@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import daniel.rad.radiotabsdrawer.login.User;
@@ -68,6 +69,8 @@ public class MediaPlayerFragment extends Fragment {
     static public boolean mIsPlaying;
 //    static public boolean mIsLoading;
 
+    ArrayList<ProgramsData> programsFromPlaylist;
+
     public MediaPlayerFragment() {
         // Required empty public constructor
     }
@@ -103,7 +106,7 @@ public class MediaPlayerFragment extends Fragment {
                 }
                 else {
                     //when playlist selected
-                    programsList = ProgramsReceiver.getPrograms(); //TODO: change to the playlist list
+                    programsList = programsFromPlaylist;
                 }
                 for (int i = 0; i < programsList.size(); i++) {
                     if (programsList.get(i).getProgramName().equals(currentlyPlayingProgram)){
@@ -130,8 +133,16 @@ public class MediaPlayerFragment extends Fragment {
             bnForward.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnForward.animate().scaleX(1).scaleY(1).setDuration(200);
 
-                //getting the next program
-                List<ProgramsData> programsList = ProgramsReceiver.getPrograms();
+                //getting the previous program
+                List<ProgramsData> programsList;
+                if (!fromPlaylist) {
+                    //when no playlist selected
+                    programsList = ProgramsReceiver.getPrograms();
+                }
+                else {
+                    //when playlist selected
+                    programsList = programsFromPlaylist;
+                }
                 for (int i = 0; i < programsList.size(); i++) {
                     if (programsList.get(i).getProgramName().equals(currentlyPlayingProgram)){
                         if (programsList.size()-i == 1){
@@ -223,6 +234,7 @@ public class MediaPlayerFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             programsData = intent.getParcelableExtra("program");
             if (programsData.getProgramName().equals(currentlyPlayingProgram)) return;
+            fromPlaylist = intent.getBooleanExtra("isFromPlaylist", false);
             tvProgramName.setText(programsData.getProgramName());
             setProgressBarVisible();
 
@@ -271,6 +283,7 @@ public class MediaPlayerFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             String programToPlay = intent.getStringExtra("program");
             if (!programToPlay.equals(currentlyPlayingProgram)){
+                System.out.println(programToPlay);
                 shouldStartPlaying = true;
                 currentlyPlayingProgram = programToPlay;
                 mMediaBrowserHelper = new MediaPlayerFragment.MediaBrowserConnection(getContext());
@@ -278,6 +291,26 @@ public class MediaPlayerFragment extends Fragment {
 
                 mMediaBrowserHelper.onStart();
                 setProgressBarInvisible();
+            }
+        }
+    };
+
+    BroadcastReceiver playingPlaylistReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            programsFromPlaylist = intent.getParcelableArrayListExtra("playlist");
+            System.out.println(programsFromPlaylist);
+            if (programsFromPlaylist != null) {
+                fromPlaylist = true;
+//                if (!programsFromPlaylist.get(0).getProgramName().equals(currentlyPlayingProgram)) {
+//                    shouldStartPlaying = true;
+//                    currentlyPlayingProgram = programsFromPlaylist.get(0).getProgramName();
+//                    mMediaBrowserHelper = new MediaPlayerFragment.MediaBrowserConnection(getContext());
+//                    mMediaBrowserHelper.registerCallback(new MediaPlayerFragment.MediaBrowserListener());
+//
+//                    mMediaBrowserHelper.onStart();
+//                    setProgressBarInvisible();
+//                }
             }
         }
     };
@@ -311,6 +344,7 @@ public class MediaPlayerFragment extends Fragment {
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastReceiver);
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(playingNowReceiver);
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(isLoggedIn);
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(playingPlaylistReceiver);
     }
 
     @Override
@@ -319,6 +353,7 @@ public class MediaPlayerFragment extends Fragment {
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver,new IntentFilter("currentProgram"));
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(playingNowReceiver,new IntentFilter("programToPlay"));
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(isLoggedIn,new IntentFilter("loggedOut"));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(playingPlaylistReceiver,new IntentFilter("currentlyPlayingPlaylist"));
     }
 
     /**

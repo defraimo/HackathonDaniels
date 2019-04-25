@@ -45,46 +45,6 @@ public class MusicLibrary {
     private static final TreeMap<String, MediaMetadataCompat> music = new TreeMap<>();
     private static final HashMap<String, Integer> albumRes = new HashMap<>();
     private static final HashMap<String, String> musicFileName = new HashMap<>();
-    private static List<ProgramsData> programs;
-
-//    static {
-//        createMediaMetadataCompat(
-//                "Jazz_In_Paris",
-//                "Jazz in Paris",
-//                "Media Right Productions",
-//                103,
-//                TimeUnit.SECONDS,
-//                "jazz_in_paris.mp3",
-//                R.drawable.profile_pic2,
-//                "album_jazz_blues");
-//        createMediaMetadataCompat(
-//                "The_Coldest_Shoulder",
-//                "The Coldest Shoulder",
-//                "The 126ers",
-//                160,
-//                TimeUnit.SECONDS,
-//                "the_coldest_shoulder.mp3",
-//                R.drawable.profile_pic3,
-//                "album_youtube_audio_library_rock_2");
-//    }
-
-//    static {
-//        getBroadcasts();
-//        for (int i = 0; i < programs.size(); i++) {
-//            ProgramsData model = programs.get(i);
-//            createMediaMetadataCompat(
-//                   model.getVodId(),
-//                    model.getProgramName(),
-//                    model.getStudentName(),
-//                    getDuration(model),
-//                    model.getDurationUnit(),
-//                    model.getMediaSource(),
-//                    model.getProfilePic(),
-//                    model.getCreationDate(),
-//                    false
-//            );
-//        }
-//    }
 
     public static void playingPrograms(ArrayList<ProgramsData> programs) {
         for (int i = 0; i < programs.size(); i++) {
@@ -130,32 +90,32 @@ public class MusicLibrary {
     }
 
     public static void playingProgramsAsync(ProgramsData model, Context context) {
-        List<ProgramsData> loadedPrograms = ProgramsReceiver.getPrograms();
-
-        for (int i = 0; i < loadedPrograms.size(); i++) {
-            if (loadedPrograms.get(i) != null) {
-                if (loadedPrograms.get(i).getProgramName().equals(model.getProgramName())) {
-                    if (loadedPrograms.get(i).isLoaded()) {
-                        createMediaMetadataCompat(
-                                model.getVodId(),
-                                model.getProgramName(),
-                                model.getStudentName(),
-                                model.getDuration(),
-                                model.getDurationUnit(),
-                                model.getMediaSource(),
-                                model.getProfilePic(),
-                                String.valueOf(model.getCreationDate()),
-                                false
-                        );
-                        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
-                        Intent intent = new Intent("programToPlay");
-                        intent.putExtra("program", model.getProgramName());
-                        localBroadcastManager.sendBroadcast(intent);
-                        return;
-                    }
-                }
-            }
-        }
+//        List<ProgramsData> loadedPrograms = ProgramsReceiver.getPrograms();
+//
+//        for (int i = 0; i < loadedPrograms.size(); i++) {
+//            if (loadedPrograms.get(i) != null) {
+//                if (loadedPrograms.get(i).getProgramName().equals(model.getProgramName())) {
+//                    if (loadedPrograms.get(i).isLoaded()) {
+//                        createMediaMetadataCompat(
+//                                model.getVodId(),
+//                                model.getProgramName(),
+//                                model.getStudentName(),
+//                                model.getDuration(),
+//                                model.getDurationUnit(),
+//                                model.getMediaSource(),
+//                                model.getProfilePic(),
+//                                String.valueOf(model.getCreationDate()),
+//                                false
+//                        );
+//                        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+//                        Intent intent = new Intent("programToPlay");
+//                        intent.putExtra("program", model.getProgramName());
+//                        localBroadcastManager.sendBroadcast(intent);
+//                        return;
+//                    }
+//                }
+//            }
+//        }
         MediaPlayer mp = new MediaPlayer();
         mp.reset();
         try {

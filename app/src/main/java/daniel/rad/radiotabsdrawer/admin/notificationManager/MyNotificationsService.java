@@ -90,7 +90,6 @@ public class MyNotificationsService extends IntentService {
 
 //        foregroundService(notification);
 
-
         NotificationManagerCompat.from(MyNotificationsService.this).notify(123,notification);
 
     }
