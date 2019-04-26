@@ -59,7 +59,6 @@ public class ZoomedPictureDialogFragment extends DialogFragment {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    System.out.println("failed downloading pic");
                     pbLoadingZoomedPic.setVisibility(View.INVISIBLE);
 
                     String uriPic = getArguments().getString("uriPic");

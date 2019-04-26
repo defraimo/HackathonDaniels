@@ -159,7 +159,6 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                System.out.println("failed downloading pic");
                 holder.pbLoadingProgramPic.setVisibility(View.INVISIBLE);
                 holder.ivProfilePic.setImageResource(R.drawable.ic_default_pic);
             }

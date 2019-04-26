@@ -118,7 +118,7 @@ public class ProfileActivity extends AppCompatActivity {
                         currentUser.setUriPic(uri);
                         Glide.with(getApplicationContext()).load(uri).into(ivProfilePic);
 
-                    }).addOnFailureListener(e -> System.out.println("failed downloading pic"));
+                    }).addOnFailureListener(e -> {});
                 }
 
                 @Override

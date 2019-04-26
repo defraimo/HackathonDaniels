@@ -246,7 +246,6 @@ public class ProgramsManagerOptionsFragment extends Fragment {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                System.out.println("failed downloading pic");
                 pbLoadingPic.setVisibility(View.INVISIBLE);
                 ivProgramImage.setImageResource(R.drawable.ic_default_pic);
                 if (imgDecodableString != null){

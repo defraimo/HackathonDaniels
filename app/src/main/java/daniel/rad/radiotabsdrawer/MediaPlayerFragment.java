@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -56,7 +57,7 @@ public class MediaPlayerFragment extends Fragment {
 
     public MediaBrowserHelper mMediaBrowserHelper;
 
-    ProgramsData programsData;
+    public static ProgramsData programsData;
     boolean fromUser;
 
     public static String currentlyPlayingProgram;
@@ -69,7 +70,7 @@ public class MediaPlayerFragment extends Fragment {
     static public boolean mIsPlaying;
 //    static public boolean mIsLoading;
 
-    ArrayList<ProgramsData> programsFromPlaylist;
+    static ArrayList<ProgramsData> programsFromPlaylist;
 
     public MediaPlayerFragment() {
         // Required empty public constructor
@@ -91,74 +92,42 @@ public class MediaPlayerFragment extends Fragment {
         initProgressBar(view);
 
         bnBack.setOnClickListener(v -> {
-//            mIsLoading = true;
             setProgressBarVisible();
             shouldStartPlaying = true;
             mMediaBrowserHelper.getTransportControls().stop();
             bnBack.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
                 bnBack.animate().scaleX(1).scaleY(1).setDuration(200);
+            });
 
-                //getting the previous program
-                List<ProgramsData> programsList;
-                if (!fromPlaylist) {
-                    //when no playlist selected
-                    programsList = ProgramsReceiver.getPrograms();
-                }
-                else {
-                    //when playlist selected
-                    programsList = programsFromPlaylist;
-                }
-                for (int i = 0; i < programsList.size(); i++) {
-                    if (programsList.get(i).getProgramName().equals(currentlyPlayingProgram)){
-                        if (i == 0){
-                            nextProgramToPlay = programsList.get(programsList.size()-1);
-                        }
-                        else {
-                            nextProgramToPlay = programsList.get(i-1);
-                        }
+            //getting the previous program
+            List<ProgramsData> programsList;
+            if (!fromPlaylist) {
+                //when no playlist selected
+                programsList = ProgramsReceiver.getPrograms();
+            }
+            else {
+                //when playlist selected
+                programsList = programsFromPlaylist;
+            }
+            for (int i = 0; i < programsList.size(); i++) {
+                if (programsList.get(i).getProgramName().equals(currentlyPlayingProgram)){
+                    if (i == 0){
+                        nextProgramToPlay = programsList.get(programsList.size()-1);
+                    }
+                    else {
+                        nextProgramToPlay = programsList.get(i-1);
                     }
                 }
-                MusicLibrary.playingProgramsAsync(nextProgramToPlay,getContext());
+            }
+            MusicLibrary.playingProgramsAsync(nextProgramToPlay,getContext());
 
-                mMediaBrowserHelper.getTransportControls().skipToPrevious();
-                bnPlay.setImageResource(R.drawable.ic_pause);
-                makeTopRadioPlay();
-            });
+            mMediaBrowserHelper.getTransportControls().skipToPrevious();
+            bnPlay.setImageResource(R.drawable.ic_pause);
+            makeTopRadioPlay();
         });
 
         bnForward.setOnClickListener(v -> {
-            setProgressBarVisible();
-            shouldStartPlaying = true;
-            mMediaBrowserHelper.getTransportControls().stop();
-            bnForward.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
-                bnForward.animate().scaleX(1).scaleY(1).setDuration(200);
-
-                //getting the previous program
-                List<ProgramsData> programsList;
-                if (!fromPlaylist) {
-                    //when no playlist selected
-                    programsList = ProgramsReceiver.getPrograms();
-                }
-                else {
-                    //when playlist selected
-                    programsList = programsFromPlaylist;
-                }
-                for (int i = 0; i < programsList.size(); i++) {
-                    if (programsList.get(i).getProgramName().equals(currentlyPlayingProgram)){
-                        if (programsList.size()-i == 1){
-                            nextProgramToPlay = programsList.get(0);
-                        }
-                        else {
-                            nextProgramToPlay = programsList.get(i+1);
-                        }
-                    }
-                }
-                MusicLibrary.playingProgramsAsync(nextProgramToPlay,getContext());
-
-                mMediaBrowserHelper.getTransportControls().skipToNext();
-                bnPlay.setImageResource(R.drawable.ic_pause);
-                makeTopRadioPlay();
-            });
+            goForward();
         });
 
         bnPlay.setOnClickListener(v -> {
@@ -170,6 +139,40 @@ public class MediaPlayerFragment extends Fragment {
         mMediaBrowserHelper.registerCallback(new MediaPlayerFragment.MediaBrowserListener());
 
         return view;
+    }
+
+    private void goForward() {
+        setProgressBarVisible();
+        shouldStartPlaying = true;
+        mMediaBrowserHelper.getTransportControls().stop();
+        bnForward.animate().scaleX(1.2f).scaleY(1.2f).setDuration(200).withEndAction(() -> {
+            bnForward.animate().scaleX(1).scaleY(1).setDuration(200);
+        });
+
+        //getting the previous program
+        List<ProgramsData> programsList;
+        if (!fromPlaylist) {
+            //when no playlist selected
+            programsList = ProgramsReceiver.getPrograms();
+        }
+        else {
+            //when playlist selected
+            programsList = programsFromPlaylist;
+        }
+        for (int i = 0; i < programsList.size(); i++) {
+            if (programsList.get(i).getProgramName().equals(currentlyPlayingProgram)){
+                if (programsList.size()-i == 1 || i == programsList.size()-1){
+                    nextProgramToPlay = programsList.get(0);
+                }
+                else {
+                    nextProgramToPlay = programsList.get(i+1);
+                }
+            }
+        }
+        MusicLibrary.playingProgramsAsync(nextProgramToPlay,getContext());
+
+        bnPlay.setImageResource(R.drawable.ic_pause);
+        makeTopRadioPlay();
     }
 
     public void initProgressBar(View view) {
@@ -278,6 +281,16 @@ public class MediaPlayerFragment extends Fragment {
         }
     };
 
+    BroadcastReceiver goToNextProgram = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean goToNext = intent.getBooleanExtra("goToNext", false);
+            if (goToNext){
+                goForward();
+            }
+        }
+    };
+
     BroadcastReceiver playingNowReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -290,6 +303,7 @@ public class MediaPlayerFragment extends Fragment {
                 mMediaBrowserHelper.registerCallback(new MediaPlayerFragment.MediaBrowserListener());
 
                 mMediaBrowserHelper.onStart();
+//                mMediaBrowserHelper.getTransportControls().play();
                 setProgressBarInvisible();
             }
         }
@@ -302,15 +316,6 @@ public class MediaPlayerFragment extends Fragment {
             System.out.println(programsFromPlaylist);
             if (programsFromPlaylist != null) {
                 fromPlaylist = true;
-//                if (!programsFromPlaylist.get(0).getProgramName().equals(currentlyPlayingProgram)) {
-//                    shouldStartPlaying = true;
-//                    currentlyPlayingProgram = programsFromPlaylist.get(0).getProgramName();
-//                    mMediaBrowserHelper = new MediaPlayerFragment.MediaBrowserConnection(getContext());
-//                    mMediaBrowserHelper.registerCallback(new MediaPlayerFragment.MediaBrowserListener());
-//
-//                    mMediaBrowserHelper.onStart();
-//                    setProgressBarInvisible();
-//                }
             }
         }
     };
@@ -345,6 +350,7 @@ public class MediaPlayerFragment extends Fragment {
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(playingNowReceiver);
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(isLoggedIn);
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(playingPlaylistReceiver);
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(goToNextProgram);
     }
 
     @Override
@@ -354,6 +360,7 @@ public class MediaPlayerFragment extends Fragment {
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(playingNowReceiver,new IntentFilter("programToPlay"));
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(isLoggedIn,new IntentFilter("loggedOut"));
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(playingPlaylistReceiver,new IntentFilter("currentlyPlayingPlaylist"));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(goToNextProgram,new IntentFilter("nextProgram"));
     }
 
     /**

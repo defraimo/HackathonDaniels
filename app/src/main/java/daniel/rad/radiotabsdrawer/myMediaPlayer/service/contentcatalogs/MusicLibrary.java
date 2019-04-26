@@ -45,6 +45,7 @@ public class MusicLibrary {
     private static final TreeMap<String, MediaMetadataCompat> music = new TreeMap<>();
     private static final HashMap<String, Integer> albumRes = new HashMap<>();
     private static final HashMap<String, String> musicFileName = new HashMap<>();
+    private static ProgramsData modelProgram;
 
     public static void playingPrograms(ArrayList<ProgramsData> programs) {
         for (int i = 0; i < programs.size(); i++) {
@@ -116,6 +117,7 @@ public class MusicLibrary {
 //                }
 //            }
 //        }
+        modelProgram = model;
         MediaPlayer mp = new MediaPlayer();
         mp.reset();
         try {
@@ -136,11 +138,16 @@ public class MusicLibrary {
                     String.valueOf(model.getCreationDate()),
                     false
             );
+            modelProgram.setDuration(mp1.getDuration());
             LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
             Intent intent = new Intent("programToPlay");
             intent.putExtra("program", model.getProgramName());
             localBroadcastManager.sendBroadcast(intent);
         });
+    }
+
+    public static ProgramsData getCureentlyPlaying(){
+        return modelProgram;
     }
 
     public static String getRoot() {

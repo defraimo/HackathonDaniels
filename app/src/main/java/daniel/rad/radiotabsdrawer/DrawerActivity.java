@@ -148,7 +148,6 @@ public class DrawerActivity extends AppCompatActivity {
                                 Glide.with(getApplicationContext()).load(uri).into(ivProfile);
 
                             }).addOnFailureListener(e -> {
-                                System.out.println("failed downloading pic");
                                 pbLoadingPic.setVisibility(View.INVISIBLE);
                             });
                 }

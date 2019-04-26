@@ -80,7 +80,6 @@ public class CreatePlaylistAdapter extends RecyclerView.Adapter<CreatePlaylistAd
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                System.out.println("failed downloading pic");
                 holder.ivProfilePic.setImageResource(programsData.getProfilePic());
             }
         });
