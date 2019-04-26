@@ -29,6 +29,7 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
     public Playlist playlist;
     public ProgramsData program;
     public WeakReference<Context> contextWeakReference;
+    private String previousName;
 
     private int choice;
     public static final int CREATE_PLAYLIST = 1;
@@ -44,7 +45,6 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
         contextWeakReference = new WeakReference<>(context);
         this.choice = choice;
     }
-
     public PlaylistsJsonWriter(Playlist playlist, ProgramsData program, Context context, int choice) {
         this.program = program;
         this.playlist = playlist;
@@ -55,6 +55,12 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
         this.program = program;
         contextWeakReference = new WeakReference<>(context);
         this.choice = choice;
+    }
+    public PlaylistsJsonWriter(String previousName, Playlist playlist, Context context, int choice) {
+        this.playlist = playlist;
+        contextWeakReference = new WeakReference<>(context);
+        this.choice = choice;
+        this.previousName = previousName;
     }
     public PlaylistsJsonWriter() {
     }
@@ -125,16 +131,19 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
         DatabaseReference name = userName.child("מועדפים");
         name.child(program.getVodId()).setValue(program);
     }
+
     private void removeFromFavs(DatabaseReference userName) {
         DatabaseReference name = userName.child("מועדפים");
         name.child(program.getVodId()).removeValue();
     }
 
     private void addProgram(DatabaseReference userName) {
+        userName.child(previousName).removeValue();
         DatabaseReference name = userName.child(playlist.getName());
         for (ProgramsData programsData : playlist.getProgramsData()) {
             name.child(programsData.getVodId()).setValue(programsData);
         }
+
     }
 
     private void deletePlaylist(DatabaseReference userName) {

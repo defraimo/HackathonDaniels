@@ -172,7 +172,9 @@ public class CreatePlaylistFragment extends Fragment {
                 Playlist newPlaylist = new Playlist(playlistName, programsToCreate);
                 new PlaylistsJsonWriter(newPlaylist, getContext(), PlaylistsJsonWriter.CREATE_PLAYLIST).execute();
             } else {
-                new PlaylistsJsonWriter(playlist, getContext(), PlaylistsJsonWriter.ADD_PROGRAM).execute();
+                String previousName = playlist.getName();
+                playlist.setName(playlistName);
+                new PlaylistsJsonWriter(previousName,playlist, getContext(), PlaylistsJsonWriter.ADD_PROGRAM).execute();
             }
         });
     }
