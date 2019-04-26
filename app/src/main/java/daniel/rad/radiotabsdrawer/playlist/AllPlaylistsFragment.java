@@ -29,7 +29,7 @@ public class AllPlaylistsFragment extends Fragment implements JsonReaderInterfac
     RecyclerView rvPlaylist;
     TextView tvPlaylist;
     ImageView ivAddPlaylist;
-    ArrayList<Playlist> playlistsList;
+    public static ArrayList<Playlist> playlistsList;
     ProgressBar progressBar;
     PlaylistJsonReader jsonReader;
     PlaylistAdapter adapter;
@@ -86,6 +86,14 @@ public class AllPlaylistsFragment extends Fragment implements JsonReaderInterfac
         });
 
     }
-
-
+    public static Playlist getFavs(){
+        if(playlistsList != null) {
+            for (Playlist playlist : playlistsList) {
+                if (playlist.getName().equals("מועדפים")) {
+                    return playlist;
+                }
+            }
+        }
+        return null;
+    }
 }

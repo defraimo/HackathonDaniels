@@ -36,7 +36,8 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
     public static final int ADD_PROGRAM = 3;
     public static final int REMOVE_PROGRAM = 4;
     public static final int ADD_TO_FAVS = 5;
-    public static final int RECOMMENDED_PLAYLIST = 6;
+    public static final int REMOVE_FROM_FAVS = 6;
+    public static final int RECOMMENDED_PLAYLIST = 7;
 
     public PlaylistsJsonWriter(Playlist playlist, Context context, int choice) {
         this.playlist = playlist;
@@ -83,6 +84,9 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
                 case ADD_TO_FAVS:
                     addToFavs(userName);
                     break;
+                case REMOVE_FROM_FAVS:
+                    removeFromFavs(userName);
+                    break;
                 case RECOMMENDED_PLAYLIST:
                     writeRecommended(userName);
                     break;
@@ -120,6 +124,10 @@ public class PlaylistsJsonWriter extends AsyncTask<Void, Void, Void> {
     private void addToFavs(DatabaseReference userName) {
         DatabaseReference name = userName.child("מועדפים");
         name.child(program.getVodId()).setValue(program);
+    }
+    private void removeFromFavs(DatabaseReference userName) {
+        DatabaseReference name = userName.child("מועדפים");
+        name.child(program.getVodId()).removeValue();
     }
 
     private void addProgram(DatabaseReference userName) {

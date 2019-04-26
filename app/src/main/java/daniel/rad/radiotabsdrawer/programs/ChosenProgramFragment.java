@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,6 +29,9 @@ import java.util.List;
 
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.login.User;
+import daniel.rad.radiotabsdrawer.playlist.AllPlaylistsFragment;
+import daniel.rad.radiotabsdrawer.playlist.Playlist;
+import daniel.rad.radiotabsdrawer.playlist.PlaylistsJsonWriter;
 
 
 /**
@@ -43,6 +47,9 @@ public class ChosenProgramFragment extends Fragment {
     ImageView ivComment;
     EditText etComment;
     TextView tvNoComments;
+    ProgramsData model;
+    static boolean isFavs;
+
 
     private DatabaseReference programComments =
             FirebaseDatabase.getInstance()
@@ -76,11 +83,11 @@ public class ChosenProgramFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if ( getArguments() != null) {
+        if (getArguments() != null) {
             //receiving the data we passed with Parcelable:
-           ProgramsData model =  getArguments().getParcelable("model");
+            model = getArguments().getParcelable("model");
 
-           //defining the elements in the fragment:
+            //defining the elements in the fragment:
             tvChosenStudentName = view.findViewById(R.id.tvChosenStudentName);
             tvChosenProgramName = view.findViewById(R.id.tvChosenProgramName);
             rvChosenComments = view.findViewById(R.id.rvChosenComments);
@@ -94,7 +101,7 @@ public class ChosenProgramFragment extends Fragment {
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             ivComment.setOnClickListener(v -> {
-                if (user != null){
+                if (user != null) {
                     String uid = user.getUid();
 
                     fromUser = true;
@@ -113,15 +120,14 @@ public class ChosenProgramFragment extends Fragment {
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     currentUser = dataSnapshot.getValue(User.class);
 
-                                    if (etComment.getText().toString().equals("")){
+                                    if (etComment.getText().toString().equals("")) {
                                         etComment.setError("חובה להזין טקסט");
-                                    }
-                                    else {
+                                    } else {
                                         String comment = etComment.getText().toString();
                                         etComment.setText("");
-                                        String fullComment = currentUser.getUsername()+": "+comment;
-                                        programComments.child(model.getVodId()).child(""+(counter+1)).setValue(fullComment);
-                                        rvChosenComments.scrollToPosition(comments.size()-1);
+                                        String fullComment = currentUser.getUsername() + ": " + comment;
+                                        programComments.child(model.getVodId()).child("" + (counter + 1)).setValue(fullComment);
+                                        rvChosenComments.scrollToPosition(comments.size() - 1);
                                     }
                                 }
 
@@ -146,18 +152,17 @@ public class ChosenProgramFragment extends Fragment {
                     comments.clear();
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         String comment = (String) child.getValue();
-                        if (!comment.equals("")){
+                        if (!comment.equals("")) {
                             comments.add(comment);
                         }
                     }
-                    if (comments.isEmpty()){
+                    if (comments.isEmpty()) {
                         tvNoComments.setVisibility(View.VISIBLE);
-                    }
-                    else {
+                    } else {
                         tvNoComments.setVisibility(View.GONE);
                     }
-                    rvChosenComments.setAdapter(new CommentsAdapter(comments,getContext()));
-                    rvChosenComments.scrollToPosition(comments.size()-1);
+                    rvChosenComments.setAdapter(new CommentsAdapter(comments, getContext()));
+                    rvChosenComments.scrollToPosition(comments.size() - 1);
                 }
 
                 @Override
@@ -174,10 +179,42 @@ public class ChosenProgramFragment extends Fragment {
             ivShare.setOnClickListener(v -> {
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, "מוזמנ/ת להקשיב לתוכנית - "+model.getProgramName()+" של "+model.getStudentName()+"! *קישור כניסה לאפליקצייה*");
+                share.putExtra(Intent.EXTRA_TEXT, "מוזמנ/ת להקשיב לתוכנית - " + model.getProgramName() + " של " + model.getStudentName() + "! *קישור כניסה לאפליקצייה*");
 
                 startActivity(Intent.createChooser(share, "היכן תרצה לשתף את התוכנית?"));
             });
+
+            checkIfFavs();
+
+            ivAddToFav.setOnClickListener(v -> {
+                if (isFavs) {
+                    Toast.makeText(v.getContext(), "הוסר מהמועדפים", Toast.LENGTH_SHORT).show();
+                    ivAddToFav.setImageResource(R.drawable.ic_favourite);
+                    isFavs = false;
+                    new PlaylistsJsonWriter(model, v.getContext(), PlaylistsJsonWriter.REMOVE_FROM_FAVS).execute();
+                } else {
+                    Toast.makeText(v.getContext(), "נוסף למועדפים", Toast.LENGTH_SHORT).show();
+                    isFavs = true;
+                    ivAddToFav.setImageResource(R.drawable.ic_favourite_pressed);
+                    new PlaylistsJsonWriter(model, v.getContext(), PlaylistsJsonWriter.ADD_TO_FAVS).execute();
+                }
+            });
+        }
+    }
+
+    private void checkIfFavs() {
+        if (AllPlaylistsFragment.getFavs() != null) {
+            Playlist favs = AllPlaylistsFragment.getFavs();
+            if (favs.getProgramsData() == null) return;
+            for (ProgramsData favsProgramsDatum : favs.getProgramsData()) {
+                if (favsProgramsDatum.getProgramName().equals(model.getProgramName())) {
+                    ivAddToFav.setImageResource(R.drawable.ic_favourite_pressed);
+                    isFavs = true;
+                } else {
+                    ivAddToFav.setImageResource(R.drawable.ic_favourite);
+                    isFavs = false;
+                }
+            }
         }
     }
 }
