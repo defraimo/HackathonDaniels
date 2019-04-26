@@ -284,7 +284,6 @@ public class RadioTopFragment extends Fragment {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    System.out.println("failed downloading pic");
                     pbRadioPic.setVisibility(View.INVISIBLE);
                     ivProfilePic.setImageResource(R.drawable.ic_default_pic);
                 }
@@ -428,7 +427,6 @@ public class RadioTopFragment extends Fragment {
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            System.out.println("failed downloading pic");
                                             pbRadioPic.setVisibility(View.INVISIBLE);
                                             ivProfilePic.setImageResource(R.drawable.ic_default_pic);
                                         }

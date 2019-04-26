@@ -64,6 +64,8 @@ public class ProgramsManagerListFragment extends Fragment {
             if (!programsManagerWasChosen) {
                 adapter = new ProgramsManagerAdapter(ProgramsReceiver.getPrograms(), getContext(), true);
                 rvProgramsManager.setAdapter(adapter);
+                ivProgramsManager.setImageResource(R.drawable.ic_choose_right);
+                ivCommentsManager.setImageResource(R.drawable.ic_choose_left_unpressed);
                 programsManagerWasChosen = true;
             }
         });
@@ -72,6 +74,8 @@ public class ProgramsManagerListFragment extends Fragment {
             if (programsManagerWasChosen) {
                 adapter = new ProgramsManagerAdapter(ProgramsReceiver.getPrograms(), getContext(), false);
                 rvProgramsManager.setAdapter(adapter);
+                ivCommentsManager.setImageResource(R.drawable.ic_choose_left);
+                ivProgramsManager.setImageResource(R.drawable.ic_choose_right_unpressed);
                 programsManagerWasChosen = false;
             }
         });

@@ -18,6 +18,8 @@ package daniel.rad.radiotabsdrawer.myMediaPlayer.ui;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -29,6 +31,7 @@ import android.widget.SeekBar;
 
 import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
 import daniel.rad.radiotabsdrawer.R;
+import daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs.MusicLibrary;
 
 /**
  * SeekBar that can be used with a {@link MediaSessionCompat} to track and seek in playing
@@ -56,6 +59,13 @@ public class MediaSeekBar extends AppCompatSeekBar {
             if (progress != 0){
                 mediaPlayerFragment.initSbSong(getRootView());
                 mediaPlayerFragment.sbSong.setProgress(progress);
+            }
+            if (MusicLibrary.getCureentlyPlaying() != null) {
+                if (MusicLibrary.getCureentlyPlaying().getDuration() == progress) {
+                    Intent goToNextProgramIntent = new Intent("nextProgram");
+                    goToNextProgramIntent.putExtra("goToNext",true);
+                    LocalBroadcastManager.getInstance(getContext()).sendBroadcast(goToNextProgramIntent);
+                }
             }
         }
 

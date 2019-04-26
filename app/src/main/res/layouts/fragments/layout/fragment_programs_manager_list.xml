@@ -56,14 +56,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0.16" />
 
     <ImageView
         android:id="@+id/ivProgramsManager"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:src="@drawable/ic_button_comment"
+        android:src="@drawable/ic_choose_right"
         app:layout_constraintBottom_toBottomOf="@+id/ivCommentsManager"
         app:layout_constraintStart_toEndOf="@+id/ivCommentsManager"
         app:layout_constraintTop_toTopOf="@+id/ivCommentsManager" />
@@ -73,8 +72,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:src="@drawable/ic_button_comment"
+        android:src="@drawable/ic_choose_left_unpressed"
         app:layout_constraintBottom_toBottomOf="@+id/etSearch"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/etSearch" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="תוכניות"
+        android:textColor="#FFF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivProgramsManager"
+        app:layout_constraintEnd_toEndOf="@+id/ivProgramsManager"
+        app:layout_constraintStart_toEndOf="@+id/ivCommentsManager"
+        app:layout_constraintTop_toTopOf="@+id/ivProgramsManager" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="תגובות"
+        android:textColor="#FFF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivCommentsManager"
+        app:layout_constraintEnd_toEndOf="@+id/ivCommentsManager"
+        app:layout_constraintStart_toStartOf="@+id/ivCommentsManager"
+        app:layout_constraintTop_toTopOf="@+id/ivCommentsManager" />
 </android.support.constraint.ConstraintLayout>

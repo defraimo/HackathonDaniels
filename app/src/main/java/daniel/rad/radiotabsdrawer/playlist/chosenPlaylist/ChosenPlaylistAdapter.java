@@ -67,7 +67,6 @@ public class ChosenPlaylistAdapter extends RecyclerView.Adapter<ChosenPlaylistVi
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                System.out.println("failed downloading pic");
                 holder.ivProfilePic.setImageResource(programsData.getProfilePic());
             }
         });

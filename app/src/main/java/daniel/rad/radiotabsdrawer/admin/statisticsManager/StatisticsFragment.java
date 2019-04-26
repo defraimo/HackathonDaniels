@@ -27,8 +27,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import daniel.rad.radiotabsdrawer.R;
-import daniel.rad.radiotabsdrawer.admin.programsManager.ProgramsManagerAdapter;
-import daniel.rad.radiotabsdrawer.login.User;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.ProgramsReceiver;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
@@ -40,8 +38,10 @@ public class StatisticsFragment extends Fragment {
     RecyclerView rvStatistics;
     ImageView ivProgramSearch;
     EditText etSearch;
+    ImageView ivNumOfPlays;
+    ImageView ivNumOfLikes;
 
-    private boolean programsManagerWasChosen = true;
+    private boolean playsStatsWasChosen = true;
 
     private DatabaseReference programsNumOfPlays =
             FirebaseDatabase.getInstance()
@@ -65,11 +65,32 @@ public class StatisticsFragment extends Fragment {
         rvStatistics = view.findViewById(R.id.rvStatistics);
         ivProgramSearch = view.findViewById(R.id.ivProgramSearch);
         etSearch = view.findViewById(R.id.etSearch);
+        ivNumOfPlays = view.findViewById(R.id.ivNumOfPlays);
+        ivNumOfLikes = view.findViewById(R.id.ivNumOfLikes);
 
         rvStatistics.setLayoutManager(new LinearLayoutManager(getContext()));
 //                List<ProgramsData> sortedPrograms = sortPrograms(ProgramsReceiver.getPrograms());
-        LikesStatisticsAdapter adapter = new LikesStatisticsAdapter(ProgramsReceiver.getPrograms(), getContext());
-        rvStatistics.setAdapter(adapter);
+        LikesStatisticsAdapter likesAdapter = new LikesStatisticsAdapter(ProgramsReceiver.getPrograms(), getContext());
+        PlaysStatisticsAdapter playsAdapter = new PlaysStatisticsAdapter(ProgramsReceiver.getPrograms(), getContext());
+        rvStatistics.setAdapter(playsAdapter);
+
+        ivNumOfPlays.setOnClickListener(v -> {
+            if (!playsStatsWasChosen) {
+                rvStatistics.setAdapter(playsAdapter);
+                ivNumOfPlays.setImageResource(R.drawable.ic_choose_right);
+                ivNumOfLikes.setImageResource(R.drawable.ic_choose_left_unpressed);
+                playsStatsWasChosen = true;
+            }
+        });
+
+        ivNumOfLikes.setOnClickListener(v -> {
+            if (playsStatsWasChosen) {
+                rvStatistics.setAdapter(likesAdapter);
+                ivNumOfLikes.setImageResource(R.drawable.ic_choose_left);
+                ivNumOfPlays.setImageResource(R.drawable.ic_choose_right_unpressed);
+                playsStatsWasChosen = false;
+            }
+        });
 
         ivProgramSearch.setOnClickListener((v)->{
             ArrayList<ProgramsData> newList = new ArrayList<>();
@@ -100,7 +121,12 @@ public class StatisticsFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if(etSearch.getText().toString().isEmpty()){
-                    rvStatistics.setAdapter(adapter);
+                    if (playsStatsWasChosen){
+                        rvStatistics.setAdapter(playsAdapter);
+                    }
+                    else {
+                        rvStatistics.setAdapter(likesAdapter);
+                    }
                 }
             }
         });

@@ -12,7 +12,7 @@
         android:id="@+id/etSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="#BBB9B9"
@@ -44,7 +44,9 @@
         android:id="@+id/rvStatistics"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,18 +58,51 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0.17" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/ivNumOfLikes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/ic_button_blue"
-        app:layout_constraintBottom_toTopOf="@+id/guideline15"
+        android:layout_marginStart="12dp"
+        android:src="@drawable/ic_choose_left_unpressed"
+        app:layout_constraintBottom_toBottomOf="@+id/etSearch"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/etSearch" />
+
+    <ImageView
+        android:id="@+id/ivNumOfPlays"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_choose_right"
+        app:layout_constraintBottom_toBottomOf="@+id/ivNumOfLikes"
+        app:layout_constraintStart_toEndOf="@+id/ivNumOfLikes"
+        app:layout_constraintTop_toTopOf="@+id/ivNumOfLikes" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="הפעלות"
+        android:textColor="#FFF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivNumOfPlays"
+        app:layout_constraintEnd_toEndOf="@+id/ivNumOfPlays"
+        app:layout_constraintStart_toStartOf="@+id/ivNumOfPlays"
+        app:layout_constraintTop_toTopOf="@+id/ivNumOfPlays" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="לייקים"
+        android:textColor="#FFF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivNumOfLikes"
+        app:layout_constraintEnd_toStartOf="@+id/ivNumOfPlays"
+        app:layout_constraintStart_toStartOf="@+id/ivNumOfLikes"
+        app:layout_constraintTop_toTopOf="@+id/ivNumOfLikes" />
 
 </android.support.constraint.ConstraintLayout>

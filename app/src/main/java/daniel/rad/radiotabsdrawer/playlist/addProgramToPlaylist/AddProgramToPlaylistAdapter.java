@@ -74,7 +74,6 @@ public class AddProgramToPlaylistAdapter extends RecyclerView.Adapter<AddProgram
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                System.out.println("failed downloading pic");
                 holder.ivProfilePic.setImageResource(programsData.getProfilePic());
             }
         });
