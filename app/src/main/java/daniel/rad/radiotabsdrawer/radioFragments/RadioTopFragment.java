@@ -421,7 +421,7 @@ public class RadioTopFragment extends Fragment {
                                     storageRef.child("images/"+program.getVodId()).
                                             getDownloadUrl().addOnSuccessListener(uri -> {
                                         pbRadioPic.setVisibility(View.INVISIBLE);
-                                        Glide.with(getParentFragment().getContext()).load(uri).into(ivProfilePic);
+                                        Glide.with(getContext()).load(uri).into(ivProfilePic);
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
