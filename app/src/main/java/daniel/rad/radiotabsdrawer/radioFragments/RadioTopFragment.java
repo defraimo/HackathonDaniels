@@ -46,7 +46,6 @@ import daniel.rad.radiotabsdrawer.programs.ChosenProgramFragment;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -279,7 +278,7 @@ public class RadioTopFragment extends Fragment {
             storageRef.child("images/"+programsData.getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
                 pbRadioPic.setVisibility(View.INVISIBLE);
-                Glide.with(getContext()).load(uri).into(ivProfilePic);
+                Glide.with(context).load(uri).into(ivProfilePic);
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
@@ -422,7 +421,7 @@ public class RadioTopFragment extends Fragment {
                                     storageRef.child("images/"+program.getVodId()).
                                             getDownloadUrl().addOnSuccessListener(uri -> {
                                         pbRadioPic.setVisibility(View.INVISIBLE);
-                                        Glide.with(getContext()).load(uri).into(ivProfilePic);
+                                        Glide.with(getParentFragment().getContext()).load(uri).into(ivProfilePic);
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {

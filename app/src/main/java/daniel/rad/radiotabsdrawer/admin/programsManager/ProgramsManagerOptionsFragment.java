@@ -42,8 +42,6 @@ import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.login.User;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -242,7 +240,7 @@ public class ProgramsManagerOptionsFragment extends Fragment {
         storageRef.child("images/"+program.getVodId()).
                 getDownloadUrl().addOnSuccessListener(uri -> {
             pbLoadingPic.setVisibility(View.INVISIBLE);
-            Glide.with(getApplicationContext()).load(uri).into(ivProgramImage);
+            Glide.with(getContext()).load(uri).into(ivProgramImage);
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
