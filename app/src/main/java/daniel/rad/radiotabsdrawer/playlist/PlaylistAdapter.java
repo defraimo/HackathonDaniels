@@ -1,15 +1,12 @@
 package daniel.rad.radiotabsdrawer.playlist;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.RecyclerView;
-import android.util.JsonWriter;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,14 +25,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.playlist.chosenPlaylist.CreatePlaylistFragment;
 import daniel.rad.radiotabsdrawer.playlist.removeProgramsFromPlaylist.RemoveProgramFromPlaylistFragment;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
     ArrayList<Playlist> playlists;
@@ -112,7 +106,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             storageRef.child("images/" + programsDataList.get(0).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
                 holder.pbLoadingAllPic.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfileAll);
+                Glide.with(context).load(uri).into(holder.ivProfileAll);
                 allPic = true;
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -135,7 +129,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             storageRef.child("images/" + programsDataList.get(0).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
                 holder.pbLoadingPic1.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic1);
+                Glide.with(context).load(uri).into(holder.ivProfilePic1);
                 pic1 = true;
                 allPic = false;
             }).addOnFailureListener(new OnFailureListener() {
@@ -153,7 +147,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             storageRef.child("images/" + programsDataList.get(0).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
                 holder.pbLoadingPic4.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic4);
+                Glide.with(context).load(uri).into(holder.ivProfilePic4);
                 pic4 = true;
                 allPic = false;
             }).addOnFailureListener(new OnFailureListener() {
@@ -171,7 +165,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             storageRef.child("images/" + programsDataList.get(1).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
                 holder.pbLoadingPic2.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic2);
+                Glide.with(context).load(uri).into(holder.ivProfilePic2);
                 pic2 = true;
                 allPic = false;
             }).addOnFailureListener(new OnFailureListener() {
@@ -188,7 +182,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             storageRef.child("images/" + programsDataList.get(1).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
                 holder.pbLoadingPic3.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic3);
+                Glide.with(context).load(uri).into(holder.ivProfilePic3);
                 pic3 = true;
                 allPic = false;
             }).addOnFailureListener(new OnFailureListener() {
@@ -211,7 +205,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             storageRef.child("images/" + programsDataList.get(0).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
                 holder.pbLoadingPic1.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic1);
+                Glide.with(context).load(uri).into(holder.ivProfilePic1);
                 pic1 = true;
                 allPic = false;
             }).addOnFailureListener(new OnFailureListener() {
@@ -228,7 +222,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             storageRef.child("images/" + programsDataList.get(0).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
                 holder.pbLoadingPic4.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic4);
+                Glide.with(context).load(uri).into(holder.ivProfilePic4);
                 pic4 = true;
                 allPic = false;
             }).addOnFailureListener(new OnFailureListener() {
@@ -245,7 +239,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             storageRef.child("images/" + programsDataList.get(1).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
                 holder.pbLoadingPic2.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic2);
+                Glide.with(context).load(uri).into(holder.ivProfilePic2);
                 pic2 = true;
                 allPic = false;
             }).addOnFailureListener(new OnFailureListener() {
@@ -262,7 +256,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             storageRef.child("images/" + programsDataList.get(2).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
                 holder.pbLoadingPic3.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic3);
+                Glide.with(context).load(uri).into(holder.ivProfilePic3);
                 pic3 = true;
                 allPic = false;
             }).addOnFailureListener(new OnFailureListener() {
@@ -285,7 +279,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             storageRef.child("images/" + programsDataList.get(0).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
                 holder.pbLoadingPic1.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic1);
+                Glide.with(context).load(uri).into(holder.ivProfilePic1);
                 pic1 = true;
                 allPic = false;
             }).addOnFailureListener(new OnFailureListener() {
@@ -303,7 +297,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             storageRef.child("images/" + programsDataList.get(3).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
                 holder.pbLoadingPic4.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic4);
+                Glide.with(context).load(uri).into(holder.ivProfilePic4);
                 pic4 = true;
                 allPic = false;
             }).addOnFailureListener(new OnFailureListener() {
@@ -321,7 +315,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             storageRef.child("images/" + programsDataList.get(1).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
                 holder.pbLoadingPic2.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic2);
+                Glide.with(context).load(uri).into(holder.ivProfilePic2);
                 pic2 = true;
                 allPic = false;
             }).addOnFailureListener(new OnFailureListener() {
@@ -339,7 +333,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlayListViewHolder> {
             storageRef.child("images/" + programsDataList.get(2).getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
                 holder.pbLoadingPic3.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic3);
+                Glide.with(context).load(uri).into(holder.ivProfilePic3);
                 pic3 = true;
                 allPic = false;
             }).addOnFailureListener(new OnFailureListener() {

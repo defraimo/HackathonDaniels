@@ -21,8 +21,6 @@ import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 public class AddProgramToPlaylistAdapter extends RecyclerView.Adapter<AddProgramToPlaylistAdapter.AddProgramToPlaylistViewHolder> {
     List<ProgramsData> programsDataList;
     Context context;
@@ -70,7 +68,7 @@ public class AddProgramToPlaylistAdapter extends RecyclerView.Adapter<AddProgram
 //        holder.ivProfilePic.setImageResource(programsData.getProfilePic());
         storageRef.child("images/" + programsDataList.get(position).getVodId()).
                 getDownloadUrl().addOnSuccessListener(uri -> {
-            Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic);
+            Glide.with(context).load(uri).into(holder.ivProfilePic);
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {

@@ -1,17 +1,12 @@
 package daniel.rad.radiotabsdrawer.playlist.chosenPlaylist;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
@@ -22,12 +17,10 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import daniel.rad.radiotabsdrawer.playlist.PlaylistAdapter;
-import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import daniel.rad.radiotabsdrawer.R;
+import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class CreatePlaylistAdapter extends RecyclerView.Adapter<CreatePlaylistAdapter.CreatePlaylistViewHolder> {
     List<ProgramsData> programsDataList;
@@ -76,7 +69,7 @@ public class CreatePlaylistAdapter extends RecyclerView.Adapter<CreatePlaylistAd
 //        holder.ivProfilePic.setImageResource(programsData.getProfilePic());
         storageRef.child("images/" + programsDataList.get(position).getVodId()).
                 getDownloadUrl().addOnSuccessListener(uri -> {
-            Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic);
+            Glide.with(context).load(uri).into(holder.ivProfilePic);
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {

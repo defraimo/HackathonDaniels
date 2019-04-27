@@ -1,10 +1,7 @@
 package daniel.rad.radiotabsdrawer.admin.programsManager;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -22,7 +19,6 @@ import com.google.firebase.storage.StorageReference;
 import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class ZoomedPictureDialogFragment extends DialogFragment {
 
@@ -55,7 +51,7 @@ public class ZoomedPictureDialogFragment extends DialogFragment {
             storageRef.child("images/" + program.getVodId()).
                     getDownloadUrl().addOnSuccessListener(uri -> {
                 pbLoadingZoomedPic.setVisibility(View.INVISIBLE);
-                Glide.with(getApplicationContext()).load(uri).into(ivZoomedPic);
+                Glide.with(view.getContext()).load(uri).into(ivZoomedPic);
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
