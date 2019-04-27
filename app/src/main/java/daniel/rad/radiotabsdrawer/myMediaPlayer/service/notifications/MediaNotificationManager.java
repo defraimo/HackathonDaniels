@@ -92,7 +92,7 @@ public class MediaNotificationManager {
                         mService.getString(R.string.label_next),
                         MediaButtonReceiver.buildMediaButtonPendingIntent(
                                 mService,
-                                PlaybackStateCompat.ACTION_SKIP_TO_NEXT));
+                                MediaNotificationActions.NEXT_PROGRAM)); //PlaybackStateCompat.ACTION_SKIP_TO_NEXT
         mPrevAction =
                 new NotificationCompat.Action(
                         R.drawable.ic_back_song,
