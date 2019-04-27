@@ -21,7 +21,6 @@ import daniel.rad.radiotabsdrawer.R;
 import daniel.rad.radiotabsdrawer.programs.ProgramsData;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class RemovePlaylistAdapter extends RecyclerView.Adapter<RemovePlaylistAdapter.RemovePlaylistViewHolder> {
     List<ProgramsData> programsDataList;
@@ -56,7 +55,7 @@ public class RemovePlaylistAdapter extends RecyclerView.Adapter<RemovePlaylistAd
 //        holder.ivProfilePic.setImageResource(programsData.getProfilePic());
         storageRef.child("images/" + programsDataList.get(i).getVodId()).
                 getDownloadUrl().addOnSuccessListener(uri -> {
-            Glide.with(getApplicationContext()).load(uri).into(holder.ivProfilePic);
+            Glide.with(context).load(uri).into(holder.ivProfilePic);
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
