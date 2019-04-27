@@ -13,17 +13,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:backgroundTint="#FFF"
         android:ems="10"
         android:hint="אימייל"
         android:inputType="textEmailAddress"
         android:textColor="@color/colorAccent"
         android:textColorHint="#59999797"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvFb" />
+        app:layout_constraintTop_toBottomOf="@+id/tvFb"
+        app:layout_constraintVertical_bias="0.120000005" />
 
     <EditText
         android:id="@+id/etPassword"
@@ -48,12 +51,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:src="@drawable/ic_button_blue_long"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/etPassword"
+        app:layout_constraintVertical_bias="0.39" />
 
     <TextView
         android:id="@+id/textView19"
@@ -122,7 +129,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
         android:text="התחברות מנהל"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#80FFFFFF"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -134,7 +141,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="צור משתמש"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#80FFFFFF"
         app:layout_constraintEnd_toEndOf="@+id/ivEnterApp"
         app:layout_constraintTop_toBottomOf="@+id/ivEnterApp" />
 
@@ -142,11 +149,13 @@
         android:id="@+id/imageView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
         android:src="@drawable/ic_divider"
+        app:layout_constraintBottom_toTopOf="@+id/ivEnterApp"
         app:layout_constraintEnd_toEndOf="@+id/ivEnterApp"
+        app:layout_constraintHorizontal_bias="0.464"
         app:layout_constraintStart_toStartOf="@+id/ivEnterApp"
-        app:layout_constraintTop_toBottomOf="@+id/tvCreateUser" />
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
     <TextView
         android:id="@+id/tvForgotPassword"
@@ -155,7 +164,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="שכחת סיסמא?"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#80FFFFFF"
         app:layout_constraintStart_toStartOf="@+id/ivEnterApp"
         app:layout_constraintTop_toBottomOf="@+id/ivEnterApp" />
 

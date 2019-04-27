@@ -19,6 +19,7 @@
         android:ems="8"
         android:fontFamily="sans-serif-medium"
         android:hint="חיפוש"
+        android:gravity="right"
         android:inputType="textPersonName"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"

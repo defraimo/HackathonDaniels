@@ -146,6 +146,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:textColor="#FFF"
+        android:gravity="right"
         app:layout_constraintBottom_toBottomOf="@+id/imageView14"
         app:layout_constraintEnd_toEndOf="@+id/imageView14"
         app:layout_constraintStart_toStartOf="@+id/imageView14"
