@@ -1,11 +1,13 @@
 package daniel.rad.radiotabsdrawer.login;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -16,6 +18,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
@@ -54,7 +57,7 @@ import daniel.rad.radiotabsdrawer.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SignInFragment extends Fragment {
+public class SignUpFragment extends Fragment {
 
     EditText etEmail;
     EditText etSignInPassword;
@@ -81,7 +84,7 @@ public class SignInFragment extends Fragment {
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference storageRef = storage.getReference();
 
-    public SignInFragment() {
+    public SignUpFragment() {
         // Required empty public constructor
     }
 
@@ -111,7 +114,7 @@ public class SignInFragment extends Fragment {
         ivSignUp.setOnClickListener(v -> {
             if (!etUserFullName.getText().toString().equals("")) {
                 pbSignIn.setVisibility(View.VISIBLE);
-                if (imgDecodableString == null && cameraUncheckedFilePath == null){
+                if (imgDecodableString == null && cameraUncheckedFilePath == null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("מומלץ להוסיף תמונה").
                             setPositiveButton("הוסף", (dialog, which) -> {
@@ -148,8 +151,7 @@ public class SignInFragment extends Fragment {
                                         });
                             }).
                             show();
-                }
-                else {
+                } else {
                     mAuth.createUserWithEmailAndPassword(etEmail.getText().toString(), etSignInPassword.getText().toString())
                             .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -175,8 +177,7 @@ public class SignInFragment extends Fragment {
                                 }
                             });
                 }
-            }
-            else {
+            } else {
                 pbSignIn.setVisibility(View.INVISIBLE);
                 etUserFullName.setError("שדה חובה");
             }
@@ -190,6 +191,7 @@ public class SignInFragment extends Fragment {
             goToGallery();
         });
     }
+
     private void createNewUser(FirebaseUser fbUser) {
         if (fbUser != null) {
             String username = etUserFullName.getText().toString();
@@ -198,17 +200,15 @@ public class SignInFragment extends Fragment {
 
             User user;
 
-            if (imgDecodableString != null){
+            if (imgDecodableString != null) {
                 user = new User(username, email, userId, imgDecodableString);
-                uploadImg(imgDecodableString,fbUser);
+                uploadImg(imgDecodableString, fbUser);
 //                uploadImage(imgDecodableString);
-            }
-            else if (cameraCheckedFilePath != null){
+            } else if (cameraCheckedFilePath != null) {
                 user = new User(username, email, userId, cameraCheckedFilePath);
-                uploadImg(cameraCheckedFilePath,fbUser);
+                uploadImg(cameraCheckedFilePath, fbUser);
 //                uploadImage(cameraCheckedFilePath);
-            }
-            else {
+            } else {
                 user = new User(username, email, userId);
             }
 
@@ -216,9 +216,9 @@ public class SignInFragment extends Fragment {
         }
     }
 
-    private void uploadImg(String picUri,FirebaseUser user){
+    private void uploadImg(String picUri, FirebaseUser user) {
         Uri uri = Uri.parse(picUri);
-        StorageReference ref = storageRef.child("images/"+user.getUid());
+        StorageReference ref = storageRef.child("images/" + user.getUid());
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setTitle("יוצר משתמש..");
         progressDialog.show();
@@ -246,9 +246,9 @@ public class SignInFragment extends Fragment {
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
                         .getTotalByteCount());
-                progressDialog.setMessage("טוען "+(int)progress+"%");
+                progressDialog.setMessage("טוען " + (int) progress + "%");
             }
         });
     }
@@ -261,7 +261,7 @@ public class SignInFragment extends Fragment {
         pickIntent.setType("image/*");
 
         Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
 
         startActivityForResult(chooserIntent, PICK_IMAGE);
     }
@@ -301,12 +301,22 @@ public class SignInFragment extends Fragment {
     }
 
     private void captureFromCamera() {
-        try {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", createImageFile()));
-            startActivityForResult(intent, CAMERA_REQUEST_CODE);
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        String writingToDisk = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        if (ActivityCompat.checkSelfPermission(
+                getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{writingToDisk}, 1);
+        }
+        if (ActivityCompat.checkSelfPermission(
+                getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            try {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", createImageFile()));
+                startActivityForResult(intent, CAMERA_REQUEST_CODE);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 }

@@ -73,7 +73,7 @@ public class RegularLoginFragment extends Fragment {
         tvCreateUser.setOnClickListener(v -> {
             getActivity().getSupportFragmentManager().
                     beginTransaction().
-                    replace(R.id.login_frame, new SignInFragment()).
+                    replace(R.id.login_frame, new SignUpFragment()).
                     addToBackStack("regularLogin").
                     commit();
         });

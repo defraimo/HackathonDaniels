@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
-    tools:context=".login.SignInFragment">
+    tools:context=".login.SignUpFragment">
 
     <EditText
         android:id="@+id/etUserFullName"
