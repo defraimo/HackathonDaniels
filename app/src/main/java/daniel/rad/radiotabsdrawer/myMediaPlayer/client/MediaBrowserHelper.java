@@ -28,7 +28,6 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaControllerCompat.Callback;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +74,6 @@ public class MediaBrowserHelper {
                             null);
             mMediaBrowser.connect();
         }
-        Log.d(TAG, "onStart: Creating MediaBrowser, and connecting");
     }
 
     public void onStop() {
@@ -88,7 +86,6 @@ public class MediaBrowserHelper {
             mMediaBrowser = null;
         }
         resetState();
-        Log.d(TAG, "onStop: Releasing MediaController, Disconnecting from MediaBrowser");
     }
 
     /**
@@ -137,12 +134,10 @@ public class MediaBrowserHelper {
                 callback.onPlaybackStateChanged(null);
             }
         });
-        Log.d(TAG, "resetState: ");
     }
 
     public MediaControllerCompat.TransportControls getTransportControls() {
         if (mMediaController == null) {
-            Log.d(TAG, "getTransportControls: MediaController is null!");
             throw new IllegalStateException("MediaController is null!");
         }
         return mMediaController.getTransportControls();
@@ -202,7 +197,6 @@ public class MediaBrowserHelper {
 
                 MediaBrowserHelper.this.onConnected(mMediaController);
             } catch (RemoteException e) {
-                Log.d(TAG, String.format("onConnected: Problem: %s", e.toString()));
                 throw new RuntimeException(e);
             }
 

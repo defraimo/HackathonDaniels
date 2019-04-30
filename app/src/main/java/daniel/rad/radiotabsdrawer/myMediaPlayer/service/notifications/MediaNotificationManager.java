@@ -22,7 +22,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -35,13 +34,9 @@ import android.support.v4.media.app.NotificationCompat.MediaStyle;
 import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.Log;
 
 import daniel.rad.radiotabsdrawer.DrawerActivity;
-import daniel.rad.radiotabsdrawer.MainActivity;
-import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
 import daniel.rad.radiotabsdrawer.R;
-import daniel.rad.radiotabsdrawer.admin.notificationManager.MyNotificationsService;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.MusicService;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs.MusicLibrary;
 
@@ -92,7 +87,7 @@ public class MediaNotificationManager {
                         mService.getString(R.string.label_next),
                         MediaButtonReceiver.buildMediaButtonPendingIntent(
                                 mService,
-                                MediaNotificationActions.NEXT_PROGRAM)); //PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+                                PlaybackStateCompat.ACTION_SKIP_TO_NEXT));
         mPrevAction =
                 new NotificationCompat.Action(
                         R.drawable.ic_back_song,
@@ -107,7 +102,7 @@ public class MediaNotificationManager {
     }
 
     public void onDestroy() {
-        Log.d(TAG, "onDestroy: ");
+
     }
 
     public NotificationManager getNotificationManager() {
@@ -196,9 +191,6 @@ public class MediaNotificationManager {
             mChannel.setVibrationPattern(
                     new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
             mNotificationManager.createNotificationChannel(mChannel);
-            Log.d(TAG, "createChannel: New channel created");
-        } else {
-            Log.d(TAG, "createChannel: Existing channel reused");
         }
     }
 

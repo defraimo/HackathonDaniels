@@ -28,11 +28,10 @@ import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import daniel.rad.radiotabsdrawer.MediaPlayerFragment;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.contentcatalogs.MusicLibrary;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.notifications.MediaNotificationManager;
 import daniel.rad.radiotabsdrawer.myMediaPlayer.service.players.MediaPlayerAdapter;
@@ -64,7 +63,6 @@ public class MusicService extends MediaBrowserServiceCompat {
         mMediaNotificationManager = new MediaNotificationManager(this);
 
         mPlayback = new MediaPlayerAdapter(this, new MediaPlayerListener());
-        Log.d(TAG, "onCreate: MusicService creating MediaSession, and MediaNotificationManager");
     }
 
     public void initPlayerAdapter(Context context) {
@@ -82,7 +80,6 @@ public class MusicService extends MediaBrowserServiceCompat {
         mMediaNotificationManager.onDestroy();
         mPlayback.stop();
         mSession.release();
-        Log.d(TAG, "onDestroy: MediaPlayerAdapter stopped, and MediaSession released");
     }
 
     @Override
@@ -147,7 +144,6 @@ public class MusicService extends MediaBrowserServiceCompat {
             }
 
             mPlayback.playFromMedia(mPreparedMedia);
-            Log.d(TAG, "onPlayFromMediaId: MediaSession active");
         }
 
         @Override

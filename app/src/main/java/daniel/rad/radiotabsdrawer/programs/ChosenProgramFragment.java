@@ -179,7 +179,7 @@ public class ChosenProgramFragment extends Fragment {
             ivShare.setOnClickListener(v -> {
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, "מוזמנ/ת להקשיב לתוכנית - " + model.getProgramName() + " של " + model.getStudentName() + "! *קישור כניסה לאפליקצייה*");
+                share.putExtra(Intent.EXTRA_TEXT, "מוזמנ/ת להקשיב לתוכנית - " + model.getProgramName() + " של " + model.getStudentName() + "! "+"https://play.google.com/store/apps/details?id=daniel.rad.radiotabsdrawer"+"");
 
                 startActivity(Intent.createChooser(share, "היכן תרצה לשתף את התוכנית?"));
             });
