@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="daniels.hackathon.radio">
+    package="daniel.rad.radiotabsdrawer">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -21,33 +21,34 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:supportsRtl"
-        tools:targetApi="m">
+        tools:targetApi="m"
+        tools:ignore="GoogleAppIndexingWarning">
         <service
-            android:name="daniels.hackathon.radio.admin.notificationManager.MyNotificationsService"
+            android:name=".admin.notificationManager.MyNotificationsService"
             android:enabled="true"
             android:exported="true"/>
         <activity
-            android:name="daniels.hackathon.radio.admin.AdminActivity"
+            android:name=".admin.AdminActivity"
             android:screenOrientation="portrait"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity android:name="daniels.hackathon.radio.login.LoginActivity"
+        <activity android:name=".login.LoginActivity"
             android:screenOrientation="portrait">
 
         </activity>
         <activity
-            android:name="daniels.hackathon.radio.profile.ProfileActivity"
+            android:name=".profile.ProfileActivity"
             android:label="פרופיל אישי"
-            android:parentActivityName="daniels.hackathon.radio.DrawerActivity"
+            android:parentActivityName=".DrawerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="daniels.hackathon.radio.DrawerActivity" />
+                android:value=".DrawerActivity" />
         </activity>
-        <activity android:name="daniels.hackathon.radio.MainActivity"
+        <activity android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,14 +57,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="daniels.hackathon.radio.DrawerActivity"
+            android:name=".DrawerActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <service
-            android:name="daniels.hackathon.radio.myMediaPlayer.service.MusicService"
+            android:name=".myMediaPlayer.service.MusicService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

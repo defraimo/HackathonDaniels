@@ -7,7 +7,7 @@
     android:background="#FF1E202A"
     tools:context=".MediaPlayerFragment">
 
-    <daniels.hackathon.radio.myMediaPlayer.ui.MediaSeekBar
+    <daniel.rad.radiotabsdrawer.myMediaPlayer.ui.MediaSeekBar
         android:id="@+id/sbSong"
         style="@style/AppTheme.SeekBar"
         android:layout_width="0dp"
